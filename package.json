@@ -1,0 +1,14 @@
+{
+  "name": "beamish-compiler",
+  "version": "0.1.0",
+  "description": "Converts a Beamish pipeline to a DAG ready for validation and execution by a runner.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Birbeck <mark.birbeck@gmail.com> (http://markbirbeck.com/)",
+  "license": "MIT"
+}
