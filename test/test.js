@@ -6,6 +6,7 @@ chai.should();
 describe('compile pipeline', () => {
   it('compile simple function', () => {
     const Pipeline = require('../lib/Pipeline');
+    const ParDo = require('../lib/ParDo');
 
     /**
      * Set up our pipeline:
@@ -18,7 +19,7 @@ describe('compile pipeline', () => {
      */
 
     p
-    .apply(() => { return 'hello, world'; })
+    .apply(ParDo().of(() => { return 'hello, world'; }))
     ;
 
     /**
