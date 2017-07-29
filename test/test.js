@@ -7,6 +7,17 @@ describe('compile pipeline', () => {
   it('compile simple function', () => {
     const Pipeline = require('../lib/Pipeline');
     const ParDo = require('../lib/ParDo');
+    const DoFn = require('../lib/DoFn');
+
+    /**
+     * Define a DoFn for ParDo:
+     */
+
+    class ComputeWordLengthFn extends DoFn {
+      processElement() {
+        return 'hello, world';
+      }
+    }
 
     /**
      * Set up our pipeline:
@@ -19,7 +30,7 @@ describe('compile pipeline', () => {
      */
 
     p
-    .apply(ParDo().of(() => { return 'hello, world'; }))
+    .apply(ParDo().of(new ComputeWordLengthFn()))
     ;
 
     /**
@@ -28,6 +39,12 @@ describe('compile pipeline', () => {
 
     p.graph.should.be.an('array');
     p.graph.should.have.lengthOf(1);
-    p.graph[0].should.eql('() => { return \'hello, world\'; }');
+
+    p.graph[0]
+    .should.eql(`class ComputeWordLengthFn extends DoFn {
+      processElement() {
+        return 'hello, world';
+      }
+    }`);
   });
 });
