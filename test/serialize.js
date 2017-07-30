@@ -38,7 +38,7 @@ describe('compile pipeline', () => {
      * Test the graph:
      */
 
-    const graph = p.transform.graph;
+    const graph = p.transforms.graph;
 
     graph.should.be.an('array');
     graph.should.have.lengthOf(1);
@@ -75,7 +75,7 @@ describe('compile pipeline', () => {
      * Test the graph:
      */
 
-    const graph = p.transform.graph;
+    const graph = p.transforms.graph;
 
     graph.should.be.an('array');
     graph.should.have.lengthOf(3);
