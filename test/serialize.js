@@ -38,10 +38,12 @@ describe('compile pipeline', () => {
      * Test the graph:
      */
 
-    p.graph.should.be.an('array');
-    p.graph.should.have.lengthOf(1);
+    const graph = p.transform.graph;
 
-    p.graph[0]
+    graph.should.be.an('array');
+    graph.should.have.lengthOf(1);
+
+    graph[0]
     .should.eql(
 `class ComputeWordLengthFn extends DoFn {
   processElement() {
@@ -73,10 +75,12 @@ describe('compile pipeline', () => {
      * Test the graph:
      */
 
-    p.graph.should.be.an('array');
-    p.graph.should.have.lengthOf(3);
+    const graph = p.transform.graph;
 
-    p.graph
+    graph.should.be.an('array');
+    graph.should.have.lengthOf(3);
+
+    graph
     .forEach(el => {
       el
       .should.eql(
