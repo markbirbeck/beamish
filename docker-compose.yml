@@ -1,0 +1,8 @@
+version: "3.2"
+services:
+  unit-test:
+    build:
+      context: ./test
+    image: node-unit-test:latest
+    volumes:
+      - ${PWD}:/usr/src/app
