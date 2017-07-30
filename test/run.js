@@ -3,9 +3,9 @@ const chai = require('chai');
 chai.use(require('chai-as-promised'));
 chai.should();
 
-const Pipeline = require('../lib/Pipeline');
-const ParDo = require('../lib/ParDo');
-const DoFn = require('../lib/DoFn');
+const Pipeline = require('../lib/sdk/Pipeline');
+const ParDo = require('../lib/sdk/transforms/ParDo');
+const DoFn = require('../lib/sdk/transforms/DoFn');
 
 /**
  * Define successful and failing DoFns:
