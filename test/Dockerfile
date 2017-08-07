@@ -1,9 +1,4 @@
-FROM node:alpine
-
-# Create app directory and set as working directory:
-#
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+FROM beamish:latest
 
 # Install app dependencies as global node modules:
 #
