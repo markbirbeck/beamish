@@ -6,28 +6,11 @@ chai.should();
 const Pipeline = require('../lib/sdk/Pipeline');
 const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
+const Create = require('../lib/sdk/transforms/Create');
 
 /**
  * Define a DoFn for ParDo:
  */
-
-const lines = [
-  'To be, or not to be: that is the question: ',
-  'Whether \'tis nobler in the mind to suffer ',
-  'The slings and arrows of outrageous fortune, ',
-  'Or to take arms against a sea of troubles, '
-];
-
-class CreateOfLinesFn extends DoFn {
-  constructor(lines) {
-    super();
-    this.lines = lines;
-  }
-
-  processElement(c) {
-    this.lines.forEach(line => c.output(line));
-  }
-}
 
 class SplitLineFn extends DoFn {
   processElement(c) {
@@ -57,7 +40,12 @@ describe('Create', () => {
       let p = Pipeline.create();
 
       p
-      .apply(ParDo().of(new CreateOfLinesFn(lines)))
+      .apply(ParDo().of(Create.of([
+        'To be, or not to be: that is the question: ',
+        'Whether \'tis nobler in the mind to suffer ',
+        'The slings and arrows of outrageous fortune, ',
+        'Or to take arms against a sea of troubles, '
+      ])))
       .apply(ParDo().of(new SplitLineFn()))
       .apply(ParDo().of(new ComputeWordLengthFn()))
       .apply(ParDo().of(new OutputFn()))
