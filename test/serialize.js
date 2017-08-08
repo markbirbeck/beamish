@@ -45,11 +45,11 @@ describe('compile pipeline', () => {
 
     graph[0]
     .should.eql(
-`class ComputeWordLengthFn extends DoFn {
+`new class ComputeWordLengthFn extends DoFn {
   processElement() {
     return 'hello, world';
   }
-}`
+}({})`
     );
   });
 
@@ -84,12 +84,58 @@ describe('compile pipeline', () => {
     .forEach(el => {
       el
       .should.eql(
-`class ComputeWordLengthFn extends DoFn {
+`new class ComputeWordLengthFn extends DoFn {
   processElement() {
     return 'hello, world';
   }
-}`
+}({})`
       )
     });
+  });
+
+  it('compile function with initialised values', () => {
+    let p = Pipeline.create();
+
+    /**
+     * Define a DoFn for ParDo:
+     */
+
+    class GreetingFn extends DoFn {
+      constructor(opts) {
+        super();
+        this.greeting = opts.greeting;
+      }
+
+      processElement() {
+        return `${this.greeting}, world`;
+      }
+    }
+
+    p
+    .apply(ParDo().of(new GreetingFn({greeting: 'hello'})))
+    ;
+
+    /**
+     * Test the graph:
+     */
+
+    const graph = p.transforms.graph;
+
+    graph.should.be.an('array');
+    graph.should.have.lengthOf(1);
+
+    graph[0]
+    .should.eql(
+`new class GreetingFn extends DoFn {
+      constructor(opts) {
+        super();
+        this.greeting = opts.greeting;
+      }
+
+      processElement() {
+        return \`\${this.greeting}, world\`;
+      }
+    }({"greeting":"hello"})`
+    );
   });
 });
