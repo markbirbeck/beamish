@@ -49,7 +49,7 @@ describe('compile pipeline', () => {
   processElement() {
     return 'hello, world';
   }
-}({})`
+}().init({})`
     );
   });
 
@@ -88,7 +88,7 @@ describe('compile pipeline', () => {
   processElement() {
     return 'hello, world';
   }
-}({})`
+}().init({})`
       )
     });
   });
@@ -101,9 +101,9 @@ describe('compile pipeline', () => {
      */
 
     class GreetingFn extends DoFn {
-      constructor(opts) {
+      constructor(greeting) {
         super();
-        this.greeting = opts.greeting;
+        this.greeting = greeting;
       }
 
       processElement() {
@@ -112,7 +112,7 @@ describe('compile pipeline', () => {
     }
 
     p
-    .apply(ParDo().of(new GreetingFn({greeting: 'hello'})))
+    .apply(ParDo().of(new GreetingFn('hello')))
     ;
 
     /**
@@ -127,15 +127,15 @@ describe('compile pipeline', () => {
     graph[0]
     .should.eql(
 `new class GreetingFn extends DoFn {
-      constructor(opts) {
+      constructor(greeting) {
         super();
-        this.greeting = opts.greeting;
+        this.greeting = greeting;
       }
 
       processElement() {
         return \`\${this.greeting}, world\`;
       }
-    }({"greeting":"hello"})`
+    }().init({"greeting":"hello"})`
     );
   });
 });
