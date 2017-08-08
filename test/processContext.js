@@ -6,6 +6,7 @@ chai.should();
 const Pipeline = require('../lib/sdk/Pipeline');
 const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
+const Create = require('../lib/sdk/transforms/Create');
 
 /**
  * Define a DoFn for ParDo:
@@ -38,6 +39,7 @@ describe('processElement', () => {
     let p = Pipeline.create();
 
     p
+    .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new ComputeWordLengthFn()))
     .apply(ParDo().of(new OutputFn()))
     .run()
@@ -48,6 +50,7 @@ describe('processElement', () => {
     let p = Pipeline.create();
 
     p
+    .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new SplitLineFn()))
     .apply(ParDo().of(new ComputeWordLengthFn()))
     .apply(ParDo().of(new OutputFn()))
