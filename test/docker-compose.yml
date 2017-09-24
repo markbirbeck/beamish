@@ -7,3 +7,4 @@ services:
     volumes:
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
+      - /usr/src/app/node_modules
