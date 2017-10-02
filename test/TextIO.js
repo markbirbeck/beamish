@@ -12,9 +12,7 @@ describe('TextIO', () => {
   describe('read()', () => {
     it('from()', () => {
       Pipeline.create()
-      .apply(ParDo().of(
-        TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt'))
-      ))
+      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
       .apply(ParDo().of(new class extends DoFn {
         processElement(c) {
           c.element().should.eql('This is a simple file.\n');
