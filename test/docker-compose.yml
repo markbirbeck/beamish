@@ -3,7 +3,7 @@ services:
   unit-test:
     build:
       context: .
-    image: node-unit-test:latest
+    image: beamish-unit-test:latest
     volumes:
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
