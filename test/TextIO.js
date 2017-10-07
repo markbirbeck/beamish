@@ -19,6 +19,7 @@ describe('TextIO', () => {
         }
       }))
       .run()
+      .waitUntilFinish()
       ;
     });
   });

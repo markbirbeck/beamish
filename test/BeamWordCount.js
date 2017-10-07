@@ -115,6 +115,6 @@ describe('Beam Word Count', () => {
      * Run the pipeline:
      */
 
-    p.run().waitUntilFinish();
+    return p.run().waitUntilFinish();
   });
 });

@@ -50,6 +50,7 @@ describe('Create', () => {
       .apply(ParDo().of(new ComputeWordLengthFn()))
       .apply(ParDo().of(new OutputFn()))
       .run()
+      .waitUntilFinish()
       ;
     });
   });
