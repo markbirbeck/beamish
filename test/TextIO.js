@@ -11,7 +11,7 @@ const TextIO = require('../lib/sdk/io/TextIO');
 describe('TextIO', () => {
   describe('read()', () => {
     it('from()', () => {
-      Pipeline.create()
+      return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
       .apply(ParDo().of(new class extends DoFn {
         processElement(c) {
