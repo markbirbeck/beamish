@@ -56,7 +56,7 @@ describe('Beam Word Count', () => {
      *  gs://apache-beam-samples/shakespeare/*
      */
 
-    p.apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/*')))
+    p.apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
 
     /**
      * Concept #2: Apply a ParDo transform to our PCollection of text lines.
