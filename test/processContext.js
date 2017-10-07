@@ -38,23 +38,25 @@ describe('processElement', () => {
   it('simple function', () => {
     let p = Pipeline.create();
 
-    p
+    return p
     .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new ComputeWordLengthFn()))
     .apply(ParDo().of(new OutputFn()))
     .run()
+    .waitUntilFinish()
     ;
   });
 
   it('multiple output() calls', () => {
     let p = Pipeline.create();
 
-    p
+    return p
     .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new SplitLineFn()))
     .apply(ParDo().of(new ComputeWordLengthFn()))
     .apply(ParDo().of(new OutputFn()))
     .run()
+    .waitUntilFinish()
     ;
   });
 });

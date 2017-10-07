@@ -34,6 +34,7 @@ describe('pipeline#run()', () => {
     .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new SuccessFN()))
     .run()
+    .waitUntilFinish()
     .should.be.fulfilled;
     ;
   });
@@ -46,6 +47,7 @@ describe('pipeline#run()', () => {
     .apply(ParDo().of(Create.of(['abc xyz 123'])))
     .apply(ParDo().of(new FailFN()))
     .run()
+    .waitUntilFinish()
     .should.be.rejected;
     ;
   });

@@ -39,7 +39,7 @@ describe('Create', () => {
     it('strings', () => {
       let p = Pipeline.create();
 
-      p
+      return p
       .apply(ParDo().of(Create.of([
         'To be, or not to be: that is the question: ',
         'Whether \'tis nobler in the mind to suffer ',
@@ -50,6 +50,7 @@ describe('Create', () => {
       .apply(ParDo().of(new ComputeWordLengthFn()))
       .apply(ParDo().of(new OutputFn()))
       .run()
+      .waitUntilFinish()
       ;
     });
   });
