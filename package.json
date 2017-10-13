@@ -1,7 +1,7 @@
 {
-  "name": "beamish-compiler",
+  "name": "beamish-direct-runner",
   "version": "0.1.0",
-  "description": "Converts a Beamish pipeline to a DAG ready for validation and execution by a runner.",
+  "description": "A Direct Runner for Beamish.",
   "main": "index.js",
   "directories": {
     "test": "test"
