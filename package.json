@@ -9,7 +9,6 @@
   "scripts": {
     "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test"
   },
-  "author": "Mark Birbeck <mark.birbeck@gmail.com> (http://markbirbeck.com/)",
   "license": "MIT",
   "dependencies": {
     "highland": "^2.11.1",
