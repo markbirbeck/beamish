@@ -9,7 +9,6 @@
   "scripts": {
     "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test"
   },
-  "license": "MIT",
   "dependencies": {
     "highland": "^2.11.1",
     "serialize-javascript": "^1.4.0"
