@@ -2,7 +2,6 @@
   "name": "beamish-direct-runner",
   "version": "0.1.0",
   "description": "A Direct Runner for Beamish.",
-  "main": "index.js",
   "directories": {
     "test": "test"
   },
