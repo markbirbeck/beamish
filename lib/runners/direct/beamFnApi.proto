@@ -21,8 +21,9 @@ option objc_class_prefix = "HLW";
 
 package fn_execution;
 
-// The greeting service definition.
-service Greeter {
+// An API that describes the work that a SDK harness is meant to do.
+// Stable
+service BeamFnControl {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
   // Sends another greeting
