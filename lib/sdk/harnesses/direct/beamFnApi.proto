@@ -29,8 +29,23 @@ service BeamFnControl {
   rpc Control (InstructionRequest) returns (InstructionReply) {}
 }
 
-// The request message containing the user's name.
+// A request sent by a runner which the SDK is asked to fulfill.
+// For any unsupported request type, an error should be returned with a
+// matching instruction id.
+// Stable
 message InstructionRequest {
+  // (Required) An unique identifier provided by the runner which represents
+  // this requests execution. The InstructionResponse MUST have the matching id.
+  string instruction_id = 1;
+
+  // (Required) A request that the SDK Harness needs to interpret.
+  oneof request {
+    RegisterRequest register = 1000;
+  }
+}
+
+// The request message containing the user's name.
+message RegisterRequest {
   string name = 1;
 }
 
