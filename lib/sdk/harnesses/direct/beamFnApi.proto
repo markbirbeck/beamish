@@ -51,9 +51,11 @@ message RegisterRequest {
   repeated ProcessBundleDescriptor process_bundle_descriptor = 1;
 }
 
-// The request message containing the user's name.
+// Definitions that should be used to construct the bundle processing graph.
 message ProcessBundleDescriptor {
-  string name = 1;
+  // (Required) A pipeline level unique id which can be used as a reference to
+  // refer to this.
+  string id = 1;
 }
 
 // The response message containing the greetings
