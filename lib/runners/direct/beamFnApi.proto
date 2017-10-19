@@ -44,8 +44,16 @@ message InstructionRequest {
   }
 }
 
-// The request message containing the user's name.
+// A list of objects which can be referred to by the runner in
+// future requests.
+// Stable
 message RegisterRequest {
+  // (Optional) The set of descriptors used to process bundles.
+  repeated ProcessBundleDescriptor process_bundle_descriptor = 1;
+}
+
+// The request message containing the user's name.
+message ProcessBundleDescriptor {
   string name = 1;
 }
 
