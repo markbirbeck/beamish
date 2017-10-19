@@ -15,11 +15,11 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.grpc.examples.helloworld";
-option java_outer_classname = "HelloWorldProto";
+option java_package = "org.apache.beam.model.fnexecution.v1";
+option java_outer_classname = "BeamFnApi";
 option objc_class_prefix = "HLW";
 
-package helloworld;
+package fn_execution;
 
 // The greeting service definition.
 service Greeter {
