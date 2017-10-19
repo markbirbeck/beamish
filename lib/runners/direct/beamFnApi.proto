@@ -24,8 +24,9 @@ package fn_execution;
 // An API that describes the work that a SDK harness is meant to do.
 // Stable
 service BeamFnControl {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  // Instructions sent by the runner to the SDK requesting different types
+  // of work.
+  rpc Control (HelloRequest) returns (HelloReply) {}
 }
 
 // The request message containing the user's name.
