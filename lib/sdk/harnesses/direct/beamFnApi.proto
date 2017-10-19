@@ -26,15 +26,15 @@ package fn_execution;
 service BeamFnControl {
   // Instructions sent by the runner to the SDK requesting different types
   // of work.
-  rpc Control (HelloRequest) returns (HelloReply) {}
+  rpc Control (InstructionRequest) returns (InstructionReply) {}
 }
 
 // The request message containing the user's name.
-message HelloRequest {
+message InstructionRequest {
   string name = 1;
 }
 
 // The response message containing the greetings
-message HelloReply {
+message InstructionReply {
   string message = 1;
 }
