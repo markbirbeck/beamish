@@ -26,7 +26,7 @@ package fn_execution;
 service BeamFnControl {
   // Instructions sent by the runner to the SDK requesting different types
   // of work.
-  rpc Control (InstructionRequest) returns (InstructionReply) {}
+  rpc Control (InstructionRequest) returns (InstructionResponse) {}
 }
 
 // A request sent by a runner which the SDK is asked to fulfill.
@@ -44,6 +44,26 @@ message InstructionRequest {
   }
 }
 
+// The response for an associated request the SDK had been asked to fulfill.
+// Stable
+message InstructionResponse {
+  // (Required) A reference provided by the runner which represents a requests
+  // execution. The InstructionResponse MUST have the matching id when
+  // responding to the runner.
+  string instruction_id = 1;
+
+  // If this is specified, then this instruction has failed.
+  // A human readable string representing the reason as to why processing has
+  // failed.
+  string error = 2;
+
+  // If the instruction did not fail, it is required to return an equivalent
+  // response type depending on the request this matches.
+  oneof response {
+    RegisterResponse register = 1000;
+  }
+}
+
 // A list of objects which can be referred to by the runner in
 // future requests.
 // Stable
@@ -52,14 +72,14 @@ message RegisterRequest {
   repeated ProcessBundleDescriptor process_bundle_descriptor = 1;
 }
 
+// Stable
+message RegisterResponse {
+  string message = 1;
+}
+
 // Definitions that should be used to construct the bundle processing graph.
 message ProcessBundleDescriptor {
   // (Required) A pipeline level unique id which can be used as a reference to
   // refer to this.
   string id = 1;
-}
-
-// The response message containing the greetings
-message InstructionReply {
-  string message = 1;
 }
