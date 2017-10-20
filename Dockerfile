@@ -9,8 +9,17 @@ ENV NODE_PATH /usr/local/lib/node_modules
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+# Required by gRPC when running on Alpine:
+#
+RUN apk add --no-cache \
+  libc6-compat
+
 # Bundle app source
 #
 COPY . /usr/src/app
 
-RUN npm install
+# We need '-unsafe-perm' as described here:
+#
+#  https://github.com/grpc/grpc/issues/6435
+#
+RUN npm install -g -unsafe-perm
