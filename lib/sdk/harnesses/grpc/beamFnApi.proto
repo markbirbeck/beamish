@@ -26,7 +26,7 @@ package fn_execution;
 service BeamFnControl {
   // Instructions sent by the runner to the SDK requesting different types
   // of work.
-  rpc Control (InstructionRequest) returns (InstructionResponse) {}
+  rpc Control (stream InstructionRequest) returns (stream InstructionResponse) {}
 }
 
 // A request sent by a runner which the SDK is asked to fulfill.
@@ -41,6 +41,7 @@ message InstructionRequest {
   // (Required) A request that the SDK Harness needs to interpret.
   oneof request {
     RegisterRequest register = 1000;
+    ProcessBundleRequest process_bundle = 1001;
   }
 }
 
@@ -61,6 +62,7 @@ message InstructionResponse {
   // response type depending on the request this matches.
   oneof response {
     RegisterResponse register = 1000;
+    ProcessBundleResponse process_bundle = 1001;
   }
 }
 
@@ -74,7 +76,6 @@ message RegisterRequest {
 
 // Stable
 message RegisterResponse {
-  string message = 1;
 }
 
 // Definitions that should be used to construct the bundle processing graph.
@@ -82,4 +83,30 @@ message ProcessBundleDescriptor {
   // (Required) A pipeline level unique id which can be used as a reference to
   // refer to this.
   string id = 1;
+
+  // (Required) A map from pipeline-scoped id to PTransform.
+  string transforms = 2;
+}
+
+// A request to process a given bundle.
+// Stable
+message ProcessBundleRequest {
+  // (Required) A reference to the process bundle descriptor that must be
+  // instantiated and executed by the SDK harness.
+  string process_bundle_descriptor_reference = 1;
+
+  // (Optional) A list of cache tokens that can be used by an SDK to reuse
+  // cached data returned by the State API across multiple bundles.
+  repeated bytes cache_tokens = 2;
+}
+
+// Stable
+message ProcessBundleResponse {
+  // (Optional) If metrics reporting is supported by the SDK, this represents
+  // the final metrics to record for this bundle.
+  Metrics metrics = 1;
+}
+
+message Metrics {
+  string message = 1;
 }
