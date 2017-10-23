@@ -8,3 +8,11 @@ services:
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
       - /usr/src/app/node_modules
+    depends_on:
+      - harness
+
+  harness:
+    image: beamish:latest
+    ports:
+      - "50051:50051"
+    command: ["node", "/usr/src/app/lib/sdk/harnesses/grpc/launch.js"]
