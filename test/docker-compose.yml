@@ -10,9 +10,11 @@ services:
       - /usr/src/app/node_modules
 
   harness:
-    image: beamish:latest
+    build:
+      context: ..
+      dockerfile: ./Dockerfile-harness
+    image: beamish-grpc-harness:latest
     ports:
       - "50051:50051"
     depends_on:
       - unit-test
-    command: ["node", "/usr/src/app/lib/sdk/harnesses/grpc/launch.js"]
