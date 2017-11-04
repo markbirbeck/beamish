@@ -116,5 +116,5 @@ describe('Beam Word Count', () => {
      */
 
     return p.run().waitUntilFinish();
-  }).timeout(4000);
+  });
 });

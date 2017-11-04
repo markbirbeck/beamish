@@ -26,7 +26,7 @@ package fn_execution;
 service BeamFnControl {
   // Instructions sent by the runner to the SDK requesting different types
   // of work.
-  rpc Control (stream InstructionRequest) returns (stream InstructionResponse) {}
+  rpc Control (stream InstructionResponse) returns (stream InstructionRequest) {}
 }
 
 // A request sent by a runner which the SDK is asked to fulfill.

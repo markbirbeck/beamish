@@ -6,13 +6,16 @@
     "test": "test"
   },
   "scripts": {
+    "build": "docker-compose -f build.docker-compose.yml build",
     "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test"
   },
   "dependencies": {
+    "dockerode": "^2.5.3",
     "grpc": "^1.6.6",
     "highland": "^2.11.1",
     "serialize-javascript": "^1.4.0",
-    "@slack/client": "^3.14.0"
+    "@slack/client": "^3.14.0",
+    "yargs": "^10.0.3"
   },
   "devDependencies": {}
 }

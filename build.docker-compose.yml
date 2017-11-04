@@ -1,0 +1,12 @@
+version: "3.2"
+services:
+  build-beamish:
+    build:
+      context: .
+    image: beamish:latest
+
+  build-beamish-grpc-harness:
+    build:
+      context: .
+      dockerfile: Dockerfile-harness
+    image: beamish-grpc-harness:latest

@@ -16,6 +16,14 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 RUN npm install -g -unsafe-perm
 
-# Bundle app source
+# Copy app source:
 #
-COPY . /usr/src/app
+COPY lib/sdk /usr/src/app
+
+# Copy test files:
+#
+# TODO: Create a separate Docker image for testing.
+#
+COPY test/fixtures /usr/src/app/test/fixtures
+
+ENTRYPOINT ["node", "./harnesses/grpc/launch.js"]
