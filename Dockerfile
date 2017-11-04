@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:8
 
 # Install app dependencies as global node modules:
 #
@@ -8,11 +8,6 @@ ENV NODE_PATH /usr/local/lib/node_modules
 #
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-
-# Required by gRPC when running on Alpine:
-#
-RUN apk add --no-cache \
-  libc6-compat
 
 # Bundle app source
 #
