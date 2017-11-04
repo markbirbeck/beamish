@@ -6,6 +6,7 @@
     "test": "test"
   },
   "scripts": {
+    "build": "docker-compose -f build.docker-compose.yml build",
     "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test"
   },
   "dependencies": {
