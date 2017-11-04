@@ -4,17 +4,10 @@ services:
     build:
       context: .
     image: beamish-unit-test:latest
+    ports:
+      - "50051:50051"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
       - /usr/src/app/node_modules
-
-  harness:
-    build:
-      context: ..
-      dockerfile: ./Dockerfile-harness
-    image: beamish-grpc-harness:latest
-    ports:
-      - "50051:50051"
-    depends_on:
-      - unit-test
