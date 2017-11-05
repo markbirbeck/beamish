@@ -9,4 +9,4 @@ RUN npm install -g \
 
 # Launch the app:
 #
-CMD ["/bin/sh", "-c", "mocha --watch --recursive --timeout 30000"]
+CMD ["/bin/sh", "-c", "mocha --watch --recursive --timeout 30000 --reporter min"]
