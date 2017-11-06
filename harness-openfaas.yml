@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://localhost:8080
+
+functions:
+  beamish-harness:
+    lang: node
+    handler: ./lib/sdk/harnesses/openfaas
+    image: beamish-harness-openfaas
