@@ -10,3 +10,9 @@ services:
       context: .
       dockerfile: Dockerfile-harness
     image: beamish-grpc-harness:latest
+
+  build-beamish-grpc-harness-openfaas:
+    build:
+      context: .
+      dockerfile: Dockerfile-harness-openfaas
+    image: beamish-grpc-harness-openfaas:latest
