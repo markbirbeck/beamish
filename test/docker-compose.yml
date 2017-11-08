@@ -1,9 +1,21 @@
 version: "3.2"
 services:
+  # Data described here:
+  #
+  #  https://dev.mysql.com/doc/employee/en/sakila-structure.html
+  #
+  db:
+    image: genschsa/mysql-employees:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'college'
   unit-test:
     build:
       context: .
     image: beamish-unit-test:latest
+    depends_on:
+      - db
     ports:
       - "50051:50051"
     volumes:
