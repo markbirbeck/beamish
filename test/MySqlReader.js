@@ -2,7 +2,8 @@ const chai = require('chai');
 
 chai.should();
 
-const MySqlReader = require('../lib/sdk/io/MySqlReader');
+const MySqlSource = require('../lib/sdk/io/MySqlSource');
+const MySqlReader = MySqlSource.MySqlReader
 
 describe('MySqlReader', () => {
   it('start() and close()', (done) => {
