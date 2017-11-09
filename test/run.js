@@ -13,13 +13,13 @@ const Create = require('../lib/sdk/transforms/Create');
  */
 
 class SuccessFN extends DoFn {
-  processElement() {
+  apply() {
     return 'hello, world';
   }
 }
 
 class FailFN extends DoFn {
-  processElement() {
+  apply() {
     throw new Error('blah');
     return 'hello, world';
   }

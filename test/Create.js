@@ -21,10 +21,8 @@ class SplitLineFn extends DoFn {
 }
 
 class ComputeWordLengthFn extends DoFn {
-  processElement(c) {
-    let word = c.element();
-
-    c.output(word.length);
+  apply(element) {
+    return element.length;
   }
 }
 
