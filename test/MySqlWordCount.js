@@ -18,7 +18,7 @@ class OutputFn extends DoFn {
 }
 
 describe('MySQL Word Count', () => {
-  it.only('minimal', () => {
+  it('minimal', () => {
 
     /**
      * Derived from:
