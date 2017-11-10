@@ -6,7 +6,15 @@ const MySqlSource = require('../lib/sdk/io/MySqlSource');
 
 describe('MySqlSource', () => {
   it('createReader()', (done) => {
-    let reader = new MySqlSource().createReader();
+    let reader = new MySqlSource({
+      query: 'SELECT dept_name FROM departments;',
+      connectionConfiguration: {
+        host: 'db',
+        user: 'root',
+        password: 'college',
+        database: 'employees'
+      }
+    }).createReader();
 
     try {
       let f = async () => {
