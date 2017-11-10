@@ -1,4 +1,3 @@
-const path = require('path');
 const chai = require('chai');
 
 chai.use(require('chai-as-promised'));
@@ -19,7 +18,7 @@ class OutputFn extends DoFn {
 }
 
 describe('MySQL Word Count', () => {
-  it('minimal', () => {
+  it.only('minimal', () => {
 
     /**
      * Derived from:
@@ -46,7 +45,19 @@ describe('MySQL Word Count', () => {
      * Apply the pipeline's transforms:
      */
 
-    p.apply('MySQL', MySqlIO.read().from())
+    p.apply(
+      'MySQL',
+      MySqlIO
+      .read()
+      .withConnectionConfiguration({
+        host: 'db',
+        user: 'root',
+        password: 'college',
+        database: 'employees'
+      })
+      .withQuery('SELECT dept_name FROM departments;')
+      .from()
+    )
 
     /**
      * Extract just the department name:
