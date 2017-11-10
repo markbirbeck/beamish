@@ -7,7 +7,17 @@ const MySqlReader = MySqlSource.MySqlReader
 
 describe('MySqlReader', () => {
   it('start() and close()', (done) => {
-    let reader = new MySqlReader();
+    let reader = new MySqlReader({
+      spec: {
+        query: 'SELECT dept_name FROM departments;',
+        connectionConfiguration: {
+          host: 'db',
+          user: 'root',
+          password: 'college',
+          database: 'employees'
+        }
+      }
+    });
 
     try {
       let f = async () => {
@@ -29,7 +39,17 @@ describe('MySqlReader', () => {
   });
 
   it('advance()', (done) => {
-    let reader = new MySqlReader();
+    let reader = new MySqlReader({
+      spec: {
+        query: 'SELECT dept_name FROM departments;',
+        connectionConfiguration: {
+          host: 'db',
+          user: 'root',
+          password: 'college',
+          database: 'employees'
+        }
+      }
+    });
 
     try {
       let f = async () => {
