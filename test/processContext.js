@@ -39,9 +39,9 @@ describe('processElement', () => {
     let p = Pipeline.create();
 
     return p
-    .apply(ParDo().of(Create.of(['abc xyz 123'])))
-    .apply(ParDo().of(new ComputeWordLengthFn()))
-    .apply(ParDo().of(new OutputFn()))
+    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new OutputFn()))
     .run()
     .waitUntilFinish()
     ;
@@ -51,10 +51,10 @@ describe('processElement', () => {
     let p = Pipeline.create();
 
     return p
-    .apply(ParDo().of(Create.of(['abc xyz 123'])))
-    .apply(ParDo().of(new SplitLineFn()))
-    .apply(ParDo().of(new ComputeWordLengthFn()))
-    .apply(ParDo().of(new OutputFn()))
+    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    .apply(ParDo.of(new SplitLineFn()))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new OutputFn()))
     .run()
     .waitUntilFinish()
     ;

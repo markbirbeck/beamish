@@ -52,7 +52,7 @@ describe('MySQL Word Count', () => {
      * Extract just the department name:
      */
 
-    .apply('DeptName', ParDo().of(
+    .apply('DeptName', ParDo.of(
       new class ExtractDeptNameFn extends DoFn {
         apply(input) {
           return input.dept_name;
@@ -68,7 +68,7 @@ describe('MySQL Word Count', () => {
      * Shakespeare's collected texts:
      */
 
-    .apply('ExtractWords', ParDo().of(
+    .apply('ExtractWords', ParDo.of(
       new class ExtractWordsFn extends DoFn {
         processElement(c) {
           c.element()
@@ -101,7 +101,7 @@ describe('MySQL Word Count', () => {
       }()
     ))
 
-    .apply('Output', ParDo().of(new OutputFn()))
+    .apply('Output', ParDo.of(new OutputFn()))
     ;
 
     /**

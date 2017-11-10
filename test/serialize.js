@@ -31,7 +31,7 @@ describe('compile pipeline', () => {
      */
 
     p
-    .apply(ParDo().of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
     ;
 
     /**
@@ -66,9 +66,9 @@ describe('compile pipeline', () => {
      */
 
     p
-    .apply(ParDo().of(new ComputeWordLengthFn()))
-    .apply(ParDo().of(new ComputeWordLengthFn()))
-    .apply(ParDo().of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
+    .apply(ParDo.of(new ComputeWordLengthFn()))
     ;
 
     /**
@@ -112,7 +112,7 @@ describe('compile pipeline', () => {
     }
 
     p
-    .apply(ParDo().of(new GreetingFn('hello')))
+    .apply(ParDo.of(new GreetingFn('hello')))
     ;
 
     /**
