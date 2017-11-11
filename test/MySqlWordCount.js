@@ -56,7 +56,6 @@ describe('MySQL Word Count', () => {
         database: 'employees'
       })
       .withQuery('SELECT dept_name FROM departments;')
-      .from()
     )
 
     /**
