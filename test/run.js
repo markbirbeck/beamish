@@ -35,7 +35,7 @@ describe('pipeline#run()', () => {
     .apply(ParDo().of(new SuccessFN()))
     .run()
     .waitUntilFinish()
-    .should.be.fulfilled;
+    .should.be.fulfilled
     ;
   });
 
@@ -48,7 +48,7 @@ describe('pipeline#run()', () => {
     .apply(ParDo().of(new FailFN()))
     .run()
     .waitUntilFinish()
-    .should.be.rejected;
+    .should.be.rejectedWith('blah')
     ;
   });
 });
