@@ -12,7 +12,7 @@ const Pipeline = require('../lib/sdk/Pipeline');
 const PipelineOptionsFactory = require('../lib/sdk/options/PipelineOptionsFactory')
 const TextIO = require('../lib/sdk/io/TextIO');
 
-describe('GrpcRunner', () => {
+describe.skip('GrpcRunner', () => {
   describe('Beam Word Count', () => {
     it('minimal', () => {
 
