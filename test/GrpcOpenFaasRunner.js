@@ -18,7 +18,7 @@ class OutputFn extends DoFn {
   }
 }
 
-describe.skip('GrpcOpenFaasRunner', () => {
+describe.only('GrpcOpenFaasRunner', () => {
   describe('Beam Word Count', () => {
     it('minimal', () => {
 
