@@ -67,7 +67,7 @@ describe.skip('GrpcRunner', () => {
        * Shakespeare's collected texts:
        */
 
-      .apply('ExtractWords', ParDo().of(
+      .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
           processElement(c) {
             c.element()

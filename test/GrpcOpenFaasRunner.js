@@ -73,7 +73,7 @@ describe.skip('GrpcOpenFaasRunner', () => {
        * Shakespeare's collected texts:
        */
 
-      .apply('ExtractWords', ParDo().of(
+      .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
           processElement(c) {
             c.element()
@@ -123,7 +123,7 @@ describe.skip('GrpcOpenFaasRunner', () => {
        * going to do this:
        */
 
-      .apply(ParDo().of(new OutputFn()))
+      .apply(ParDo.of(new OutputFn()))
       ;
 
       /**

@@ -15,7 +15,7 @@ describe('TextIO', () => {
     it('from()', () => {
       return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
-      .apply(ParDo().of(new class extends DoFn {
+      .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           c.element().should.eql('This is a simple file.\n');
         }
@@ -30,7 +30,7 @@ describe('TextIO', () => {
     it('to()', () => {
       return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file2.txt')))
-      .apply('ExtractWords', ParDo().of(
+      .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
           processElement(c) {
             c.element().split('\n').forEach(word => c.output(word));

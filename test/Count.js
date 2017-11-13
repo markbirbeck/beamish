@@ -20,7 +20,7 @@ describe('Count', () => {
   it('perElement()', () => {
     return Pipeline.create()
     .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file2.txt')))
-    .apply('ExtractWords', ParDo().of(
+    .apply('ExtractWords', ParDo.of(
       new class ExtractWordsFn extends DoFn {
         processElement(c) {
           c.element().split('\n').forEach(word => c.output(word));
@@ -35,7 +35,7 @@ describe('Count', () => {
         }
       }()
     ))
-    .apply(ParDo().of(new OutputFn()))
+    .apply(ParDo.of(new OutputFn()))
     .run()
     .waitUntilFinish()
     ;

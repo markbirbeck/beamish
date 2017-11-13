@@ -1,4 +1,3 @@
-const path = require('path');
 const chai = require('chai');
 
 chai.use(require('chai-as-promised'));
@@ -10,9 +9,15 @@ const DoFn = require('../lib/sdk/transforms/DoFn');
 const ParDo = require('../lib/sdk/transforms/ParDo');
 const Pipeline = require('../lib/sdk/Pipeline');
 const PipelineOptionsFactory = require('../lib/sdk/options/PipelineOptionsFactory')
-const TextIO = require('../lib/sdk/io/TextIO');
+const MySqlIO = require('../lib/sdk/io/MySqlIO');
 
-describe('Beam Word Count', () => {
+class OutputFn extends DoFn {
+  processElement(c) {
+    console.log(c.element());
+  }
+}
+
+describe('MySQL Word Count', () => {
   it('minimal', () => {
 
     /**
@@ -40,23 +45,30 @@ describe('Beam Word Count', () => {
      * Apply the pipeline's transforms:
      */
 
-    /**
-     * Concept #1: Apply a root transform to the pipeline; in this case,
-     * TextIO.Read to read a set of input text files. TextIO.Read returns
-     * a PCollection where each element is one line from the input text
-     * (a set of Shakespeare's texts).
-     */
+    p.apply(
+      'MySQL',
+      MySqlIO
+      .read()
+      .withConnectionConfiguration({
+        host: 'db',
+        user: 'root',
+        password: 'college',
+        database: 'employees'
+      })
+      .withQuery('SELECT dept_name FROM departments;')
+    )
 
     /**
-     * This example reads a public data set consisting of the complete works
-     * of Shakespeare:
-     *
-     * [TODO] The original examples uses the URL:
-     *
-     *  gs://apache-beam-samples/shakespeare/*
+     * Extract just the department name:
      */
 
-    p.apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+    .apply('DeptName', ParDo.of(
+      new class ExtractDeptNameFn extends DoFn {
+        apply(input) {
+          return input.dept_name;
+        }
+      }()
+    ))
 
     /**
      * Concept #2: Apply a ParDo transform to our PCollection of text lines.
@@ -99,16 +111,7 @@ describe('Beam Word Count', () => {
       }()
     ))
 
-    /**
-     * Concept #4: Apply a write transform, TextIO.Write, at the end of the
-     * pipeline. TextIO.Write writes the contents of a PCollection (in this
-     * case, our PCollection of formatted strings) to a series of text files.
-     *
-     * By default, it will write to a set of files with names like
-     * wordcount-00001-of-00005
-     */
-
-    .apply(TextIO.write().to('wordcounts'))
+    .apply('Output', ParDo.of(new OutputFn()))
     ;
 
     /**
