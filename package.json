@@ -8,6 +8,7 @@
   "scripts": {
     "build": "docker-compose -f build.docker-compose.yml build",
     "deployOpenFaas": "docker stack deploy func -c openfaas/docker-compose.yml",
+    "rmOpenFaas": "docker stack rm func",
     "test": "docker-compose -f test/docker-compose.yml run --rm --service-ports unit-test"
   },
   "dependencies": {

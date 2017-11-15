@@ -61,3 +61,11 @@ Check all is well by navigating to the UI:
 http://localhost:8080/ui/
 
 Try a few functions.
+
+## Remove The OpenFaaS Harness
+
+To remove the OpenFaaS infrastructure:
+
+```shell
+npm run rmOpenFaas
+```
