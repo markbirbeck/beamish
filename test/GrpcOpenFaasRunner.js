@@ -19,7 +19,7 @@ class OutputFn extends DoFn {
   }
 }
 
-describe('GrpcOpenFaasRunner', () => {
+describe.only('GrpcOpenFaasRunner', () => {
   describe('Beam Word Count', () => {
     it('minimal', () => {
 
@@ -123,7 +123,7 @@ describe('GrpcOpenFaasRunner', () => {
       return p.run().waitUntilFinish();
     });
 
-    it.only('MySqlSource', () => {
+    it('MySqlSource', () => {
 
       /**
        * Derived from:
