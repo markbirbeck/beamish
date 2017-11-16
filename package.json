@@ -9,7 +9,8 @@
     "build": "docker-compose -f build.docker-compose.yml build",
     "deployOpenFaas": "docker stack deploy func -c openfaas/docker-compose.yml",
     "rmOpenFaas": "docker stack rm func",
-    "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test unit-test"
+    "test": "docker-compose -f test/docker-compose.yml up --build --exit-code-from unit-test unit-test",
+    "test-openfaas": "docker-compose -f test/docker-compose-openfaas.yml up --build --exit-code-from unit-test unit-test"
   },
   "dependencies": {
     "dockerode": "^2.5.3",

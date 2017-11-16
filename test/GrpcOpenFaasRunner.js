@@ -20,7 +20,7 @@ class OutputFn extends DoFn {
 
 describe.only('GrpcOpenFaasRunner', () => {
   describe('Beam Word Count', () => {
-    it.only('minimal', () => {
+    it('minimal', () => {
 
       /**
        * Derived from:
