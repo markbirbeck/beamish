@@ -107,17 +107,6 @@ describe.only('GrpcOpenFaasRunner', () => {
       ))
 
       /**
-       * Concept #4: Apply a write transform, TextIO.Write, at the end of the
-       * pipeline. TextIO.Write writes the contents of a PCollection (in this
-       * case, our PCollection of formatted strings) to a series of text files.
-       *
-       * By default, it will write to a set of files with names like
-       * wordcount-00001-of-00005
-       */
-
-      .apply(TextIO.write().to('wordcounts'))
-
-      /**
        * [TODO] OpenFaaS functions return everything that is written to stdout
        * so for now just echo everything until we work out exactly how we're
        * going to do this:

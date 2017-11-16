@@ -1,0 +1,13 @@
+version: "3.2"
+services:
+  unit-test:
+    build:
+      context: .
+    image: beamish-unit-test:latest
+    ports:
+      - "50051:50051"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}:/usr/src/app
+      - ${PWD}/test:/usr/src/app/test
+      - /usr/src/app/node_modules
