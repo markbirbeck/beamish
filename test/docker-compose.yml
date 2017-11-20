@@ -6,6 +6,8 @@ services:
   #
   db:
     image: genschsa/mysql-employees:latest
+    networks:
+      - functions
     ports:
       - "3306:3306"
     environment:
@@ -16,6 +18,8 @@ services:
     image: beamish-unit-test:latest
     depends_on:
       - db
+    networks:
+      - functions
     ports:
       - "50051:50051"
     volumes:
@@ -23,3 +27,8 @@ services:
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
       - /usr/src/app/node_modules
+
+networks:
+  functions:
+    external:
+      name: func_functions
