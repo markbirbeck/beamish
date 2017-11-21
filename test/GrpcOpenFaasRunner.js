@@ -38,7 +38,8 @@ describe('GrpcOpenFaasRunner', () => {
 
       const options = PipelineOptionsFactory.create()
       .setRunner('grpc/GrpcRunner')
-      .setHarness('openfaas/GrpcHarnessOpenFaasProxy')
+      .setHarness('grpc/GrpcHarnessProxy')
+      .setImage('beamish-grpc-harness-openfaas:latest')
       ;
 
       /**
@@ -141,7 +142,11 @@ describe('GrpcOpenFaasRunner', () => {
        * based on the class path configured in its dependencies:
        */
 
-      const options = PipelineOptionsFactory.create().setRunner('grpc-openfaas/GrpcOpenFaasRunner');
+      const options = PipelineOptionsFactory.create()
+      .setRunner('grpc/GrpcRunner')
+      .setHarness('grpc/GrpcHarnessProxy')
+      .setImage('beamish-grpc-harness-openfaas:latest')
+      ;
 
       /**
        * Create the Pipeline object with the options we defined above:
