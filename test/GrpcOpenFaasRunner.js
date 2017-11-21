@@ -36,7 +36,10 @@ describe('GrpcOpenFaasRunner', () => {
        * based on the class path configured in its dependencies:
        */
 
-      const options = PipelineOptionsFactory.create().setRunner('grpc-openfaas/GrpcOpenFaasRunner');
+      const options = PipelineOptionsFactory.create()
+      .setRunner('grpc/GrpcRunner')
+      .setHarness('openfaas/GrpcHarnessOpenFaasProxy')
+      ;
 
       /**
        * Create the Pipeline object with the options we defined above:
