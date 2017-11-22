@@ -26,4 +26,4 @@ COPY lib/sdk /usr/src/app
 #
 COPY test/fixtures /usr/src/app/test/fixtures
 
-ENTRYPOINT ["node", "./harnesses/grpc/launch.js"]
+ENTRYPOINT ["node", "./fn/harness/launch.js"]
