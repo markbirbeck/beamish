@@ -5,11 +5,11 @@ services:
       context: .
     image: beamish:latest
 
-  build-beamish-grpc-harness:
+  build-beamish-FnHarness:
     build:
       context: .
-      dockerfile: Dockerfile-harness
-    image: beamish-grpc-harness:latest
+      dockerfile: Dockerfile-FnHarness
+    image: beamish-fnharness:latest
 
   build-beamish-grpc-harness-openfaas:
     build:
