@@ -38,7 +38,6 @@ describe('GrpcOpenFaasRunner', () => {
 
       const options = PipelineOptionsFactory.create()
       .setRunner('grpc/GrpcRunner')
-      .setHarness('grpc/GrpcHarnessProxy')
       .setImage('beamish-grpc-harness-openfaas:latest')
       ;
 
@@ -144,7 +143,6 @@ describe('GrpcOpenFaasRunner', () => {
 
       const options = PipelineOptionsFactory.create()
       .setRunner('grpc/GrpcRunner')
-      .setHarness('grpc/GrpcHarnessProxy')
       .setImage('beamish-grpc-harness-openfaas:latest')
       ;
 
