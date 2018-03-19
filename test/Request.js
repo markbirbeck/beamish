@@ -94,4 +94,48 @@ describe('Request', () => {
     }))
     .run().waitUntilFinish();
   });
+
+  it('retrieve text files', async () => {
+    const ms = mockServerClient('mockserver', 1080);
+
+    /**
+     * Clear any previous mocks:
+     */
+
+    await ms.reset();
+
+    /**
+     * Set up a mock that serves up a text file:
+     */
+
+    await ms.mockAnyResponse({
+      httpRequest: {
+        path: '/text/plain'
+      },
+      httpResponse: {
+        body: 'I like text',
+        headers: [{
+          name: 'Content-Type',
+          values: ['text/plain']
+        }]
+      }
+    });
+
+    /**
+     * Now run the pipeline and check that we get text:
+     */
+
+    const options = PipelineOptionsFactory.create();
+    const p = Pipeline.create(options);
+
+    return p
+    .apply(RequestIO.read().withUrl('http://mockserver:1080/text/plain'))
+    .apply(ParDo.of(new class extends DoFn {
+      processElement(c) {
+        c.element()
+        .should.have.equal('I like text');
+      }
+    }))
+    .run().waitUntilFinish();
+  });
 });
