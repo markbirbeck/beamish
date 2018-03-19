@@ -12,12 +12,19 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 'college'
+  mockserver:
+    image: jamesdbloom/mockserver
+    networks:
+      - functions
+    ports:
+      - "1080:1080"
   unit-test:
     build:
       context: .
     image: beamish-unit-test:latest
     depends_on:
       - db
+      - mockserver
     networks:
       - functions
     ports:

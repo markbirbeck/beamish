@@ -10,7 +10,7 @@ const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
 const FileIO = require('../lib/sdk/io/FileIO');
 
-describe.only('FileIO', () => {
+describe('FileIO', () => {
   describe('read()', () => {
     it('from()', () => {
       return Pipeline.create()

@@ -7,6 +7,9 @@ RUN npm install -g \
   chai-as-promised \
   mocha
 
+RUN npm install -g \
+  mockserver-client
+
 # Launch the app:
 #
 CMD ["/bin/sh", "-c", "mocha --watch --recursive --timeout 30000 --reporter min"]
