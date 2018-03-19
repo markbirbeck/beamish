@@ -10,7 +10,7 @@ const PipelineOptionsFactory = require('../lib/sdk/options/PipelineOptionsFactor
 const RequestIO = require('../lib/sdk/io/RequestIO');
 
 
-describe.only('Request', () => {
+describe('Request', () => {
   it('postcode', () => {
     const options = PipelineOptionsFactory.create();
     const p = Pipeline.create(options);
