@@ -37,20 +37,24 @@ describe('FileIO', () => {
   });
 
   describe('write()', () => {
-    it('to()', () => {
-      return Pipeline.create()
+    it('to()', async () => {
 
       /**
        * Read a JPEG and then save it to the output directory:
        */
 
+      await Pipeline.create()
       .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/beamish.jpeg')))
       .apply(FileIO.write().to(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
+      .run()
+      .waitUntilFinish()
+      ;
 
       /**
        * Now read the file that was written and check that it's correct:
        */
 
+      await Pipeline.create()
       .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
