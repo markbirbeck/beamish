@@ -8,58 +8,7 @@ const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
 const TextIO = require('../lib/sdk/io/TextIO');
 const Create = require('../lib/sdk/transforms/Create');
-
-class CsvParseFn extends DoFn {
-  constructor(columns) {
-    super();
-    this.columns = columns;
-  }
-
-  processStart() {
-    /**
-     * For a full list of possible options see:
-     *
-     *  http://csv.adaltas.com/parse/
-     */
-
-    this.options = {
-      columns: this.columns,
-      comment: '#',
-      trim: true
-    };
-    this.parse = require('csv-parse/lib/sync');
-  }
-
-  processElement(c) {
-
-    /**
-     * Get the input:
-     */
-
-    let line = c.element();
-
-    /**
-     * If we're hoping to do 'autodiscovery' on the columns then use
-     * the first line as the column names:
-     */
-
-    if (this.options.columns === true) {
-      this.options.columns = null;
-      this.options.columns = this.parse(line, this.options)[0];
-    } else {
-
-      /**
-       * Check the parsed result before outputting since it may be
-       * a comment; they come back as 'undefined':
-       */
-
-      const parsed = this.parse(line, this.options)[0];
-      if (parsed) {
-        c.output(parsed);
-      }
-    }
-  }
-}
+const Csv = require('../lib/sdk/transforms/Csv');
 
 describe('Csv', () => {
   describe.only('parse', () => {
@@ -72,7 +21,7 @@ describe('Csv', () => {
        * will process all rows:
        */
 
-      .apply(ParDo.of(new CsvParseFn()))
+      .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           const row = c.element();
@@ -90,7 +39,7 @@ describe('Csv', () => {
       it('whitespace is trimmed at the start and end', async () => {
         await Pipeline.create()
         .apply(ParDo.of(Create.of([ '  d,  e ,    f     ' ])))
-        .apply(ParDo.of(new CsvParseFn()))
+        .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const row = c.element();
@@ -107,7 +56,7 @@ describe('Csv', () => {
       it('whitespace is NOT trimmed from within fields', async () => {
         await Pipeline.create()
         .apply(ParDo.of(Create.of([ '  hello,  world ,    is    it   me     ' ])))
-        .apply(ParDo.of(new CsvParseFn()))
+        .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const row = c.element();
@@ -126,7 +75,7 @@ describe('Csv', () => {
       it('quotes can be used around fields', async () => {
         await Pipeline.create()
         .apply(ParDo.of(Create.of([ '"g","h","i"' ])))
-        .apply(ParDo.of(new CsvParseFn()))
+        .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const row = c.element();
@@ -143,7 +92,7 @@ describe('Csv', () => {
       it('whitespace inside quotes is preserved', async () => {
         await Pipeline.create()
         .apply(ParDo.of(Create.of([ '"j ","  k ","   l"' ])))
-        .apply(ParDo.of(new CsvParseFn()))
+        .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const row = c.element();
@@ -165,7 +114,7 @@ describe('Csv', () => {
          */
 
         .apply(ParDo.of(Create.of([ '"""m"" "," "" n"" ","   o"' ])))
-        .apply(ParDo.of(new CsvParseFn()))
+        .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const row = c.element();
@@ -187,7 +136,7 @@ describe('Csv', () => {
         'p,  q,r',
         '# And another comment that should be skipped'
       ])))
-      .apply(ParDo.of(new CsvParseFn()))
+      .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           const row = c.element();
@@ -215,7 +164,7 @@ describe('Csv', () => {
          * with properties named according to the header:
          */
 
-        .apply(ParDo.of(new CsvParseFn(true)))
+        .apply(ParDo.of(new Csv(true)))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
             const obj = c.element();
@@ -248,7 +197,7 @@ describe('Csv', () => {
           '# Test having leading and trailing whitespace',
           '7, 8  ,"9"'
         ])))
-        .apply(ParDo.of(new CsvParseFn(true)))
+        .apply(ParDo.of(new Csv(true)))
         .apply(ParDo.of(new class extends DoFn {
           processStart() {
             this.result = {};
