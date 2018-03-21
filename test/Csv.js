@@ -9,7 +9,57 @@ const DoFn = require('../lib/sdk/transforms/DoFn');
 const TextIO = require('../lib/sdk/io/TextIO');
 const Create = require('../lib/sdk/transforms/Create');
 
-class CsvParseFn extends DoFn { }
+class CsvParseFn extends DoFn {
+  constructor(columns) {
+    super();
+    this.columns = columns;
+  }
+
+  processStart() {
+    /**
+     * For a full list of possible options see:
+     *
+     *  http://csv.adaltas.com/parse/
+     */
+
+    this.options = {
+      columns: this.columns,
+      comment: '#',
+      trim: true
+    };
+    this.parse = require('csv-parse/lib/sync');
+  }
+
+  processElement(c) {
+
+    /**
+     * Get the input:
+     */
+
+    let line = c.element();
+
+    /**
+     * If we're hoping to do 'autodiscovery' on the columns then use
+     * the first line as the column names:
+     */
+
+    if (this.options.columns === true) {
+      this.options.columns = null;
+      this.options.columns = this.parse(line, this.options)[0];
+    } else {
+
+      /**
+       * Check the parsed result before outputting since it may be
+       * a comment; they come back as 'undefined':
+       */
+
+      const parsed = this.parse(line, this.options)[0];
+      if (parsed) {
+        c.output(parsed);
+      }
+    }
+  }
+}
 
 describe('Csv', () => {
   describe.only('parse', () => {
