@@ -11,7 +11,7 @@ const Create = require('../lib/sdk/transforms/Create');
 const Csv = require('../lib/sdk/transforms/Csv');
 
 describe('Csv', () => {
-  describe.only('parse', () => {
+  describe('parse', () => {
     it('simple row', async () => {
       await Pipeline.create()
       .apply(ParDo.of(Create.of([ 'a,b,c' ])))
