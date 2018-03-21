@@ -12,6 +12,7 @@
     "test": "docker-compose -f test/docker-compose.yml up --exit-code-from unit-test unit-test"
   },
   "dependencies": {
+    "csv-parse": "^2.0.4",
     "dockerode": "^2.5.3",
     "grpc": "^1.6.6",
     "highland": "^2.11.1",
