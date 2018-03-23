@@ -99,4 +99,26 @@ describe('Split', () => {
     .waitUntilFinish()
     ;
   });
+
+  it('when last line ends with delimiter it is not a blank line, but preceding line can be blank', async () => {
+    await Pipeline.create()
+    .apply(ParDo.of(Create.of(['line 13\nline 14\nline 15\n\n'])))
+    .apply('Split', ParDo.of(new Split()))
+    .apply(ParDo.of(new class extends DoFn {
+      processStart() {
+        this.result = [];
+      }
+
+      processElement(c) {
+        this.result.push(c.element());
+      }
+
+      processFinish() {
+        this.result.should.eql(['line 13', 'line 14', 'line 15', '']);
+      }
+    }))
+    .run()
+    .waitUntilFinish()
+    ;
+  });
 });
