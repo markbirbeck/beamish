@@ -77,4 +77,26 @@ describe('Split', () => {
       ;
     });
   });
+
+  it('when last line ends with delimiter it is not a blank line', async () => {
+    await Pipeline.create()
+    .apply(ParDo.of(Create.of(['line 10\nline 11\nline 12\n'])))
+    .apply('Split', ParDo.of(new Split()))
+    .apply(ParDo.of(new class extends DoFn {
+      processStart() {
+        this.result = [];
+      }
+
+      processElement(c) {
+        this.result.push(c.element());
+      }
+
+      processFinish() {
+        this.result.should.eql(['line 10', 'line 11', 'line 12']);
+      }
+    }))
+    .run()
+    .waitUntilFinish()
+    ;
+  });
 });
