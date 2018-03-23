@@ -31,4 +31,26 @@ describe('Split', () => {
     .waitUntilFinish()
     ;
   });
+
+  it('using \\r', async () => {
+    await Pipeline.create()
+    .apply(ParDo.of(Create.of(['line 4\rline 5\rline 6'])))
+    .apply('Split', ParDo.of(new Split()))
+    .apply(ParDo.of(new class extends DoFn {
+      processStart() {
+        this.result = [];
+      }
+
+      processElement(c) {
+        this.result.push(c.element());
+      }
+
+      processFinish() {
+        this.result.should.eql(['line 4', 'line 5', 'line 6']);
+      }
+    }))
+    .run()
+    .waitUntilFinish()
+    ;
+  });
 });
