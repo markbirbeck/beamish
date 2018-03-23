@@ -221,7 +221,7 @@ describe('Csv', () => {
             });
           }
 
-          processFinish(pe) {
+          processFinish() {
             this.result.should.eql({
               friends: 12,
               romans: 15,
