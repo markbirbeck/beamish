@@ -45,7 +45,7 @@ describe('TextIO', () => {
           }
         }()
       ))
-      .apply(TextIO.write().to('textio-write-wordcounts'))
+      .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/textio-write-wordcounts')))
       .run()
       .waitUntilFinish()
       ;
