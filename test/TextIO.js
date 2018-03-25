@@ -9,6 +9,7 @@ const MapElements = require('../lib/sdk/transforms/MapElements');
 const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
 const TextIO = require('../lib/sdk/io/TextIO');
+const FileIO = require('../lib/sdk/io/FileIO');
 
 describe('TextIO', () => {
   describe('read()', () => {
@@ -20,6 +21,46 @@ describe('TextIO', () => {
           c.element().should.eql('This is a simple file.\n');
         }
       }))
+      .run()
+      .waitUntilFinish()
+      ;
+    });
+
+    it('word count', () => {
+      return Pipeline.create()
+      .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply('ExtractWords', ParDo.of(
+        new class ExtractWordsFn extends DoFn {
+          processElement(c) {
+            c.element().toString().toLowerCase()
+            .split(/[^\S]+/)
+            .forEach(word => word.length && c.output(word))
+            ;
+          }
+        }()
+      ))
+      .apply('Count', ParDo.of(
+        new class extends DoFn {
+          processStart() {
+            this.count = 0;
+          }
+
+          processElement() {
+            this.count++;
+          }
+
+          processFinish(pe) {
+            pe.output(this.count);
+          }
+        }
+      ))
+      .apply('Check', ParDo.of(
+        new class extends DoFn {
+          apply(input) {
+            input.should.equal(26141);
+          }
+        }
+      ))
       .run()
       .waitUntilFinish()
       ;
