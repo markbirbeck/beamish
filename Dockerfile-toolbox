@@ -1,0 +1,32 @@
+FROM node:8-alpine
+
+# Install app dependencies as global node modules:
+#
+ENV NODE_PATH /usr/local/lib/node_modules
+
+# Create app directory and set as working directory:
+#
+WORKDIR /usr/src/app
+
+# Add some handy tools:
+#
+RUN apk add --no-cache \
+  bash \
+  curl \
+  jq
+
+RUN apk add --no-cache \
+  git
+
+# We need '-unsafe-perm' for grpc as described here:
+#
+#  https://github.com/grpc/grpc/issues/6435
+#
+RUN npm install -g -unsafe-perm \
+  gitlab:beamish/direct-runner#semver:^0.1.0
+
+# Tidy up:
+#
+RUN npm cache clean --force
+
+ENTRYPOINT "/bin/bash"
