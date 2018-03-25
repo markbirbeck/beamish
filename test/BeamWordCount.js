@@ -108,7 +108,7 @@ describe('Beam Word Count', () => {
      * wordcount-00001-of-00005
      */
 
-    .apply(TextIO.write().to('wordcounts'))
+    .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/wordcounts')))
     ;
 
     /**
