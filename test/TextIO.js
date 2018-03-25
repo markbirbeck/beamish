@@ -9,7 +9,6 @@ const MapElements = require('../lib/sdk/transforms/MapElements');
 const ParDo = require('../lib/sdk/transforms/ParDo');
 const DoFn = require('../lib/sdk/transforms/DoFn');
 const TextIO = require('../lib/sdk/io/TextIO');
-const FileIO = require('../lib/sdk/io/FileIO');
 
 describe('TextIO', () => {
   describe('read()', () => {
@@ -26,9 +25,9 @@ describe('TextIO', () => {
       ;
     });
 
-    it('word count', () => {
+    it.only('word count', () => {
       return Pipeline.create()
-      .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
       .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
           processElement(c) {
