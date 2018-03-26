@@ -17,9 +17,79 @@ describe('TextIO', () => {
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
-          c.element().should.eql('This is a simple file.\n');
+          c.element().should.eql('This is a simple file.');
         }
       }))
+      .run()
+      .waitUntilFinish()
+      ;
+    });
+
+    it('line count', () => {
+      return Pipeline.create()
+      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply('Count', ParDo.of(
+        new class extends DoFn {
+          processStart() {
+            this.count = 0;
+          }
+
+          processElement() {
+            this.count++;
+          }
+
+          processFinish(pe) {
+            pe.output(this.count);
+          }
+        }
+      ))
+      .apply('Check', ParDo.of(
+        new class extends DoFn {
+          apply(input) {
+            input.should.equal(4469);
+          }
+        }
+      ))
+      .run()
+      .waitUntilFinish()
+      ;
+    });
+
+    it('word count', () => {
+      return Pipeline.create()
+      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply('ExtractWords', ParDo.of(
+        new class ExtractWordsFn extends DoFn {
+          processElement(c) {
+            c.element().toString().toLowerCase()
+            .split(/[^\S]+/)
+            .forEach(word => word.length && c.output(word))
+            ;
+          }
+        }()
+      ))
+      .apply('Count', ParDo.of(
+        new class extends DoFn {
+          processStart() {
+            this.count = 0;
+          }
+
+          processElement() {
+            this.count++;
+          }
+
+          processFinish(pe) {
+            pe.output(this.count);
+          }
+        }
+      ))
+      .apply('Check', ParDo.of(
+        new class extends DoFn {
+          apply(input) {
+            input.should.equal(26141);
+          }
+        }
+      ))
       .run()
       .waitUntilFinish()
       ;
@@ -45,7 +115,7 @@ describe('TextIO', () => {
           }
         }()
       ))
-      .apply(TextIO.write().to('textio-write-wordcounts'))
+      .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/textio-write-wordcounts')))
       .run()
       .waitUntilFinish()
       ;
