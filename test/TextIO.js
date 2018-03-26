@@ -25,6 +25,36 @@ describe('TextIO', () => {
       ;
     });
 
+    it.only('line count', () => {
+      return Pipeline.create()
+      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply('Count', ParDo.of(
+        new class extends DoFn {
+          processStart() {
+            this.count = 0;
+          }
+
+          processElement() {
+            this.count++;
+          }
+
+          processFinish(pe) {
+            pe.output(this.count);
+          }
+        }
+      ))
+      .apply('Check', ParDo.of(
+        new class extends DoFn {
+          apply(input) {
+            input.should.equal(4469);
+          }
+        }
+      ))
+      .run()
+      .waitUntilFinish()
+      ;
+    });
+
     it.only('word count', () => {
       return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
