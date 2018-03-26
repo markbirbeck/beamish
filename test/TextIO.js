@@ -25,7 +25,7 @@ describe('TextIO', () => {
       ;
     });
 
-    it.only('line count', () => {
+    it('line count', () => {
       return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
       .apply('Count', ParDo.of(
@@ -55,7 +55,7 @@ describe('TextIO', () => {
       ;
     });
 
-    it.only('word count', () => {
+    it('word count', () => {
       return Pipeline.create()
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
       .apply('ExtractWords', ParDo.of(
