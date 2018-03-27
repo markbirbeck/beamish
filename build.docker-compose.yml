@@ -21,3 +21,9 @@ services:
     build:
       context: ./openfaas/harness
     image: beamish-harness-openfaas:latest
+
+  build-beamish-toolbox:
+    build:
+      context: .
+      dockerfile: Dockerfile-toolbox
+    image: beamish-toolbox:latest
