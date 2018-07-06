@@ -123,4 +123,26 @@ describe('Split', () => {
       ;
     });
   });
+
+  it('dealing with blank lines', async () => {
+    await Pipeline.create()
+    .apply(ParDo.of(Create.of(['line 16\r\r\rline 17\rline 18\r'])))
+    .apply('Split', ParDo.of(new Split()))
+    .apply(ParDo.of(new class extends DoFn {
+      processStart() {
+        this.result = [];
+      }
+
+      processElement(c) {
+        this.result.push(c.element());
+      }
+
+      processFinish() {
+        this.result.should.eql(['line 16', '', '', 'line 17', 'line 18']);
+      }
+    }))
+    .run()
+    .waitUntilFinish()
+    ;
+  });
 });
