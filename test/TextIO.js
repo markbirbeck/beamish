@@ -55,6 +55,41 @@ describe('TextIO', () => {
         .waitUntilFinish()
         ;
       });
+
+      /**
+       * This is a very long running test so leave it disabled until it's needed:
+       */
+
+      it.skip('companies house', function() {
+        this.timeout(0);
+        return Pipeline.create()
+        .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/companies-house/BasicCompanyData-2018-03-01-part1_5.csv')))
+        .apply('Count', ParDo.of(
+          new class extends DoFn {
+            processStart() {
+              this.count = 0;
+            }
+
+            processElement() {
+              this.count++;
+            }
+
+            processFinish(pe) {
+              pe.output(this.count);
+            }
+          }
+        ))
+        .apply('Check', ParDo.of(
+          new class extends DoFn {
+            apply(input) {
+              input.should.equal(850000);
+            }
+          }
+        ))
+        .run()
+        .waitUntilFinish()
+        ;
+      });
     });
 
     it('word count', () => {
