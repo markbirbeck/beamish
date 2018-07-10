@@ -57,7 +57,12 @@ describe('GrpcRunner', () => {
        *  gs://apache-beam-samples/shakespeare/*
        */
 
-      p.apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      /**
+       * Note that the path must be resolvable *inside* the gRPC harness, which
+       * is created with Dockerfile-FnHarness.
+       */
+
+      p.apply(TextIO.read().from('/usr/src/app/test/fixtures/shakespeare/1kinghenryiv'))
 
       /**
        * Concept #2: Apply a ParDo transform to our PCollection of text lines.

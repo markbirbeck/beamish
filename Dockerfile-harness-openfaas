@@ -18,6 +18,6 @@ RUN npm install -g -unsafe-perm
 
 # Copy app source:
 #
-COPY lib/sdk /usr/src/app
+COPY lib /usr/src/app
 
-ENTRYPOINT ["node", "./harnesses/openfaas/launch.js"]
+ENTRYPOINT ["node", "./sdk/harnesses/openfaas/launch.js"]
