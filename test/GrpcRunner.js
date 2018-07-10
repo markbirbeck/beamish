@@ -14,7 +14,12 @@ const TextIO = require('../lib/sdk/io/TextIO');
 
 describe('GrpcRunner', () => {
   describe('Beam Word Count', () => {
-    it('minimal', () => {
+    /**
+     * Disabled until https://gitlab.com/beamish/direct-runner/issues/59
+     * is fixed.
+     */
+
+    it.skip('minimal', () => {
 
       /**
        * Derived from:
