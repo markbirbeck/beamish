@@ -9,3 +9,7 @@ tap.throws(() => checkArgument('blah' === null))
 tap.comment('Check that the messages are reported.')
 tap.throws(() => checkArgument('blah' === null, 'blah must be null'),
   { message: 'blah must be null' })
+
+tap.comment('Check that the error type is reported.')
+tap.throws(() => checkArgument('blibble' === null, 'blibble must be null'),
+  { message: 'blibble must be null', name: 'IllegalArgumentError' })
