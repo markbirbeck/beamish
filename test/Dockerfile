@@ -1,11 +1,12 @@
 FROM beamish:latest
 
-# ...Mocha, Chai and friends
+# ...Mocha, Tap, Chai and friends
 RUN npm install -g \
   chai \
   chai-http \
   chai-as-promised \
-  mocha
+  mocha \
+  tap
 
 RUN npm install -g \
   mockserver-client
