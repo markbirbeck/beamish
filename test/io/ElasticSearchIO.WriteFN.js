@@ -66,10 +66,11 @@ tap.comment('Write to non-existent ES server.')
 
 let config = ElasticSearchIO
 .ConnectionConfiguration
-.create('http://non-existent-host:9200', 'my-index', 'my-type')
+.create('http://non-existent-host:9200', 'my-index', 'my-type', 5000)
 
 tap.equal(config.addresses, 'http://non-existent-host:9200')
 tap.equal(config.index, 'my-index')
+tap.equal(config.requestTimeout, 5000)
 tap.equal(config.type, 'my-type')
 
 tap.rejects(main(config))
