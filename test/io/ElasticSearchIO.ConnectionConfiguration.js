@@ -10,6 +10,10 @@ tap.equal(config.index, 'my-index')
 tap.equal(config.type, 'my-type')
 tap.equal(config.requestTimeout, undefined)
 
+tap.comment('Check that values are readonly')
+config.index = 'a-new-index-that-should-be-ignored'
+tap.equal(config.index, 'my-index')
+
 tap.comment('Check that errors are thrown if arguments are incorrect.')
 tap.throws(
   () => ConnectionConfiguration.create('http://host:9200', 'my-index'),
