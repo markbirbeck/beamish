@@ -18,6 +18,13 @@ services:
       - functions
     ports:
       - "1080:1080"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
   unit-test:
     build:
       context: .
