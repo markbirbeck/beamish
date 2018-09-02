@@ -1,4 +1,4 @@
-FROM node:10.6.0-alpine
+FROM node:10.9.0-alpine
 
 # Install app dependencies as global node modules:
 #
