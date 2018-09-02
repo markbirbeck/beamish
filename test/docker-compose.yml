@@ -14,16 +14,12 @@ services:
   #
   db:
     image: genschsa/mysql-employees:latest
-    networks:
-      - functions
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 'college'
   mockserver:
     image: jamesdbloom/mockserver
-    networks:
-      - functions
     ports:
       - "1080:1080"
   elasticsearch:
@@ -40,8 +36,6 @@ services:
     depends_on:
       - db
       - mockserver
-    networks:
-      - functions
     ports:
       - "50051:50051"
     volumes:
@@ -58,11 +52,6 @@ services:
     volumes:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
-
-networks:
-  functions:
-    external:
-      name: func_functions
 
 volumes:
   node-modules:
