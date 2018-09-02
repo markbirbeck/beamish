@@ -10,7 +10,3 @@ WORKDIR /usr/src/app
 #
 COPY package.json .
 RUN npm install -unsafe-perm
-
-# Bundle app source
-#
-COPY . /usr/src/app
