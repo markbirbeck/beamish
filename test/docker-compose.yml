@@ -44,7 +44,7 @@ services:
       - ${PWD}/test:/usr/src/app/test
       - /usr/src/app/node_modules
   tap-test:
-    image: sully/tap
+    image: markbirbeck/tap
     depends_on:
       - node-modules
       - elasticsearch
