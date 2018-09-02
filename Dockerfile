@@ -2,7 +2,6 @@ FROM node:10.9.0-alpine
 
 # Create app directory and set as working directory:
 #
-RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # We need '-unsafe-perm' as described here:
