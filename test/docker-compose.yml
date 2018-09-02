@@ -49,6 +49,15 @@ services:
       - ${PWD}:/usr/src/app
       - ${PWD}/test:/usr/src/app/test
       - /usr/src/app/node_modules
+  tap-test:
+    image: sully/tap
+    depends_on:
+      - node-modules
+      - elasticsearch
+    command: /usr/src/app/test/io/ElasticSearchIO.*.js
+    volumes:
+      - node-modules:/usr/src/app/node_modules
+      - ..:/usr/src/app
 
 networks:
   functions:
