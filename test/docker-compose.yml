@@ -1,5 +1,13 @@
 version: "3.2"
 services:
+  # Use the root Dockerfile to install dependencies into a shared volume:
+  #
+  node-modules:
+    build: ..
+    image: beamish-direct-runner-node-modules
+    volumes:
+      - node-modules:/usr/src/app/node_modules
+
   # Data described here:
   #
   #  https://dev.mysql.com/doc/employee/en/sakila-structure.html
@@ -46,3 +54,7 @@ networks:
   functions:
     external:
       name: func_functions
+
+volumes:
+  node-modules:
+    driver: local
