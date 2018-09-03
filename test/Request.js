@@ -93,7 +93,7 @@ describe('Request', () => {
       }
     }))
     .run().waitUntilFinish();
-  });
+  }).timeout(10000);
 
   it('retrieve text files', async () => {
     const ms = mockServerClient('mockserver', 1080);

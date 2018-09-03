@@ -18,7 +18,7 @@ class OutputFn extends DoFn {
 }
 
 describe('MySQL Word Count', () => {
-  it('minimal', () => {
+  it('minimal', done => {
 
     /**
      * Derived from:
@@ -118,6 +118,17 @@ describe('MySQL Word Count', () => {
      * Run the pipeline:
      */
 
-    return p.run().waitUntilFinish();
-  });
+    const waitOn = require('wait-on')
+    waitOn(
+      {
+        resources: ['tcp:db:3306'],
+        timeout: 60000
+      },
+      async err => {
+        if (err) { throw new Error(err) }
+        await p.run().waitUntilFinish()
+        done()
+      }
+    )
+  }).timeout(60000);
 });
