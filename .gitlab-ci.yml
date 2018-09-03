@@ -5,7 +5,18 @@ services:
 stages:
   - test
 
-test:
+mocha-test:
+  stage: test
+  script:
+    - cd test
+    - >
+      docker-compose up
+      --build
+      --abort-on-container-exit
+      --exit-code-from mocha-test
+      mocha-test
+
+tap-test:
   stage: test
   script:
     - cd test
@@ -15,9 +26,3 @@ test:
       --abort-on-container-exit
       --exit-code-from tap-test
       tap-test
-    - >
-      docker-compose up
-      --build
-      --abort-on-container-exit
-      --exit-code-from mocha-test
-      mocha-test
