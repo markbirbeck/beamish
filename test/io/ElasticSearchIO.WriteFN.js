@@ -89,4 +89,15 @@ tap.equal(config.addresses, 'http://elasticsearch:9200')
 tap.equal(config.index, 'my-index')
 tap.equal(config.type, 'my-type')
 
-tap.resolves(main(config))
+const waitOn = require('wait-on')
+waitOn(
+  {
+    resources: ['http://elasticsearch:9200'],
+    timeout: 60000
+  },
+  err => {
+    if (err) { throw new Error(err) }
+    tap.comment('ES is now ready')
+    tap.resolves(main(config))
+  }
+)
