@@ -9,6 +9,7 @@ mocha-test:
   stage: test
   script:
     - cd test
+    - mkdir fixtures/output
     - >
       docker-compose up
       --build
