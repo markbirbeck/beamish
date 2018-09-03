@@ -15,3 +15,9 @@ test:
       --abort-on-container-exit
       --exit-code-from tap-test
       tap-test
+    - >
+      docker-compose up
+      --build
+      --abort-on-container-exit
+      --exit-code-from mocha-test
+      mocha-test
