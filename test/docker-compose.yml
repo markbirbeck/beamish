@@ -29,20 +29,19 @@ services:
       - "9300:9300"
     environment:
       discovery.type: single-node
-  unit-test:
-    build:
-      context: .
-    image: beamish-unit-test:latest
+  mocha-test:
+    image: markbirbeck/mocha
     depends_on:
       - db
+      - node-modules
       - mockserver
+    command: --exit --exclude /usr/src/app/test/io/ElasticSearchIO.*.js
     ports:
       - "50051:50051"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}:/usr/src/app
-      - ${PWD}/test:/usr/src/app/test
-      - /usr/src/app/node_modules
+      - node-modules:/usr/src/app/node_modules
+      - ..:/usr/src/app
   tap-test:
     image: markbirbeck/tap
     depends_on:
