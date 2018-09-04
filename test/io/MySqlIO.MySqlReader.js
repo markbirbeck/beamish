@@ -22,6 +22,11 @@ const main = async () => {
   tap.ok(await reader.start())
   tap.equal(reader.getCurrent().dept_name, 'Customer Service')
 
+  tap.comment('advance() should make the next item available')
+
+  tap.ok(await reader.advance())
+  tap.equal(reader.getCurrent().dept_name, 'Development')
+
   reader.close();
 }
 
