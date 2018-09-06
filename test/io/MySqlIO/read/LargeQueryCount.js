@@ -70,6 +70,9 @@ waitOn(
   err => {
     if (err) { throw new Error(err) }
     tap.comment('MySQL is now ready')
-    tap.resolves(main())
+    tap.test({timeout: 180000}, t => {
+      t.resolves(main())
+      t.end()
+    })
   }
 )
