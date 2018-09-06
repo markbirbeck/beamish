@@ -98,6 +98,9 @@ waitOn(
   err => {
     if (err) { throw new Error(err) }
     tap.comment('ES is now ready')
-    tap.resolves(main(config))
+    tap.test({timeout: 60000}, t => {
+      t.resolves(main(config))
+      t.end()
+    })
   }
 )
