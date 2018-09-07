@@ -45,6 +45,7 @@ services:
   tap-test:
     image: markbirbeck/tap
     depends_on:
+      - db
       - node-modules
       - elasticsearch
     command: /usr/src/app/test/io/ElasticSearchIO.*.js
