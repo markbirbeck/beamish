@@ -13,7 +13,7 @@ describe('Split', () => {
   describe('delimiters', () => {
     it('using \\n', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of(['line 1\nline 2\nline 3'])))
+      .apply(Create.of(['line 1\nline 2\nline 3']))
       .apply('Split', ParDo.of(new Split()))
       .apply(ParDo.of(new class extends DoFn {
         processStart() {
@@ -35,7 +35,7 @@ describe('Split', () => {
 
     it('using \\r', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of(['line 4\rline 5\rline 6'])))
+      .apply(Create.of(['line 4\rline 5\rline 6']))
       .apply('Split', ParDo.of(new Split()))
       .apply(ParDo.of(new class extends DoFn {
         processStart() {
@@ -57,7 +57,7 @@ describe('Split', () => {
 
     it('using \\r\\n', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of(['line 7\r\nline 8\r\nline 9'])))
+      .apply(Create.of(['line 7\r\nline 8\r\nline 9']))
       .apply('Split', ParDo.of(new Split()))
       .apply(ParDo.of(new class extends DoFn {
         processStart() {
@@ -81,7 +81,7 @@ describe('Split', () => {
   describe('when last line ends with delimiter', () => {
     it('it is not a blank line', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of(['line 10\nline 11\nline 12\n'])))
+      .apply(Create.of(['line 10\nline 11\nline 12\n']))
       .apply('Split', ParDo.of(new Split()))
       .apply(ParDo.of(new class extends DoFn {
         processStart() {
@@ -103,7 +103,7 @@ describe('Split', () => {
 
     it('preceding line can be blank', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of(['line 13\nline 14\nline 15\n\n'])))
+      .apply(Create.of(['line 13\nline 14\nline 15\n\n']))
       .apply('Split', ParDo.of(new Split()))
       .apply(ParDo.of(new class extends DoFn {
         processStart() {
@@ -126,7 +126,7 @@ describe('Split', () => {
 
   it('dealing with blank lines', async () => {
     await Pipeline.create()
-    .apply(ParDo.of(Create.of(['line 16\r\r\rline 17\rline 18\r'])))
+    .apply(Create.of(['line 16\r\r\rline 17\rline 18\r']))
     .apply('Split', ParDo.of(new Split()))
     .apply(ParDo.of(new class extends DoFn {
       processStart() {

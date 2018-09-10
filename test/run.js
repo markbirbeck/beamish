@@ -31,7 +31,7 @@ describe('pipeline#run()', () => {
     let p = Pipeline.create();
 
     return p
-    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new SuccessFN()))
     .run()
     .waitUntilFinish()
@@ -44,7 +44,7 @@ describe('pipeline#run()', () => {
     let p = Pipeline.create();
 
     return p
-    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new FailFN()))
     .run()
     .waitUntilFinish()

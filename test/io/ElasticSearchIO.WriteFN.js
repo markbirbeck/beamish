@@ -26,12 +26,12 @@ const main = async config => {
   const pipeline = Pipeline.create()
 
   return pipeline
-  .apply(ParDo.of(Create.of([
+  .apply(Create.of([
     'To be, or not to be: that is the question: ',
     'Whether \'tis nobler in the mind to suffer ',
     'The slings and arrows of outrageous fortune, ',
     'Or to take arms against a sea of troubles, '
-  ])))
+  ]))
   .apply('ExtractWords', ParDo.of(
     new class ExtractWordsFn extends DoFn {
       processElement(c) {

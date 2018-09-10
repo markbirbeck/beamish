@@ -14,7 +14,7 @@ describe('Csv', () => {
   describe('parse', () => {
     it('simple row', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of([ 'a,b,c' ])))
+      .apply(Create.of([ 'a,b,c' ]))
 
       /**
        * When no parameter is passed to the parse function then it
@@ -38,7 +38,7 @@ describe('Csv', () => {
     describe('whitespace', () => {
       it('whitespace is trimmed at the start and end', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([ '  d,  e ,    f     ' ])))
+        .apply(Create.of([ '  d,  e ,    f     ' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
@@ -55,7 +55,7 @@ describe('Csv', () => {
 
       it('whitespace is NOT trimmed from within fields', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([ '  hello,  world ,    is    it   me     ' ])))
+        .apply(Create.of([ '  hello,  world ,    is    it   me     ' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
@@ -74,7 +74,7 @@ describe('Csv', () => {
     describe('quotes', async () => {
       it('quotes can be used around fields', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([ '"g","h","i"' ])))
+        .apply(Create.of([ '"g","h","i"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
@@ -91,7 +91,7 @@ describe('Csv', () => {
 
       it('whitespace inside quotes is preserved', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([ '"j ","  k ","   l"' ])))
+        .apply(Create.of([ '"j ","  k ","   l"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
@@ -113,7 +113,7 @@ describe('Csv', () => {
          * Note that two double-quotes are used to escape a double-quote:
          */
 
-        .apply(ParDo.of(Create.of([ '"""m"" "," "" n"" ","   o"' ])))
+        .apply(Create.of([ '"""m"" "," "" n"" ","   o"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
           processElement(c) {
@@ -131,11 +131,11 @@ describe('Csv', () => {
 
     it('row with comments before and after', async () => {
       await Pipeline.create()
-      .apply(ParDo.of(Create.of([
+      .apply(Create.of([
         '# A comment that should be skipped',
         'p,  q,r',
         '# And another comment that should be skipped'
-      ])))
+      ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -153,10 +153,10 @@ describe('Csv', () => {
     describe('parse to JSON', async () => {
       it('single object', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([
+        .apply(Create.of([
           'height,width,length',
           '100,200,300'
-        ])))
+        ]))
 
         /**
          * Setting the parameter to true means that first row is used
@@ -188,7 +188,7 @@ describe('Csv', () => {
 
       it('multiple objects', async () => {
         await Pipeline.create()
-        .apply(ParDo.of(Create.of([
+        .apply(Create.of([
           'friends,romans,countrymen',
           '# Test some leading whitespace',
           '1,  2,3',
@@ -196,7 +196,7 @@ describe('Csv', () => {
           '4,"5",6  ',
           '# Test having leading and trailing whitespace',
           '7, 8  ,"9"'
-        ])))
+        ]))
         .apply(ParDo.of(new Csv(true)))
         .apply(ParDo.of(new class extends DoFn {
           processStart() {
