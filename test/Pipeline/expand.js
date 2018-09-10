@@ -21,12 +21,12 @@ class SplitLineFn extends DoFn {
 const p = Pipeline.create()
 
 p
-.apply('Create quote', ParDo.of(Create.of([
+.apply('Create quote', Create.of([
   'To be, or not to be: that is the question: ',
   'Whether \'tis nobler in the mind to suffer ',
   'The slings and arrows of outrageous fortune, ',
   'Or to take arms against a sea of troubles, '
-])))
+]))
 .apply('Split each line into words', ParDo.of(new SplitLineFn()))
 .apply('Count number of words', Count.globally())
 .apply('Check the results', ParDo.of(
