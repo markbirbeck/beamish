@@ -13,13 +13,14 @@ const FileIO = require('../lib/sdk/io/FileIO');
 describe('FileIO', () => {
   describe('read()', () => {
     it('from()', () => {
-      return Pipeline.create()
+      const p = Pipeline.create()
 
       /**
        * Read a JPEG and check that it really is a JPEG and is of the
        * right length:
        */
 
+      p
       .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/beamish.jpeg')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -30,6 +31,8 @@ describe('FileIO', () => {
           buf.length.should.equal(13470);
         }
       }))
+
+      p
       .run()
       .waitUntilFinish()
       ;
@@ -43,9 +46,13 @@ describe('FileIO', () => {
        * Read a JPEG and then save it to the output directory:
        */
 
-      await Pipeline.create()
+      let p = Pipeline.create()
+
+      p
       .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/beamish.jpeg')))
       .apply(FileIO.write().to(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
+
+      p
       .run()
       .waitUntilFinish()
       ;
@@ -54,7 +61,9 @@ describe('FileIO', () => {
        * Now read the file that was written and check that it's correct:
        */
 
-      await Pipeline.create()
+      p = Pipeline.create()
+
+      p
       .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -65,6 +74,8 @@ describe('FileIO', () => {
           buf.length.should.equal(13470);
         }
       }))
+
+      p
       .run()
       .waitUntilFinish()
       ;

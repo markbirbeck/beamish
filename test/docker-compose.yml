@@ -45,9 +45,10 @@ services:
   tap-test:
     image: markbirbeck/tap
     depends_on:
+      - db
       - node-modules
       - elasticsearch
-    command: /usr/src/app/test/io/ElasticSearchIO.*.js
+    command: --no-timeout /usr/src/app/test/io /usr/src/app/test/transforms/Count /usr/src/app/test/util /usr/src/app/test/Pipeline
     volumes:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app

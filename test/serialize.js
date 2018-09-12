@@ -17,7 +17,7 @@ class ComputeWordLengthFn extends DoFn {
   }
 }
 
-describe('compile pipeline', () => {
+describe.skip('compile pipeline', () => {
   it('compile simple function', () => {
 
     /**

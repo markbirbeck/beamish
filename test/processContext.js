@@ -38,10 +38,12 @@ describe('processElement', () => {
   it('simple function', () => {
     let p = Pipeline.create();
 
-    return p
-    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    p
+    .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new ComputeWordLengthFn()))
     .apply(ParDo.of(new OutputFn()))
+
+    return p
     .run()
     .waitUntilFinish()
     ;
@@ -50,11 +52,13 @@ describe('processElement', () => {
   it('multiple output() calls', () => {
     let p = Pipeline.create();
 
-    return p
-    .apply(ParDo.of(Create.of(['abc xyz 123'])))
+    p
+    .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new SplitLineFn()))
     .apply(ParDo.of(new ComputeWordLengthFn()))
     .apply(ParDo.of(new OutputFn()))
+
+    return p
     .run()
     .waitUntilFinish()
     ;

@@ -84,7 +84,7 @@ describe('Request', () => {
     const options = PipelineOptionsFactory.create();
     const p = Pipeline.create(options);
 
-    return p
+    p
     .apply(RequestIO.read().withUrl('http://mockserver:1080/path1'))
     .apply(ParDo.of(new class extends DoFn {
       processElement(c) {
@@ -92,6 +92,8 @@ describe('Request', () => {
         .should.have.property('claim', 'we made it!');
       }
     }))
+
+    return p
     .run().waitUntilFinish();
   }).timeout(10000);
 
@@ -128,7 +130,7 @@ describe('Request', () => {
     const options = PipelineOptionsFactory.create();
     const p = Pipeline.create(options);
 
-    return p
+    p
     .apply(RequestIO.read().withUrl('http://mockserver:1080/text/plain'))
     .apply(ParDo.of(new class extends DoFn {
       processElement(c) {
@@ -136,6 +138,8 @@ describe('Request', () => {
         .should.have.equal('I like text');
       }
     }))
+
+    return p
     .run().waitUntilFinish();
   });
 });
