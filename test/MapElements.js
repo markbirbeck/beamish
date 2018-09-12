@@ -18,7 +18,9 @@ class OutputFn extends DoFn {
 
 describe('MapElements', () => {
   it('via()', () => {
-    return Pipeline.create()
+    const p = Pipeline.create()
+
+    p
     .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file2.txt')))
     .apply('ExtractWords', ParDo.of(
       new class ExtractWordsFn extends DoFn {
@@ -36,6 +38,8 @@ describe('MapElements', () => {
       }()
     ))
     .apply(ParDo.of(new OutputFn()))
+
+    return p
     .run()
     .waitUntilFinish()
     ;

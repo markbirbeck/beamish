@@ -47,7 +47,7 @@ const main = async () => {
    * Set up the query:
    */
 
-  return p.apply(
+  p.apply(
     'MySQL',
     MySqlIO
     .read()
@@ -162,6 +162,8 @@ const main = async () => {
       }
     }
   ))
+
+  return p
   .run()
   .waitUntilFinish()
 }

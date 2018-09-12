@@ -13,7 +13,9 @@ const Csv = require('../lib/sdk/transforms/Csv');
 describe('Csv', () => {
   describe('parse', () => {
     it('simple row', async () => {
-      await Pipeline.create()
+      const p = Pipeline.create()
+
+      p
       .apply(Create.of([ 'a,b,c' ]))
 
       /**
@@ -30,14 +32,17 @@ describe('Csv', () => {
           row.should.eql(['a', 'b', 'c']);
         }
       }))
-      .run()
+
+      await p.run()
       .waitUntilFinish()
       ;
     });
 
     describe('whitespace', () => {
       it('whitespace is trimmed at the start and end', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([ '  d,  e ,    f     ' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
@@ -48,13 +53,17 @@ describe('Csv', () => {
             row.should.eql(['d', 'e', 'f']);
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
       });
 
       it('whitespace is NOT trimmed from within fields', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([ '  hello,  world ,    is    it   me     ' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
@@ -65,6 +74,8 @@ describe('Csv', () => {
             row.should.eql(['hello', 'world', 'is    it   me']);
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
@@ -73,7 +84,9 @@ describe('Csv', () => {
 
     describe('quotes', async () => {
       it('quotes can be used around fields', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([ '"g","h","i"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
@@ -84,13 +97,17 @@ describe('Csv', () => {
             row.should.eql(['g', 'h', 'i']);
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
       });
 
       it('whitespace inside quotes is preserved', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([ '"j ","  k ","   l"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
@@ -101,18 +118,21 @@ describe('Csv', () => {
             row.should.eql(['j ', '  k ', '   l']);
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
       });
 
       it('escaped quotes inside quotes are preserved', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
 
         /**
          * Note that two double-quotes are used to escape a double-quote:
          */
 
+        p
         .apply(Create.of([ '"""m"" "," "" n"" ","   o"' ]))
         .apply(ParDo.of(new Csv()))
         .apply(ParDo.of(new class extends DoFn {
@@ -123,6 +143,8 @@ describe('Csv', () => {
             row.should.eql(['"m" ', ' " n" ', '   o']);
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
@@ -130,7 +152,9 @@ describe('Csv', () => {
     });
 
     it('row with comments before and after', async () => {
-      await Pipeline.create()
+      const p = Pipeline.create()
+
+      p
       .apply(Create.of([
         '# A comment that should be skipped',
         'p,  q,r',
@@ -145,6 +169,8 @@ describe('Csv', () => {
           row.should.eql(['p', 'q', 'r']);
         }
       }))
+
+      await p
       .run()
       .waitUntilFinish()
       ;
@@ -152,7 +178,9 @@ describe('Csv', () => {
 
     describe('parse to JSON', async () => {
       it('single object', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([
           'height,width,length',
           '100,200,300'
@@ -181,13 +209,17 @@ describe('Csv', () => {
             });
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;
       });
 
       it('multiple objects', async () => {
-        await Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(Create.of([
           'friends,romans,countrymen',
           '# Test some leading whitespace',
@@ -229,6 +261,8 @@ describe('Csv', () => {
             });
           }
         }))
+
+        await p
         .run()
         .waitUntilFinish()
         ;

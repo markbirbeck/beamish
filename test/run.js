@@ -30,9 +30,11 @@ describe('pipeline#run()', () => {
 
     let p = Pipeline.create();
 
-    return p
+    p
     .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new SuccessFN()))
+
+    return p
     .run()
     .waitUntilFinish()
     .should.be.fulfilled
@@ -43,9 +45,11 @@ describe('pipeline#run()', () => {
 
     let p = Pipeline.create();
 
-    return p
+    p
     .apply(Create.of(['abc xyz 123']))
     .apply(ParDo.of(new FailFN()))
+
+    return p
     .run()
     .waitUntilFinish()
     .should.be.rejectedWith('blah')

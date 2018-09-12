@@ -13,13 +13,17 @@ const TextIO = require('../lib/sdk/io/TextIO');
 describe('TextIO', () => {
   describe('read()', () => {
     it('from()', () => {
-      return Pipeline.create()
+      const p = Pipeline.create()
+
+      p
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           c.element().should.eql('This is a simple file.');
         }
       }))
+
+      return p
       .run()
       .waitUntilFinish()
       ;
@@ -27,7 +31,9 @@ describe('TextIO', () => {
 
     describe('line count', () => {
       it('shakespeare', () => {
-        return Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
         .apply('Count', ParDo.of(
           new class extends DoFn {
@@ -51,6 +57,8 @@ describe('TextIO', () => {
             }
           }
         ))
+
+        return p
         .run()
         .waitUntilFinish()
         ;
@@ -62,7 +70,9 @@ describe('TextIO', () => {
 
       it.skip('companies house', function() {
         this.timeout(0);
-        return Pipeline.create()
+        const p = Pipeline.create()
+
+        p
         .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/companies-house/BasicCompanyData-2018-03-01-part1_5.csv')))
         .apply('Count', ParDo.of(
           new class extends DoFn {
@@ -86,6 +96,8 @@ describe('TextIO', () => {
             }
           }
         ))
+
+        return p
         .run()
         .waitUntilFinish()
         ;
@@ -93,7 +105,9 @@ describe('TextIO', () => {
     });
 
     it('word count', () => {
-      return Pipeline.create()
+      const p = Pipeline.create()
+
+      p
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
       .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
@@ -127,6 +141,8 @@ describe('TextIO', () => {
           }
         }
       ))
+
+      return p
       .run()
       .waitUntilFinish()
       ;
@@ -135,7 +151,9 @@ describe('TextIO', () => {
 
   describe('write()', () => {
     it('to()', () => {
-      return Pipeline.create()
+      const p = Pipeline.create()
+
+      p
       .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file2.txt')))
       .apply(Count.perElement())
       .apply(MapElements.via(
@@ -146,6 +164,8 @@ describe('TextIO', () => {
         }()
       ))
       .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/textio-write-wordcounts')))
+
+      return p
       .run()
       .waitUntilFinish()
       ;

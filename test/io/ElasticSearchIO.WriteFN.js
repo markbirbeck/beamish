@@ -25,7 +25,7 @@ const ParDo = require('../../lib/sdk/transforms/ParDo');
 const main = async config => {
   const pipeline = Pipeline.create()
 
-  return pipeline
+  pipeline
   .apply(Create.of([
     'To be, or not to be: that is the question: ',
     'Whether \'tis nobler in the mind to suffer ',
@@ -54,6 +54,8 @@ const main = async config => {
     }()
   ))
   .apply(ElasticSearchIO.write().withConnectionConfiguration(config))
+
+  return pipeline
   .run()
   .waitUntilFinish()
 }

@@ -16,8 +16,9 @@ const Pipeline = require('../../../../lib/sdk/Pipeline');
 const ParDo = require('../../../../lib/sdk/transforms/ParDo');
 
 const main = async () => {
-  return Pipeline.create()
-  .apply(
+  const p = Pipeline.create()
+
+  p.apply(
     'MySQL',
     MySqlIO
     .read()
@@ -57,6 +58,8 @@ const main = async () => {
       }
     }
   ))
+
+  return p
   .run()
   .waitUntilFinish()
 }

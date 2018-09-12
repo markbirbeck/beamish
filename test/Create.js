@@ -37,7 +37,7 @@ describe('Create', () => {
     it('strings', () => {
       let p = Pipeline.create();
 
-      return p
+      p
       .apply(Create.of([
         'To be, or not to be: that is the question: ',
         'Whether \'tis nobler in the mind to suffer ',
@@ -47,6 +47,8 @@ describe('Create', () => {
       .apply(ParDo.of(new SplitLineFn()))
       .apply(ParDo.of(new ComputeWordLengthFn()))
       .apply(ParDo.of(new OutputFn()))
+
+      return p
       .run()
       .waitUntilFinish()
       ;

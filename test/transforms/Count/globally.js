@@ -19,7 +19,9 @@ const Pipeline = require('../../../lib/sdk/Pipeline');
 const TextIO = require('../../../lib/sdk/io/TextIO');
 
 const main = async () => {
-  return Pipeline.create()
+  const p = Pipeline.create()
+
+  p
   .apply(TextIO.read().from(path.resolve(__dirname, '../../fixtures/file2.txt')))
   .apply('ExtractWords', ParDo.of(
     new class ExtractWordsFn extends DoFn {
@@ -63,6 +65,8 @@ const main = async () => {
       }
     }
   ))
+
+  return p
   .run()
   .waitUntilFinish()
 }
