@@ -1,6 +1,6 @@
 const tap = require('tap')
 
-const { MySqlReader } = require('../../lib/sdk/io/MySqlSource')
+const { MySqlReader } = require('../../lib/sdk/io/MySqlIO/MySqlSource')
 
 tap.comment('MySqlSource#MySqlReader()')
 
