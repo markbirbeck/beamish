@@ -7,11 +7,10 @@ tap.comment('MySqlSource#createReader()')
 const main = async () => {
   const reader = new MySqlSource({
     query: 'SELECT dept_name FROM departments;',
-    connectionConfiguration: {
-      host: 'db',
-      user: 'root',
-      password: 'college',
-      database: 'employees'
+    configuration: {
+      dataSource: ['db', 'employees'],
+      username: 'root',
+      password: 'college'
     }
   })
   .createReader()
