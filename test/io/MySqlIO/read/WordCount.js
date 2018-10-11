@@ -51,12 +51,14 @@ const main = async () => {
     'MySQL',
     MySqlIO
     .read()
-    .withConnectionConfiguration({
-      host: 'db',
-      user: 'root',
-      password: 'college',
-      database: 'employees'
-    })
+    .withDataSourceConfiguration(
+      MySqlIO.DataSourceConfiguration.create([
+        'db',
+        'employees'
+      ])
+      .withUsername('root')
+      .withPassword('college')
+    )
     .withQuery('SELECT dept_name FROM departments;')
   )
 
