@@ -1,7 +1,5 @@
-const chai = require('chai');
-
-chai.use(require('chai-as-promised'));
-chai.should();
+const tap = require('tap')
+tap.comment('Create#of')
 
 const Pipeline = require('../lib/sdk/Pipeline');
 const ParDo = require('../lib/sdk/transforms/ParDo');
@@ -32,26 +30,23 @@ class OutputFn extends DoFn {
   }
 }
 
-describe('Create', () => {
-  describe('of()', () => {
-    it('strings', () => {
-      let p = Pipeline.create();
+const main = async () => {
+  const p = Pipeline.create()
 
-      p
-      .apply(Create.of([
-        'To be, or not to be: that is the question: ',
-        'Whether \'tis nobler in the mind to suffer ',
-        'The slings and arrows of outrageous fortune, ',
-        'Or to take arms against a sea of troubles, '
-      ]))
-      .apply(ParDo.of(new SplitLineFn()))
-      .apply(ParDo.of(new ComputeWordLengthFn()))
-      .apply(ParDo.of(new OutputFn()))
+  p
+  .apply(Create.of([
+    'To be, or not to be: that is the question: ',
+    'Whether \'tis nobler in the mind to suffer ',
+    'The slings and arrows of outrageous fortune, ',
+    'Or to take arms against a sea of troubles, '
+  ]))
+  .apply(ParDo.of(new SplitLineFn()))
+  .apply(ParDo.of(new ComputeWordLengthFn()))
+  .apply(ParDo.of(new OutputFn()))
 
-      return p
-      .run()
-      .waitUntilFinish()
-      ;
-    });
-  });
-});
+  return p
+  .run()
+  .waitUntilFinish()
+}
+
+tap.resolves(main())
