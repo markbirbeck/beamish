@@ -4,11 +4,11 @@
 
 const tap = require('tap')
 
-const Count = require('../../lib/sdk/transforms/Count')
-const DoFn = require('../../lib/sdk/transforms/DoFn')
-const ParDo = require('../../lib/sdk/transforms/ParDo')
-const Pipeline = require('../../lib/sdk/Pipeline')
-const Create = require('../../lib/sdk/transforms/Create')
+const Count = require('../../../lib/sdk/transforms/Count')
+const DoFn = require('../../../lib/sdk/transforms/DoFn')
+const ParDo = require('../../../lib/sdk/transforms/ParDo')
+const Pipeline = require('../../../lib/sdk/Pipeline')
+const Create = require('../../../lib/sdk/transforms/Create')
 
 class SplitLineFn extends DoFn {
   processElement(c) {

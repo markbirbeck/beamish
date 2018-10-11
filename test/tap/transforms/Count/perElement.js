@@ -11,18 +11,18 @@ tap.comment('Count#perElement')
  *  - checks the count.
  */
 
-const Count = require('../../../lib/sdk/transforms/Count');
-const DoFn = require('../../../lib/sdk/transforms/DoFn');
-const MapElements = require('../../../lib/sdk/transforms/MapElements');
-const ParDo = require('../../../lib/sdk/transforms/ParDo');
-const Pipeline = require('../../../lib/sdk/Pipeline');
-const TextIO = require('../../../lib/sdk/io/TextIO');
+const Count = require('../../../../lib/sdk/transforms/Count');
+const DoFn = require('../../../../lib/sdk/transforms/DoFn');
+const MapElements = require('../../../../lib/sdk/transforms/MapElements');
+const ParDo = require('../../../../lib/sdk/transforms/ParDo');
+const Pipeline = require('../../../../lib/sdk/Pipeline');
+const TextIO = require('../../../../lib/sdk/io/TextIO');
 
 const main = async () => {
   const p = Pipeline.create()
 
   p
-  .apply(TextIO.read().from(path.resolve(__dirname, '../../fixtures/file2.txt')))
+  .apply(TextIO.read().from(path.resolve(__dirname, '../../../fixtures/file2.txt')))
   .apply('ExtractWords', ParDo.of(
     new class ExtractWordsFn extends DoFn {
       processElement(c) {

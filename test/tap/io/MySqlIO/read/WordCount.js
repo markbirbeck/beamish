@@ -13,12 +13,12 @@ tap.comment('MySqlIO#read()')
  *  - checks the counts.
  */
 
-const Count = require('../../../../lib/sdk/transforms/Count');
-const DoFn = require('../../../../lib/sdk/transforms/DoFn');
-const MySqlIO = require('../../../../lib/sdk/io/MySqlIO')
-const Pipeline = require('../../../../lib/sdk/Pipeline');
-const PipelineOptionsFactory = require('../../../../lib/sdk/options/PipelineOptionsFactory')
-const ParDo = require('../../../../lib/sdk/transforms/ParDo');
+const Count = require('../../../../../lib/sdk/transforms/Count');
+const DoFn = require('../../../../../lib/sdk/transforms/DoFn');
+const MySqlIO = require('../../../../../lib/sdk/io/MySqlIO')
+const Pipeline = require('../../../../../lib/sdk/Pipeline');
+const PipelineOptionsFactory = require('../../../../../lib/sdk/options/PipelineOptionsFactory')
+const ParDo = require('../../../../../lib/sdk/transforms/ParDo');
 
 const main = async () => {
 
