@@ -3,12 +3,12 @@ const chai = require('chai');
 
 chai.should();
 
-const Pipeline = require('../lib/sdk/Pipeline');
-const Count = require('../lib/sdk/transforms/Count');
-const MapElements = require('../lib/sdk/transforms/MapElements');
-const ParDo = require('../lib/sdk/transforms/ParDo');
-const DoFn = require('../lib/sdk/transforms/DoFn');
-const TextIO = require('../lib/sdk/io/TextIO');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const Count = require('../../lib/sdk/transforms/Count');
+const MapElements = require('../../lib/sdk/transforms/MapElements');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const TextIO = require('../../lib/sdk/io/TextIO');
 
 describe('TextIO', () => {
   describe('read()', () => {
@@ -16,7 +16,7 @@ describe('TextIO', () => {
       const p = Pipeline.create()
 
       p
-      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file1.txt')))
+      .apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/file1.txt')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           c.element().should.eql('This is a simple file.');
@@ -34,7 +34,7 @@ describe('TextIO', () => {
         const p = Pipeline.create()
 
         p
-        .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+        .apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/shakespeare/1kinghenryiv')))
         .apply('Count', ParDo.of(
           new class extends DoFn {
             processStart() {
@@ -73,7 +73,7 @@ describe('TextIO', () => {
         const p = Pipeline.create()
 
         p
-        .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/companies-house/BasicCompanyData-2018-03-01-part1_5.csv')))
+        .apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/companies-house/BasicCompanyData-2018-03-01-part1_5.csv')))
         .apply('Count', ParDo.of(
           new class extends DoFn {
             processStart() {
@@ -108,7 +108,7 @@ describe('TextIO', () => {
       const p = Pipeline.create()
 
       p
-      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+      .apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/shakespeare/1kinghenryiv')))
       .apply('ExtractWords', ParDo.of(
         new class ExtractWordsFn extends DoFn {
           processElement(c) {
@@ -154,7 +154,7 @@ describe('TextIO', () => {
       const p = Pipeline.create()
 
       p
-      .apply(TextIO.read().from(path.resolve(__dirname, './fixtures/file2.txt')))
+      .apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/file2.txt')))
       .apply(Count.perElement())
       .apply(MapElements.via(
         new class extends DoFn {
@@ -163,7 +163,7 @@ describe('TextIO', () => {
           }
         }()
       ))
-      .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/textio-write-wordcounts')))
+      .apply(TextIO.write().to(path.resolve(__dirname, '../fixtures/output/textio-write-wordcounts')))
 
       return p
       .run()

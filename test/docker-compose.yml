@@ -35,7 +35,7 @@ services:
       - db
       - node-modules
       - mockserver
-    command: --exit --exclude /usr/src/app/test/io/ElasticSearchIO.*.js
+    command: --exit /usr/src/app/test/mocha
     ports:
       - "50051:50051"
     volumes:
@@ -48,7 +48,7 @@ services:
       - db
       - node-modules
       - elasticsearch
-    command: --no-timeout /usr/src/app/test/io /usr/src/app/test/transforms/Count /usr/src/app/test/util /usr/src/app/test/Pipeline
+    command: --no-timeout /usr/src/app/test/tap
     volumes:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app

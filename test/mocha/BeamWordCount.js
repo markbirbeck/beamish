@@ -4,13 +4,13 @@ const chai = require('chai');
 chai.use(require('chai-as-promised'));
 chai.should();
 
-const Count = require('../lib/sdk/transforms/Count');
-const MapElements = require('../lib/sdk/transforms/MapElements');
-const DoFn = require('../lib/sdk/transforms/DoFn');
-const ParDo = require('../lib/sdk/transforms/ParDo');
-const Pipeline = require('../lib/sdk/Pipeline');
-const PipelineOptionsFactory = require('../lib/sdk/options/PipelineOptionsFactory')
-const TextIO = require('../lib/sdk/io/TextIO');
+const Count = require('../../lib/sdk/transforms/Count');
+const MapElements = require('../../lib/sdk/transforms/MapElements');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const PipelineOptionsFactory = require('../../lib/sdk/options/PipelineOptionsFactory')
+const TextIO = require('../../lib/sdk/io/TextIO');
 
 describe('Beam Word Count', () => {
   it('minimal', () => {
@@ -56,7 +56,7 @@ describe('Beam Word Count', () => {
      *  gs://apache-beam-samples/shakespeare/*
      */
 
-    p.apply(TextIO.read().from(path.resolve(__dirname, './fixtures/shakespeare/1kinghenryiv')))
+    p.apply(TextIO.read().from(path.resolve(__dirname, '../fixtures/shakespeare/1kinghenryiv')))
 
     /**
      * Concept #2: Apply a ParDo transform to our PCollection of text lines.
@@ -108,7 +108,7 @@ describe('Beam Word Count', () => {
      * wordcount-00001-of-00005
      */
 
-    .apply(TextIO.write().to(path.resolve(__dirname, './fixtures/output/wordcounts')))
+    .apply(TextIO.write().to(path.resolve(__dirname, '../fixtures/output/wordcounts')))
     ;
 
     /**

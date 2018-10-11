@@ -3,12 +3,12 @@ const chai = require('chai');
 
 chai.should();
 
-const Pipeline = require('../lib/sdk/Pipeline');
-const ParDo = require('../lib/sdk/transforms/ParDo');
-const DoFn = require('../lib/sdk/transforms/DoFn');
-const TextIO = require('../lib/sdk/io/TextIO');
-const Create = require('../lib/sdk/transforms/Create');
-const Csv = require('../lib/sdk/transforms/Csv');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const TextIO = require('../../lib/sdk/io/TextIO');
+const Create = require('../../lib/sdk/transforms/Create');
+const Csv = require('../../lib/sdk/transforms/Csv');
 
 describe('Csv', () => {
   describe('parse', () => {

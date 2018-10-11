@@ -14,13 +14,13 @@ tap.comment('ElasticSearchIO#write()')
  *  - writes the JSON to ElasticSearch.
  */
 
-const Count = require('../../lib/sdk/transforms/Count');
-const Create = require('../../lib/sdk/transforms/Create');
-const DoFn = require('../../lib/sdk/transforms/DoFn');
-const ElasticSearchIO = require('../../lib/sdk/io/ElasticSearchIO')
-const Pipeline = require('../../lib/sdk/Pipeline');
-const MapElements = require('../../lib/sdk/transforms/MapElements');
-const ParDo = require('../../lib/sdk/transforms/ParDo');
+const Count = require('../../../lib/sdk/transforms/Count');
+const Create = require('../../../lib/sdk/transforms/Create');
+const DoFn = require('../../../lib/sdk/transforms/DoFn');
+const ElasticSearchIO = require('../../../lib/sdk/io/ElasticSearchIO')
+const Pipeline = require('../../../lib/sdk/Pipeline');
+const MapElements = require('../../../lib/sdk/transforms/MapElements');
+const ParDo = require('../../../lib/sdk/transforms/ParDo');
 
 const main = async config => {
   const pipeline = Pipeline.create()

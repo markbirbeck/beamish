@@ -9,11 +9,11 @@ tap.comment('MySqlIO#read() large query count')
  *  - checks the count.
  */
 
-const Count = require('../../../../lib/sdk/transforms/Count');
-const DoFn = require('../../../../lib/sdk/transforms/DoFn');
-const MySqlIO = require('../../../../lib/sdk/io/MySqlIO')
-const Pipeline = require('../../../../lib/sdk/Pipeline');
-const ParDo = require('../../../../lib/sdk/transforms/ParDo');
+const Count = require('../../../../../lib/sdk/transforms/Count');
+const DoFn = require('../../../../../lib/sdk/transforms/DoFn');
+const MySqlIO = require('../../../../../lib/sdk/io/MySqlIO')
+const Pipeline = require('../../../../../lib/sdk/Pipeline');
+const ParDo = require('../../../../../lib/sdk/transforms/ParDo');
 
 const main = async () => {
   const p = Pipeline.create()

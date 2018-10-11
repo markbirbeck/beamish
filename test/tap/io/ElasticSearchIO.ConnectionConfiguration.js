@@ -1,6 +1,6 @@
 const tap = require('tap')
 
-const ConnectionConfiguration = require('../../lib/sdk/io/ElasticSearchIO/ConnectionConfiguration')
+const ConnectionConfiguration = require('../../../lib/sdk/io/ElasticSearchIO/ConnectionConfiguration')
 
 tap.comment('Check that all values are set correctly.')
 let config = ConnectionConfiguration.create('http://host:9200', 'my-index', 'my-type')
