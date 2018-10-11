@@ -35,7 +35,7 @@ services:
       - db
       - node-modules
       - mockserver
-    command: --exit --exclude /usr/src/app/test/io/ElasticSearchIO.*.js
+    command: --exit /usr/src/app/test/mocha
     ports:
       - "50051:50051"
     volumes:

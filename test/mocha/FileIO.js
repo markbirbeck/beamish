@@ -3,12 +3,12 @@ const chai = require('chai');
 
 chai.should();
 
-const Pipeline = require('../lib/sdk/Pipeline');
-const Count = require('../lib/sdk/transforms/Count');
-const MapElements = require('../lib/sdk/transforms/MapElements');
-const ParDo = require('../lib/sdk/transforms/ParDo');
-const DoFn = require('../lib/sdk/transforms/DoFn');
-const FileIO = require('../lib/sdk/io/FileIO');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const Count = require('../../lib/sdk/transforms/Count');
+const MapElements = require('../../lib/sdk/transforms/MapElements');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const FileIO = require('../../lib/sdk/io/FileIO');
 
 describe('FileIO', () => {
   describe('read()', () => {
@@ -21,7 +21,7 @@ describe('FileIO', () => {
        */
 
       p
-      .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/beamish.jpeg')))
+      .apply(FileIO.read().from(path.resolve(__dirname, '../fixtures/beamish.jpeg')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           const buf = c.element();
@@ -49,8 +49,8 @@ describe('FileIO', () => {
       let p = Pipeline.create()
 
       p
-      .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/beamish.jpeg')))
-      .apply(FileIO.write().to(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
+      .apply(FileIO.read().from(path.resolve(__dirname, '../fixtures/beamish.jpeg')))
+      .apply(FileIO.write().to(path.resolve(__dirname, '../fixtures/output/beamish2.jpeg')))
 
       p
       .run()
@@ -64,7 +64,7 @@ describe('FileIO', () => {
       p = Pipeline.create()
 
       p
-      .apply(FileIO.read().from(path.resolve(__dirname, './fixtures/output/beamish2.jpeg')))
+      .apply(FileIO.read().from(path.resolve(__dirname, '../fixtures/output/beamish2.jpeg')))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
           const buf = c.element();

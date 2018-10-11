@@ -6,11 +6,11 @@ chai.should();
 const mockServer = require('mockserver-client');
 const mockServerClient = mockServer.mockServerClient;
 
-const DoFn = require('../lib/sdk/transforms/DoFn');
-const ParDo = require('../lib/sdk/transforms/ParDo');
-const Pipeline = require('../lib/sdk/Pipeline');
-const PipelineOptionsFactory = require('../lib/sdk/options/PipelineOptionsFactory')
-const RequestIO = require('../lib/sdk/io/RequestIO');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const PipelineOptionsFactory = require('../../lib/sdk/options/PipelineOptionsFactory')
+const RequestIO = require('../../lib/sdk/io/RequestIO');
 
 
 describe('Request', () => {
