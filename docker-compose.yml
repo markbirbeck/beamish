@@ -1,9 +1,10 @@
-version: "3.2"
+version: "3.4"
 services:
   build-beamish:
-    build:
-      context: .
-    image: beamish:latest
+    image: node:10.9.0-alpine
+    volumes:
+      - .:/usr/src/app
+      - beamish-direct-runner-node-modules:/usr/src/app/node_modules
 
   build-beamish-FnHarness:
     build:
@@ -22,8 +23,19 @@ services:
       context: ./openfaas/harness
     image: beamish-harness-openfaas:latest
 
+  beamish-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile-runner
+    image: beamish/runner:latest
+
   build-beamish-toolbox:
     build:
       context: .
       dockerfile: Dockerfile-toolbox
     image: beamish-toolbox:latest
+
+volumes:
+  beamish-direct-runner-node-modules:
+    name: beamish-direct-runner-node-modules
+    driver: local
