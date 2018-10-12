@@ -4,6 +4,7 @@ services:
 
 stages:
   - test
+  - deploy
 
 mocha-test:
   stage: test
@@ -27,3 +28,12 @@ tap-test:
       --abort-on-container-exit
       --exit-code-from tap-test
       tap-test
+
+deploy:
+  stage: deploy
+  script:
+    - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+    - docker-compose build beamish-runner
+    - docker-compose push beamish-runner
+  only:
+    - master
