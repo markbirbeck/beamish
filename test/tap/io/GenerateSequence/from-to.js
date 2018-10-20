@@ -11,32 +11,19 @@ tap.comment('GenerateSequence#from')
  */
 
 const DoFn = require('../../../../lib/sdk/transforms/DoFn');
+const GenerateSequence = require('../../../../lib/sdk/io/GenerateSequence');
 const ParDo = require('../../../../lib/sdk/transforms/ParDo');
 const Pipeline = require('../../../../lib/sdk/Pipeline');
-
-class GenerateSequence extends DoFn {
-  constructor(from, to) {
-    super()
-    this.from = from
-    this.to = to
-  }
-
-  async processElement(c) {
-    for (let i = this.from; i <= this.to; i++) {
-      await c.output(i)
-    }
-  }
-}
 
 const main = async () => {
   const p = Pipeline.create()
 
   /**
-   * Simulate p.apply(GenerateSequence.from(7).to(1094)):
+   * Simulate p.apply(GenerateSequence.from(9).to(2001)):
    */
 
   p
-  .apply(ParDo.of(new GenerateSequence(7, 1094)))
+  .apply(ParDo.of(new GenerateSequence(9, 2001)))
 
   /**
    * Add each of the values received to a running total:
@@ -67,7 +54,7 @@ const main = async () => {
       apply(input) {
         return require('tap').same(
           input,
-          ((from, to) => (from + to) * (to - from + 1) / 2)(7, 1094)
+          ((from, to) => (from + to) * (to - from + 1) / 2)(9, 2001)
         )
       }
     }
