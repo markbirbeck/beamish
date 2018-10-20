@@ -14,28 +14,29 @@ const DoFn = require('../../../../lib/sdk/transforms/DoFn');
 const ParDo = require('../../../../lib/sdk/transforms/ParDo');
 const Pipeline = require('../../../../lib/sdk/Pipeline');
 
+class GenerateSequence extends DoFn {
+  constructor(from, to) {
+    super()
+    this.from = from
+    this.to = to
+  }
+
+  async processElement(c) {
+    for (let i = this.from; i <= this.to; i++) {
+      await c.output(i)
+    }
+  }
+}
+
 const main = async () => {
   const p = Pipeline.create()
 
   /**
-   * Simulate p.apply(GenerateSequence.from(3).to(1007)):
+   * Simulate p.apply(GenerateSequence.from(7).to(1094)):
    */
 
   p
-  .apply(ParDo.of(
-    new class extends DoFn {
-      processStart() {
-        this.from = 3
-        this.to = 1007
-      }
-
-      async processElement(c) {
-        for (let i = this.from; i <= this.to; i++) {
-          await c.output(i)
-        }
-      }
-    }
-  ))
+  .apply(ParDo.of(new GenerateSequence(7, 1094)))
 
   /**
    * Add each of the values received to a running total:
@@ -66,7 +67,7 @@ const main = async () => {
       apply(input) {
         return require('tap').same(
           input,
-          ((from, to) => (from + to) * (to - from + 1) / 2)(3, 1007)
+          ((from, to) => (from + to) * (to - from + 1) / 2)(7, 1094)
         )
       }
     }
