@@ -23,7 +23,7 @@ const main = async () => {
    */
 
   p
-  .apply(ParDo.of(new GenerateSequence(9, 2001)))
+  .apply(GenerateSequence.from(17).to(720))
 
   /**
    * Add each of the values received to a running total:
@@ -54,7 +54,7 @@ const main = async () => {
       apply(input) {
         return require('tap').same(
           input,
-          ((from, to) => (from + to) * (to - from + 1) / 2)(9, 2001)
+          ((from, to) => (from + to) * (to - from + 1) / 2)(17, 720)
         )
       }
     }
