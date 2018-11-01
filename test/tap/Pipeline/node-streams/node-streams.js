@@ -50,6 +50,11 @@ class SplitNewLineFn extends DoFn {
 }
 
 class CountFn extends DoFn {
+  constructor() {
+    super()
+    this.objectMode = true
+  }
+
   setup() {
     this.count = 0
   }
