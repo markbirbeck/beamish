@@ -7,20 +7,30 @@ const zlib = require('zlib')
 
 const pipeline = util.promisify(stream.pipeline)
 
+class ProcessContext {
+  constructor(stream, element, encoding) {
+    this._stream = stream
+    this._element = element
+    this._encoding = encoding
+  }
+
+  element() {
+    return this._encoding === 'buffer' ? this._element.toString() : this._element
+  }
+
+  output(obj) {
+    this._stream.push(obj)
+  }
+}
+
 class DoFn extends stream.Transform {
   _transform(chunk, encoding, callback) {
-    this.processElement({
-      element: () => encoding === 'buffer' ? chunk.toString() : chunk,
-      output: str => this.push(str)
-    })
+    this.processElement(new ProcessContext(this, chunk, encoding))
     callback()
   }
 
   _flush(callback) {
-    this.finalElement({
-      element: () => encoding === 'buffer' ? chunk.toString() : chunk,
-      output: str => this.push(str)
-    })
+    this.finalElement(new ProcessContext(this, ''))
     callback()
   }
 }
