@@ -99,24 +99,27 @@ class FileWriter extends DoFn {
   }
 }
 
-async function main() {
-  const steps = [
-    new DoFnAsReadable(new FileReader('../../../fixtures/shakespeare/1kinghenryiv')),
-    new DoFnAsTransform(new SplitNewLineFn()),
-    new DoFnAsTransform(new CountFn()),
-    new DoFnAsWritable(new FileWriter('../../../fixtures/output/1kinghenryiv'))
-  ]
+function main() {
+  tap.test(async t => {
+    const steps = [
+      new DoFnAsReadable(new FileReader('../../../fixtures/shakespeare/1kinghenryiv')),
+      new DoFnAsTransform(new SplitNewLineFn()),
+      new DoFnAsTransform(new CountFn()),
+      new DoFnAsWritable(new FileWriter('../../../fixtures/output/1kinghenryiv'))
+    ]
 
-  try {
-    await pipeline(...steps)
+    try {
+      await pipeline(...steps)
 
-    console.log('Pipeline succeeded')
+      console.log('Pipeline succeeded')
 
-    const stat = fs.statSync('../../../fixtures/output/1kinghenryiv')
-    tap.same(stat.size, 4)
-  } catch (err) {
-    console.error('Pipeline failed', err)
-  }
+      const stat = fs.statSync('../../../fixtures/output/1kinghenryiv')
+      t.same(stat.size, 4)
+    } catch (err) {
+      console.error('Pipeline failed', err)
+    }
+    t.done()
+  })
 }
 
 main()
