@@ -99,6 +99,32 @@ class FileWriter extends DoFn {
   }
 }
 
+class MySqlReader extends DoFn {
+  constructor(config) {
+    super()
+    this.config = config
+
+    /**
+     * Set an objectMode flag so that DoFnAsReadable can set itself up
+     * correctly:
+     */
+
+    this.objectMode = true
+  }
+
+  setup() {
+    const mysql = require('mysql')
+    this.connection = mysql.createConnection(this.config.connection)
+    this.connection.connect()
+    this.stream = this.connection.query(this.config.query).stream()
+  }
+
+  async teardown() {
+    await this.stream.destroy()
+    await this.connection.end()
+  }
+}
+
 function main() {
   tap.test(async t => {
     const steps = [
@@ -120,6 +146,47 @@ function main() {
     }
     t.done()
   })
+
+  tap.test(async t => {
+    const steps = [
+      new DoFnAsReadable(
+        new MySqlReader({
+          connection: {
+            host: 'db',
+            database: 'employees',
+            user: 'root',
+            password: 'college'
+          },
+          query: 'SELECT dept_name FROM departments;'
+        })
+      ),
+      new DoFnAsTransform(new CountFn()),
+      new DoFnAsWritable(new FileWriter('../../../fixtures/output/departments'))
+    ]
+
+    try {
+      await pipeline(...steps)
+
+      console.log('Pipeline succeeded')
+
+      const stat = fs.statSync('../../../fixtures/output/departments')
+      t.same(stat.size, 1)
+    } catch (err) {
+      console.error('Pipeline failed', err)
+    }
+    t.done()
+  })
 }
 
-main()
+const waitOn = require('wait-on')
+waitOn(
+  {
+    resources: ['tcp:db:3306'],
+    timeout: 30000
+  },
+  err => {
+    if (err) { throw new Error(err) }
+    console.log('Resources are ready')
+    main()
+  }
+)
