@@ -11,6 +11,7 @@ const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
 const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
+const MySqlReader = require('./../../../../lib/sdk/io/node-streams/MySqlReader')
 
 class SplitNewLineFn extends DoFn {
   setup() {
@@ -101,32 +102,6 @@ class FileWriter extends DoFn {
       this.stream.on('ready', resolve)
       this.stream.on('error', reject)
     })
-  }
-}
-
-class MySqlReader extends DoFn {
-  constructor(config) {
-    super()
-    this.config = config
-
-    /**
-     * Set an objectMode flag so that DoFnAsReadable can set itself up
-     * correctly:
-     */
-
-    this.objectMode = true
-  }
-
-  setup() {
-    const mysql = require('mysql')
-    this.connection = mysql.createConnection(this.config.connection)
-    this.connection.connect()
-    this.stream = this.connection.query(this.config.query).stream()
-  }
-
-  async teardown() {
-    await this.stream.destroy()
-    await this.connection.end()
   }
 }
 
