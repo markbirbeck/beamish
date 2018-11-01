@@ -62,13 +62,12 @@ class CountFn extends DoFn {
 
 async function main() {
   const source = fs.createReadStream('../../../fixtures/shakespeare/1kinghenryiv')
-  const transform = new SplitNewLineFn()
   const sink = fs.createWriteStream('../../../fixtures/output/1kinghenryiv')
 
   try {
     await pipeline(
       source,
-      transform,
+      new SplitNewLineFn(),
       new CountFn(),
       sink
     )
