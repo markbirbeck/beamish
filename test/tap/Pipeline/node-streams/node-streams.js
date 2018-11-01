@@ -10,6 +10,7 @@ const pipeline = util.promisify(stream.pipeline)
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
+const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
 
 class SplitNewLineFn extends DoFn {
   setup() {
@@ -78,13 +79,32 @@ class FileReader extends DoFn {
   }
 }
 
+class FileWriter extends DoFn {
+  constructor(fileName) {
+    super()
+    this.fileName = fileName
+  }
+
+  /**
+   * Note that there is no need for a teardown() since the default for
+   * the writable stream is to auto close:
+   */
+
+  setup() {
+    return new Promise((resolve, reject) => {
+      this.stream = fs.createWriteStream(this.fileName)
+      this.stream.on('ready', resolve)
+      this.stream.on('error', reject)
+    })
+  }
+}
+
 async function main() {
-  const sink = fs.createWriteStream('../../../fixtures/output/1kinghenryiv')
   const steps = [
     new DoFnAsReadable(new FileReader('../../../fixtures/shakespeare/1kinghenryiv')),
     new DoFnAsTransform(new SplitNewLineFn()),
     new DoFnAsTransform(new CountFn()),
-    sink
+    new DoFnAsWritable(new FileWriter('../../../fixtures/output/1kinghenryiv'))
   ]
 
   try {
