@@ -10,10 +10,11 @@ const pipeline = util.promisify(stream.pipeline)
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 
 class SplitNewLineFn extends DoFn {
+  setup() {
+    this.last = ''
+  }
+
   processElement(c) {
-    if (this.last === undefined) {
-      this.last = ''
-    }
 
     /**
      * Add any leftovers from previous processing to the front of
@@ -46,11 +47,11 @@ class SplitNewLineFn extends DoFn {
 }
 
 class CountFn extends DoFn {
-  processElement(c) {
-    if (this.count === undefined) {
-      this.count = 0
-    }
+  setup() {
+    this.count = 0
+  }
 
+  processElement(c) {
     this.count++
   }
 
