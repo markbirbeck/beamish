@@ -61,11 +61,48 @@ class CountFn extends DoFn {
   }
 }
 
+class FileReader extends stream.Readable {
+  constructor(fileName) {
+    super()
+    this.stream = fs.createReadStream(fileName)
+
+    /**
+     * When there is no more data, let the upstream handler
+     * know, and ask the downstream handler to destroy itself:
+     */
+
+    this.stream.on('end', () => {
+      this.push(null)
+      this.stream.destroy()
+    })
+
+    /**
+     * Whenever we receive any data from the wrapped stream, forward
+     * it to the upstream handler. Note that we pause the incoming
+     * stream if the upstream is not able to take any more:
+     */
+
+    this.stream.on('data', chunk => {
+      if (!this.push(chunk)) {
+        this.stream.pause()
+      }
+    })
+  }
+
+  /**
+   * When the upstream handler is ready for more, then unpause the
+   * wrapped stream:
+   */
+
+  _read() {
+    this.stream.resume()
+  }
+}
+
 async function main() {
-  const source = fs.createReadStream('../../../fixtures/shakespeare/1kinghenryiv')
   const sink = fs.createWriteStream('../../../fixtures/output/1kinghenryiv')
   const steps = [
-    source,
+    new FileReader('../../../fixtures/shakespeare/1kinghenryiv'),
     new DoFnAsTransform(new SplitNewLineFn()),
     new DoFnAsTransform(new CountFn()),
     sink
