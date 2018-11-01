@@ -8,6 +8,7 @@ const zlib = require('zlib')
 const pipeline = util.promisify(stream.pipeline)
 
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
+const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
 
 class SplitNewLineFn extends DoFn {
   setup() {
@@ -65,8 +66,8 @@ async function main() {
   const sink = fs.createWriteStream('../../../fixtures/output/1kinghenryiv')
   const steps = [
     source,
-    new SplitNewLineFn(),
-    new CountFn(),
+    new DoFnAsTransform(new SplitNewLineFn()),
+    new DoFnAsTransform(new CountFn()),
     sink
   ]
 
