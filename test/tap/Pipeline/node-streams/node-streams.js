@@ -45,6 +45,20 @@ class SplitNewLineFn extends DoFn {
   }
 }
 
+class CountFn extends DoFn {
+  processElement(c) {
+    if (this.count === undefined) {
+      this.count = 0
+    }
+
+    this.count++
+  }
+
+  finalElement(c) {
+    c.output('' + this.count)
+  }
+}
+
 async function main() {
   const source = fs.createReadStream('../../../fixtures/shakespeare/1kinghenryiv')
   const transform = new SplitNewLineFn()
@@ -54,13 +68,14 @@ async function main() {
     await pipeline(
       source,
       transform,
+      new CountFn(),
       sink
     )
 
     console.log('Pipeline succeeded')
 
     const stat = fs.statSync('../../../fixtures/output/1kinghenryiv')
-    tap.same(stat.size, 140533)
+    tap.same(stat.size, 4)
   } catch (err) {
     console.error('Pipeline failed', err)
   }
