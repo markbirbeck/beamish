@@ -12,6 +12,7 @@ const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoF
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
 const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
 const MySqlReader = require('./../../../../lib/sdk/io/node-streams/MySqlReader')
+const ElasticSearchWriter = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriter')
 
 class SplitNewLineFn extends DoFn {
   setup() {
@@ -156,12 +157,47 @@ function main() {
     }
     t.done()
   })
+
+  tap.test(async t => {
+    const steps = [
+      new DoFnAsReadable(
+        new MySqlReader({
+          connection: {
+            host: 'db',
+            database: 'employees',
+            user: 'root',
+            password: 'college'
+          },
+          query: 'SELECT dept_name FROM departments;'
+        })
+      ),
+      new DoFnAsWritable(
+        new ElasticSearchWriter({
+          connection: {
+            host: 'elasticsearch:9200'
+          },
+          idFn: obj => obj.dept_name,
+          type: 'department',
+          index: 'departments'
+        })
+      )
+    ]
+
+    try {
+      await pipeline(...steps)
+
+      console.log('Pipeline succeeded')
+    } catch (err) {
+      console.error('Pipeline failed', err)
+    }
+    t.done()
+  })
 }
 
 const waitOn = require('wait-on')
 waitOn(
   {
-    resources: ['tcp:db:3306'],
+    resources: ['tcp:db:3306', 'tcp:elasticsearch:9200'],
     timeout: 30000
   },
   err => {
