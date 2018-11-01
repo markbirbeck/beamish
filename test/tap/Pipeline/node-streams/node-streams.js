@@ -63,14 +63,15 @@ class CountFn extends DoFn {
 async function main() {
   const source = fs.createReadStream('../../../fixtures/shakespeare/1kinghenryiv')
   const sink = fs.createWriteStream('../../../fixtures/output/1kinghenryiv')
+  const steps = [
+    source,
+    new SplitNewLineFn(),
+    new CountFn(),
+    sink
+  ]
 
   try {
-    await pipeline(
-      source,
-      new SplitNewLineFn(),
-      new CountFn(),
-      sink
-    )
+    await pipeline(...steps)
 
     console.log('Pipeline succeeded')
 
