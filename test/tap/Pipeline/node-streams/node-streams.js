@@ -7,33 +7,7 @@ const zlib = require('zlib')
 
 const pipeline = util.promisify(stream.pipeline)
 
-class ProcessContext {
-  constructor(stream, element, encoding) {
-    this._stream = stream
-    this._element = element
-    this._encoding = encoding
-  }
-
-  element() {
-    return this._encoding === 'buffer' ? this._element.toString() : this._element
-  }
-
-  output(obj) {
-    this._stream.push(obj)
-  }
-}
-
-class DoFn extends stream.Transform {
-  _transform(chunk, encoding, callback) {
-    this.processElement(new ProcessContext(this, chunk, encoding))
-    callback()
-  }
-
-  _flush(callback) {
-    this.finalElement(new ProcessContext(this, ''))
-    callback()
-  }
-}
+const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 
 class SplitNewLineFn extends DoFn {
   processElement(c) {
