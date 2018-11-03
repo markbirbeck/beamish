@@ -2,6 +2,7 @@ const tap = require('tap')
 
 const stream = require('stream')
 const fs = require('fs')
+const path = require('path')
 const util = require('util')
 const zlib = require('zlib')
 
@@ -82,7 +83,7 @@ class FileReader extends DoFn {
    */
 
   setup() {
-    this.stream = fs.createReadStream(this.fileName)
+    this.stream = fs.createReadStream(path.resolve(__dirname, this.fileName))
   }
 }
 
@@ -99,7 +100,7 @@ class FileWriter extends DoFn {
 
   setup() {
     return new Promise((resolve, reject) => {
-      this.stream = fs.createWriteStream(this.fileName)
+      this.stream = fs.createWriteStream(path.resolve(__dirname, this.fileName))
       this.stream.on('ready', resolve)
       this.stream.on('error', reject)
     })
