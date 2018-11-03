@@ -35,7 +35,7 @@ deploy:
   script:
     - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
     - docker-compose build beamish-runner
-    - docker tag beamish/runner ${CI_COMMIT_TAG}
+    - docker tag beamish/runner:${CI_COMMIT_TAG} beamish/runner:latest
     - docker-compose push beamish-runner
   only:
     - tags
