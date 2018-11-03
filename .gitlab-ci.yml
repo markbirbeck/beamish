@@ -37,4 +37,4 @@ deploy:
     - docker-compose build beamish-runner
     - docker-compose push beamish-runner
   only:
-    - master
+    - tags
