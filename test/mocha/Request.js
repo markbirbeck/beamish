@@ -38,7 +38,7 @@ describe('Request', () => {
     return p.run().waitUntilFinish();
   });
 
-  it('follow redirects', async () => {
+  it.skip('follow redirects', async () => {
     const ms = mockServerClient('mockserver', 1080);
 
     /**
@@ -97,7 +97,7 @@ describe('Request', () => {
     .run().waitUntilFinish();
   }).timeout(10000);
 
-  it('retrieve text files', async () => {
+  it.skip('retrieve text files', async () => {
     const ms = mockServerClient('mockserver', 1080);
 
     /**
