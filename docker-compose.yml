@@ -27,7 +27,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-runner
-    image: beamish/runner:latest
+    image: beamish/runner:${CI_COMMIT_TAG}
 
   build-beamish-toolbox:
     build:
