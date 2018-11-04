@@ -1,5 +1,7 @@
 FROM node:10.11.0-alpine
 
+ARG CI_COMMIT_TAG
+
 # Install app dependencies as global node modules:
 #
 ENV NODE_PATH /usr/local/lib/node_modules
@@ -18,7 +20,7 @@ RUN apk add --no-cache \
 #  https://github.com/grpc/grpc/issues/6435
 #
 RUN npm install -g -unsafe-perm \
-  gitlab:beamish/direct-runner#semver:^{CI_COMMIT_TAG}
+  gitlab:beamish/direct-runner#semver:^${CI_COMMIT_TAG}
 
 # Tidy up:
 #
