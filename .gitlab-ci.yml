@@ -37,5 +37,6 @@ deploy:
     - docker-compose build beamish-runner
     - docker tag beamish/runner:${CI_COMMIT_TAG:-latest} beamish/runner:latest
     - docker-compose push beamish-runner
+    - docker push beamish/runner:latest
   only:
     - tags
