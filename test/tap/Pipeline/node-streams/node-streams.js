@@ -8,6 +8,7 @@ const zlib = require('zlib')
 const CountFn = require('./../../../../lib/sdk/transforms/node-streams/CountFn')
 const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
+const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
 const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
@@ -20,12 +21,12 @@ const SplitNewLineFn = require('./../../../../lib/sdk/transforms/node-streams/Sp
 function main() {
   tap.test(async t => {
     const graph = [
-      new DoFnAsReadable(new FileReaderFn(path.resolve(__dirname,
-        '../../../fixtures/shakespeare/1kinghenryiv'))),
-      new DoFnAsTransform(new SplitNewLineFn()),
-      new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/1kinghenryiv')))
+      new DoFnAsReadable(ParDo.of(new FileReaderFn(path.resolve(__dirname,
+        '../../../fixtures/shakespeare/1kinghenryiv')))),
+      new DoFnAsTransform(ParDo.of(new SplitNewLineFn())),
+      new DoFnAsTransform(ParDo.of(new CountFn())),
+      new DoFnAsWritable(ParDo.of(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/1kinghenryiv'))))
     ]
 
     try {
@@ -47,7 +48,7 @@ function main() {
   tap.test(async t => {
     const graph = [
       new DoFnAsReadable(
-        new MySqlReaderFn({
+        ParDo.of(new MySqlReaderFn({
           connection: {
             host: 'db',
             database: 'employees',
@@ -55,11 +56,11 @@ function main() {
             password: 'college'
           },
           query: 'SELECT dept_name FROM departments;'
-        })
+        }))
       ),
-      new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/departments')))
+      new DoFnAsTransform(ParDo.of(new CountFn())),
+      new DoFnAsWritable(ParDo.of(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/departments'))))
     ]
 
     try {
@@ -81,7 +82,7 @@ function main() {
   tap.test(async t => {
     const graph = [
       new DoFnAsReadable(
-        new MySqlReaderFn({
+        ParDo.of(new MySqlReaderFn({
           connection: {
             host: 'db',
             database: 'employees',
@@ -89,17 +90,17 @@ function main() {
             password: 'college'
           },
           query: 'SELECT dept_name FROM departments;'
-        })
+        }))
       ),
       new DoFnAsWritable(
-        new ElasticSearchWriterFn({
+        ParDo.of(new ElasticSearchWriterFn({
           connection: {
             host: 'elasticsearch:9200'
           },
           idFn: obj => obj.dept_name,
           type: 'department',
           index: 'departments'
-        })
+        }))
       )
     ]
 
