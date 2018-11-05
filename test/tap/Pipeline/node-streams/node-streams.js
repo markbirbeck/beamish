@@ -13,53 +13,21 @@ const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
 const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
+const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
+const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
 const MySqlReader = require('./../../../../lib/sdk/io/node-streams/MySqlReader')
 const ElasticSearchWriter = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriter')
 const SplitNewLineFn = require('./../../../../lib/sdk/transforms/node-streams/SplitNewLineFn')
 
-class FileReader extends DoFn {
-  constructor(fileName) {
-    super()
-    this.fileName = fileName
-  }
-
-  /*
-   * Note that there is no need for a teardown() since the default for
-   * the writable stream is to auto close:
-   */
-
-  setup() {
-    this.stream = fs.createReadStream(path.resolve(__dirname, this.fileName))
-  }
-}
-
-class FileWriter extends DoFn {
-  constructor(fileName) {
-    super()
-    this.fileName = fileName
-  }
-
-  /**
-   * Note that there is no need for a teardown() since the default for
-   * the writable stream is to auto close:
-   */
-
-  setup() {
-    return new Promise((resolve, reject) => {
-      this.stream = fs.createWriteStream(path.resolve(__dirname, this.fileName))
-      this.stream.on('ready', resolve)
-      this.stream.on('error', reject)
-    })
-  }
-}
-
 function main() {
   tap.test(async t => {
     const steps = [
-      new DoFnAsReadable(new FileReader('../../../fixtures/shakespeare/1kinghenryiv')),
+      new DoFnAsReadable(new FileReaderFn(path.resolve(__dirname,
+        '../../../fixtures/shakespeare/1kinghenryiv'))),
       new DoFnAsTransform(new SplitNewLineFn()),
       new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriter('../../../fixtures/output/1kinghenryiv'))
+      new DoFnAsWritable(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/1kinghenryiv')))
     ]
 
     try {
@@ -89,7 +57,8 @@ function main() {
         })
       ),
       new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriter('../../../fixtures/output/departments'))
+      new DoFnAsWritable(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/departments')))
     ]
 
     try {
