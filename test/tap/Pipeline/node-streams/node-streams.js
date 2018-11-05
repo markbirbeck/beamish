@@ -15,8 +15,8 @@ const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/Do
 const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
 const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const MySqlReader = require('./../../../../lib/sdk/io/node-streams/MySqlReader')
-const ElasticSearchWriter = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriter')
+const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
+const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
 const SplitNewLineFn = require('./../../../../lib/sdk/transforms/node-streams/SplitNewLineFn')
 
 function main() {
@@ -46,7 +46,7 @@ function main() {
   tap.test(async t => {
     const steps = [
       new DoFnAsReadable(
-        new MySqlReader({
+        new MySqlReaderFn({
           connection: {
             host: 'db',
             database: 'employees',
@@ -77,7 +77,7 @@ function main() {
   tap.test(async t => {
     const steps = [
       new DoFnAsReadable(
-        new MySqlReader({
+        new MySqlReaderFn({
           connection: {
             host: 'db',
             database: 'employees',
@@ -88,7 +88,7 @@ function main() {
         })
       ),
       new DoFnAsWritable(
-        new ElasticSearchWriter({
+        new ElasticSearchWriterFn({
           connection: {
             host: 'elasticsearch:9200'
           },
