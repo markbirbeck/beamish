@@ -13,14 +13,14 @@ const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
 const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
 const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
-const SplitNewLineFn = require('./../../../../lib/sdk/transforms/node-streams/SplitNewLineFn')
+const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
 
 function main() {
   tap.test(async t => {
     const graph = [
       ParDo.of(new FileReaderFn(path.resolve(__dirname,
         '../../../fixtures/shakespeare/1kinghenryiv'))),
-      ParDo.of(new SplitNewLineFn()),
+      ParDo.of(new Split()),
       Count.globally(),
       ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/1kinghenryiv')))
