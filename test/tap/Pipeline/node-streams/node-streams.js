@@ -3,12 +3,10 @@ const tap = require('tap')
 const stream = require('stream')
 const fs = require('fs')
 const path = require('path')
-const util = require('util')
 const zlib = require('zlib')
 
-const pipeline = util.promisify(stream.pipeline)
-
 const CountFn = require('./../../../../lib/sdk/transforms/node-streams/CountFn')
+const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
@@ -31,7 +29,9 @@ function main() {
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness(steps)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
 
@@ -62,7 +62,9 @@ function main() {
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness(steps)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
 
@@ -100,7 +102,9 @@ function main() {
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness(steps)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
     } catch (err) {
