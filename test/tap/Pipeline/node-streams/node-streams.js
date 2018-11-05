@@ -19,7 +19,7 @@ const SplitNewLineFn = require('./../../../../lib/sdk/transforms/node-streams/Sp
 
 function main() {
   tap.test(async t => {
-    const steps = [
+    const graph = [
       new DoFnAsReadable(new FileReaderFn(path.resolve(__dirname,
         '../../../fixtures/shakespeare/1kinghenryiv'))),
       new DoFnAsTransform(new SplitNewLineFn()),
@@ -29,7 +29,8 @@ function main() {
     ]
 
     try {
-      const harness = new DirectHarness(steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
 
       await harness.processBundle()
 
@@ -44,7 +45,7 @@ function main() {
   })
 
   tap.test(async t => {
-    const steps = [
+    const graph = [
       new DoFnAsReadable(
         new MySqlReaderFn({
           connection: {
@@ -62,7 +63,8 @@ function main() {
     ]
 
     try {
-      const harness = new DirectHarness(steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
 
       await harness.processBundle()
 
@@ -77,7 +79,7 @@ function main() {
   })
 
   tap.test(async t => {
-    const steps = [
+    const graph = [
       new DoFnAsReadable(
         new MySqlReaderFn({
           connection: {
@@ -102,7 +104,8 @@ function main() {
     ]
 
     try {
-      const harness = new DirectHarness(steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
 
       await harness.processBundle()
 
