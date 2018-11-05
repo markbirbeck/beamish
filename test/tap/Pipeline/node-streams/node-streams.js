@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
 
-const CountFn = require('./../../../../lib/sdk/transforms/node-streams/CountFn')
+const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
 const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
@@ -21,7 +21,7 @@ function main() {
       ParDo.of(new FileReaderFn(path.resolve(__dirname,
         '../../../fixtures/shakespeare/1kinghenryiv'))),
       ParDo.of(new SplitNewLineFn()),
-      ParDo.of(new CountFn()),
+      Count.globally(),
       ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/1kinghenryiv')))
     ]
@@ -53,7 +53,7 @@ function main() {
         },
         query: 'SELECT dept_name FROM departments;'
       })),
-      ParDo.of(new CountFn()),
+      Count.globally(),
       ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/departments')))
     ]
