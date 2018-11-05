@@ -8,6 +8,7 @@ const zlib = require('zlib')
 
 const pipeline = util.promisify(stream.pipeline)
 
+const CountFn = require('./../../../../lib/sdk/transforms/node-streams/CountFn')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
@@ -49,25 +50,6 @@ class SplitNewLineFn extends DoFn {
 
   finalElement(c) {
     c.output(this.last)
-  }
-}
-
-class CountFn extends DoFn {
-  constructor() {
-    super()
-    this.objectMode = true
-  }
-
-  setup() {
-    this.count = 0
-  }
-
-  processElement(c) {
-    this.count++
-  }
-
-  finalElement(c) {
-    c.output('' + this.count)
   }
 }
 
