@@ -3,125 +3,39 @@ const tap = require('tap')
 const stream = require('stream')
 const fs = require('fs')
 const path = require('path')
-const util = require('util')
 const zlib = require('zlib')
 
-const pipeline = util.promisify(stream.pipeline)
-
+const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
+const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
-const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
-const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
-const MySqlReader = require('./../../../../lib/sdk/io/node-streams/MySqlReader')
-const ElasticSearchWriter = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriter')
-
-class SplitNewLineFn extends DoFn {
-  setup() {
-    this.last = ''
-  }
-
-  processElement(c) {
-
-    /**
-     * Add any leftovers from previous processing to the front of
-     * the new data:
-     */
-
-    this.last += c.element()
-
-    /**
-     * Split the data; we're looking for '\r', '\n', or '\r\n':
-     */
-
-    const list = this.last.split(/\r\n|[\r\n]/)
-
-    /**
-     * Save the very last entry for next time, since we don't know
-     * whether it's a full line or not:
-     */
-
-    this.last = list.pop()
-
-    while (list.length) {
-      c.output(list.shift())
-    }
-  }
-
-  finalElement(c) {
-    c.output(this.last)
-  }
-}
-
-class CountFn extends DoFn {
-  constructor() {
-    super()
-    this.objectMode = true
-  }
-
-  setup() {
-    this.count = 0
-  }
-
-  processElement(c) {
-    this.count++
-  }
-
-  finalElement(c) {
-    c.output('' + this.count)
-  }
-}
-
-class FileReader extends DoFn {
-  constructor(fileName) {
-    super()
-    this.fileName = fileName
-  }
-
-  /*
-   * Note that there is no need for a teardown() since the default for
-   * the writable stream is to auto close:
-   */
-
-  setup() {
-    this.stream = fs.createReadStream(path.resolve(__dirname, this.fileName))
-  }
-}
-
-class FileWriter extends DoFn {
-  constructor(fileName) {
-    super()
-    this.fileName = fileName
-  }
-
-  /**
-   * Note that there is no need for a teardown() since the default for
-   * the writable stream is to auto close:
-   */
-
-  setup() {
-    return new Promise((resolve, reject) => {
-      this.stream = fs.createWriteStream(path.resolve(__dirname, this.fileName))
-      this.stream.on('ready', resolve)
-      this.stream.on('error', reject)
-    })
-  }
-}
+const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
+const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
+const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
+const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
+const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
+const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
 
 function main() {
   tap.test(async t => {
-    const steps = [
-      new DoFnAsReadable(new FileReader('../../../fixtures/shakespeare/1kinghenryiv')),
-      new DoFnAsTransform(new SplitNewLineFn()),
-      new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriter('../../../fixtures/output/1kinghenryiv'))
+    const graph = [
+      ParDo.of(new FileReaderFn(path.resolve(__dirname,
+        '../../../fixtures/shakespeare/1kinghenryiv'))),
+      ParDo.of(new Split()),
+      Count.globally(),
+      ParDo.of(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/1kinghenryiv')))
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
 
-      const stat = fs.statSync('../../../fixtures/output/1kinghenryiv')
+      const stat = fs.statSync(path.resolve(__dirname,
+        '../../../fixtures/output/1kinghenryiv'))
       t.same(stat.size, 4)
     } catch (err) {
       console.error('Pipeline failed', err)
@@ -130,28 +44,31 @@ function main() {
   })
 
   tap.test(async t => {
-    const steps = [
-      new DoFnAsReadable(
-        new MySqlReader({
-          connection: {
-            host: 'db',
-            database: 'employees',
-            user: 'root',
-            password: 'college'
-          },
-          query: 'SELECT dept_name FROM departments;'
-        })
-      ),
-      new DoFnAsTransform(new CountFn()),
-      new DoFnAsWritable(new FileWriter('../../../fixtures/output/departments'))
+    const graph = [
+      ParDo.of(new MySqlReaderFn({
+        connection: {
+          host: 'db',
+          database: 'employees',
+          user: 'root',
+          password: 'college'
+        },
+        query: 'SELECT dept_name FROM departments;'
+      })),
+      Count.globally(),
+      ParDo.of(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/departments')))
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
 
-      const stat = fs.statSync('../../../fixtures/output/departments')
+      const stat = fs.statSync(path.resolve(__dirname,
+        '../../../fixtures/output/departments'))
       t.same(stat.size, 1)
     } catch (err) {
       console.error('Pipeline failed', err)
@@ -160,32 +77,31 @@ function main() {
   })
 
   tap.test(async t => {
-    const steps = [
-      new DoFnAsReadable(
-        new MySqlReader({
-          connection: {
-            host: 'db',
-            database: 'employees',
-            user: 'root',
-            password: 'college'
-          },
-          query: 'SELECT dept_name FROM departments;'
-        })
-      ),
-      new DoFnAsWritable(
-        new ElasticSearchWriter({
-          connection: {
-            host: 'elasticsearch:9200'
-          },
-          idFn: obj => obj.dept_name,
-          type: 'department',
-          index: 'departments'
-        })
-      )
+    const graph = [
+      ParDo.of(new MySqlReaderFn({
+        connection: {
+          host: 'db',
+          database: 'employees',
+          user: 'root',
+          password: 'college'
+        },
+        query: 'SELECT dept_name FROM departments;'
+      })),
+      ParDo.of(new ElasticSearchWriterFn({
+        connection: {
+          host: 'elasticsearch:9200'
+        },
+        idFn: obj => obj.dept_name,
+        type: 'department',
+        index: 'departments'
+      }))
     ]
 
     try {
-      await pipeline(...steps)
+      const harness = new DirectHarness()
+      harness.register(graph)
+
+      await harness.processBundle()
 
       console.log('Pipeline succeeded')
     } catch (err) {
