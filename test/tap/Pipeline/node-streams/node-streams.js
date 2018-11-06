@@ -34,7 +34,8 @@ function main() {
 
       console.log('Pipeline succeeded')
 
-      const stat = fs.statSync('../../../fixtures/output/1kinghenryiv')
+      const stat = fs.statSync(path.resolve(__dirname,
+        '../../../fixtures/output/1kinghenryiv'))
       t.same(stat.size, 4)
     } catch (err) {
       console.error('Pipeline failed', err)
@@ -66,7 +67,8 @@ function main() {
 
       console.log('Pipeline succeeded')
 
-      const stat = fs.statSync('../../../fixtures/output/departments')
+      const stat = fs.statSync(path.resolve(__dirname,
+        '../../../fixtures/output/departments'))
       t.same(stat.size, 1)
     } catch (err) {
       console.error('Pipeline failed', err)
