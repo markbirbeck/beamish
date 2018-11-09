@@ -32,7 +32,7 @@ function main() {
 
     t.resolves(
       new NodeStreamsRunner()
-      .run(graph)
+      .run({ graph })
       .waitUntilFinish()
     )
 
@@ -65,7 +65,7 @@ function main() {
 
     t.resolves(
       new NodeStreamsRunner()
-      .run(graph)
+      .run({ graph })
       .waitUntilFinish()
     )
 
