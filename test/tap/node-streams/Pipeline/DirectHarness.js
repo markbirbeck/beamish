@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 
 const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
-const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
+const NodeStreamsHarness = require('./../../../../lib/sdk/harnesses/node-streams/NodeStreamsHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
@@ -30,7 +30,7 @@ function main() {
         '../../../fixtures/output/departments')))
     ]
 
-    const harness = new DirectHarness()
+    const harness = new NodeStreamsHarness()
     harness.register(graph)
 
     await harness.processBundle()
@@ -62,7 +62,7 @@ function main() {
       }))
     ]
 
-    const harness = new DirectHarness()
+    const harness = new NodeStreamsHarness()
     harness.register(graph)
 
     await harness.processBundle()
