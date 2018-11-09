@@ -13,36 +13,8 @@ const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
 const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
 const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
-const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
 
 function main() {
-  tap.test(async t => {
-    const graph = [
-      ParDo.of(new FileReaderFn(path.resolve(__dirname,
-        '../../../fixtures/shakespeare/1kinghenryiv'))),
-      ParDo.of(new Split()),
-      Count.globally(),
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/1kinghenryiv')))
-    ]
-
-    try {
-      const harness = new DirectHarness()
-      harness.register(graph)
-
-      await harness.processBundle()
-
-      console.log('Pipeline succeeded')
-
-      const stat = fs.statSync(path.resolve(__dirname,
-        '../../../fixtures/output/1kinghenryiv'))
-      t.same(stat.size, 4)
-    } catch (err) {
-      console.error('Pipeline failed', err)
-    }
-    t.done()
-  })
-
   tap.test(async t => {
     const graph = [
       ParDo.of(new MySqlReaderFn({
