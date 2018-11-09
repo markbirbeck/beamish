@@ -3,7 +3,7 @@ const tap = require('tap')
 const fs = require('fs')
 const path = require('path')
 
-const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
+const NodeStreamsHarness = require('./../../../../lib/sdk/harnesses/node-streams/NodeStreamsHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
@@ -61,7 +61,7 @@ const main = async () => {
       '../../../fixtures/output/request')))
   ]
 
-  const harness = new DirectHarness()
+  const harness = new NodeStreamsHarness()
   harness.register(graph)
 
   await harness.processBundle()

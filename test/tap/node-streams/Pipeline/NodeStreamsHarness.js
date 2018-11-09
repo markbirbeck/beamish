@@ -1,5 +1,5 @@
 const tap = require('tap')
-tap.comment('node-streams DirectHarness')
+tap.comment('node-streams harness')
 
 const fs = require('fs')
 const path = require('path')
