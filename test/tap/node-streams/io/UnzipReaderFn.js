@@ -3,7 +3,6 @@ tap.comment('UnzipReaderFn')
 
 const path = require('path')
 const stream = require('stream')
-const yauzl = require('yauzl')
 
 const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
@@ -11,47 +10,7 @@ const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
 const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
-
-class UnzipReaderFn extends DoFn {
-  constructor(fileName) {
-    super()
-    this.objectMode = true
-    this.fileName = fileName
-  }
-
-  async setup() {
-    this.stream = await new Promise((resolve, reject) => {
-      yauzl.open(this.fileName, { lazyEntries: true }, (err, zipFile) => {
-        if (err) reject(err)
-        else {
-          zipFile.readEntry()
-          zipFile.on('entry', entry => {
-            /**
-             * If the next entry is a directory then skip:
-             */
-
-            if (/\/$/.test(entry.fileName)) {
-              zipFile.readEntry()
-            }
-
-            /**
-             * If the next entry is a file then we have our stream:
-             */
-
-            else {
-              zipFile.openReadStream(entry, (err, readStream) => {
-                if (err) reject(err)
-                else {
-                  resolve(readStream)
-                }
-              })
-            }
-          })
-        }
-      })
-    })
-  }
-}
+const UnzipReaderFn = require('./../../../../lib/sdk/io/node-streams/UnzipReaderFn')
 
 const main = async () => {
   const p = Pipeline.create()
