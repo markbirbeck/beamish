@@ -3,11 +3,11 @@ const chai = require('chai');
 
 chai.should();
 
-const Pipeline = require('../../../lib/sdk/Pipeline');
-const Create = require('../../../lib/sdk/transforms/Create');
-const ParDo = require('../../../lib/sdk/transforms/ParDo');
-const DoFn = require('../../../lib/sdk/transforms/DoFn');
-const Split = require('../../../lib/sdk/transforms/Split');
+const Pipeline = require('../../lib/sdk/Pipeline');
+const Create = require('../../lib/sdk/transforms/Create');
+const ParDo = require('../../lib/sdk/transforms/ParDo');
+const DoFn = require('../../lib/sdk/transforms/DoFn');
+const Split = require('../../lib/sdk/transforms/Split');
 
 describe('Split', () => {
   describe('delimiters', () => {

@@ -4,48 +4,25 @@ const stream = require('stream')
 const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
+const util = require('util')
+
+const pipeline = util.promisify(stream.pipeline)
 
 const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
-const DirectHarness = require('./../../../../lib/sdk/harnesses/node-streams/DirectHarness')
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
+const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
+const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
+const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
 const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
 const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
-const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
 
 function main() {
   tap.test(async t => {
     const graph = [
-      ParDo.of(new FileReaderFn(path.resolve(__dirname,
-        '../../../fixtures/shakespeare/1kinghenryiv'))),
-      ParDo.of(new Split()),
-      Count.globally(),
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/1kinghenryiv')))
-    ]
-
-    try {
-      const harness = new DirectHarness()
-      harness.register(graph)
-
-      await harness.processBundle()
-
-      console.log('Pipeline succeeded')
-
-      const stat = fs.statSync(path.resolve(__dirname,
-        '../../../fixtures/output/1kinghenryiv'))
-      t.same(stat.size, 4)
-    } catch (err) {
-      console.error('Pipeline failed', err)
-    }
-    t.done()
-  })
-
-  tap.test(async t => {
-    const graph = [
-      ParDo.of(new MySqlReaderFn({
+      new DoFnAsReadable(ParDo.of(new MySqlReaderFn({
         connection: {
           host: 'db',
           database: 'employees',
@@ -53,17 +30,14 @@ function main() {
           password: 'college'
         },
         query: 'SELECT dept_name FROM departments;'
-      })),
-      Count.globally(),
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/departments')))
+      }))),
+      new DoFnAsTransform(Count.globally()),
+      new DoFnAsWritable(ParDo.of(new FileWriterFn(path.resolve(__dirname,
+        '../../../fixtures/output/departments'))))
     ]
 
     try {
-      const harness = new DirectHarness()
-      harness.register(graph)
-
-      await harness.processBundle()
+      await pipeline(...graph)
 
       console.log('Pipeline succeeded')
 
@@ -78,7 +52,7 @@ function main() {
 
   tap.test(async t => {
     const graph = [
-      ParDo.of(new MySqlReaderFn({
+      new DoFnAsReadable(ParDo.of(new MySqlReaderFn({
         connection: {
           host: 'db',
           database: 'employees',
@@ -86,22 +60,19 @@ function main() {
           password: 'college'
         },
         query: 'SELECT dept_name FROM departments;'
-      })),
-      ParDo.of(new ElasticSearchWriterFn({
+      }))),
+      new DoFnAsWritable(ParDo.of(new ElasticSearchWriterFn({
         connection: {
           host: 'elasticsearch:9200'
         },
         idFn: obj => obj.dept_name,
         type: 'department',
         index: 'departments'
-      }))
+      })))
     ]
 
     try {
-      const harness = new DirectHarness()
-      harness.register(graph)
-
-      await harness.processBundle()
+      await pipeline(...graph)
 
       console.log('Pipeline succeeded')
     } catch (err) {
