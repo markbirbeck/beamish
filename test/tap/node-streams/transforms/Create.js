@@ -6,6 +6,7 @@ const stream = require('stream')
 
 const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
 const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
+const CreateReaderFn = require('./../../../../lib/sdk/io/node-streams/CreateReaderFn')
 const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
 
@@ -48,33 +49,6 @@ class MaxFn extends DoFn {
 
   finishBundle(c) {
     c.output(this.max)
-  }
-}
-
-class CreateReaderFn extends DoFn {
-  constructor(elems) {
-    super()
-    this.elems = elems
-    this.objectMode = true
-  }
-
-  setup() {
-    this.stream = new class extends stream.Readable {
-      constructor(elems) {
-        super({ objectMode: true })
-        this.elems = elems
-        this.next = 0
-      }
-
-      _read() {
-        if (this.next === this.elems.length) {
-          this.push(null)
-        } else {
-          const elem = this.elems[this.next++]
-          this.push(elem)
-        }
-      }
-    }(this.elems)
   }
 }
 
