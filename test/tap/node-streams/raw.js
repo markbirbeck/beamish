@@ -10,6 +10,7 @@ const tap = require('tap')
  */
 
 const fs = require('fs')
+const path = require('path')
 const zlib = require('zlib')
 
 /**
@@ -22,8 +23,10 @@ const pipeline = util.promisify(stream.pipeline)
 
 
 async function main() {
-  const inputPath = '../../fixtures/shakespeare/1kinghenryiv'
-  const outputPath = '../../fixtures/output/1kinghenryiv-raw.tar.gz'
+  const inputPath = path.resolve(__dirname,
+    '../../fixtures/shakespeare/1kinghenryiv')
+  const outputPath = path.resolve(__dirname,
+    '../../fixtures/output/1kinghenryiv-raw.tar.gz')
 
   /**
    * If the output file exists already then remove it, to make for
