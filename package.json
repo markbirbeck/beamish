@@ -25,7 +25,8 @@
     "serialize-javascript": "^1.4.0",
     "@slack/client": "^3.14.0",
     "wait-on": "^3.0.1",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {}
 }
