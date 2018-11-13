@@ -25,11 +25,6 @@ const main = async () => {
   .apply(Count.globally())
   .apply(
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(
           tap.same(c.element(), 6).toString()

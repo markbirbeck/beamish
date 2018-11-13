@@ -15,22 +15,12 @@ const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
  */
 
 class SplitLineFn extends DoFn {
-  constructor() {
-    super()
-    this.objectMode = true
-  }
-
   processElement(c) {
     c.element().split(' ').forEach(word => c.output(word))
   }
 }
 
 class ComputeWordLengthFn extends DoFn {
-  constructor() {
-    super()
-    this.objectMode = true
-  }
-
   processElement(c) {
     c.output(c.element().length)
   }
@@ -39,7 +29,6 @@ class ComputeWordLengthFn extends DoFn {
 class MaxFn extends DoFn {
   constructor() {
     super()
-    this.objectMode = true
     this.max = 0
   }
 
@@ -71,11 +60,6 @@ const main = async () => {
   .apply(ParDo.of(new MaxFn()))
   .apply(
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(
           tap.same(c.element(), 'outrageous'.length).toString()
