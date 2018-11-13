@@ -31,7 +31,7 @@ const main = async () => {
           .split(/[^\S]+/)
           .forEach(word => word.length && c.output(word))
         }
-      }
+      }(false)
     ),
     Count.globally(),
     ParDo.of(new FileWriterFn(path.resolve(__dirname,

@@ -13,31 +13,16 @@ const main = async () => {
   const graph = [
     ParDo.of(new RequestReaderFn('https://api.postcodes.io/postcodes/sw97de')),
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(JSON.parse(c.element()))
       }
     }),
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(c.element().result)
       }
     }),
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(
           tap.same(
@@ -48,11 +33,6 @@ const main = async () => {
       }
     }),
     ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(JSON.stringify(c.element()))
       }

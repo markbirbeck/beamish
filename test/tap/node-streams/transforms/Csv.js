@@ -27,11 +27,6 @@ tap.test('parse', t => {
     .apply(ParDo.of(new Csv()))
     .apply(
       ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['a', 'b', 'c']).toString()
@@ -55,11 +50,6 @@ tap.test('parse', t => {
       .apply(ParDo.of(new CreateReaderFn([ '  d,  e ,    f     ' ])))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['d', 'e', 'f']).toString()
@@ -81,11 +71,6 @@ tap.test('parse', t => {
       .apply(ParDo.of(new CreateReaderFn([ '  hello,  world ,    is    it   me     ' ])))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['hello', 'world', 'is    it   me']).toString()
@@ -111,11 +96,6 @@ tap.test('parse', t => {
       .apply(ParDo.of(new CreateReaderFn([ '"g","h","i"' ])))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['g', 'h', 'i']).toString()
@@ -137,11 +117,6 @@ tap.test('parse', t => {
       .apply(ParDo.of(new CreateReaderFn([ '"j ","  k ","   l"' ])))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['j ', '  k ', '   l']).toString()
@@ -167,11 +142,6 @@ tap.test('parse', t => {
       .apply(ParDo.of(new CreateReaderFn([ '"""m"" "," "" n"" ","   o"' ])))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
           c.output(
             tap.same(c.element(), ['"m" ', ' " n" ', '   o']).toString()
@@ -200,11 +170,6 @@ tap.test('parse', t => {
     ])))
     .apply(ParDo.of(new Csv()))
     .apply(ParDo.of(new class extends DoFn {
-      constructor() {
-        super()
-        this.objectMode = true
-      }
-
       processElement(c) {
         c.output(
           tap.same(c.element(), ['p', 'q', 'r']).toString()
@@ -237,11 +202,6 @@ tap.test('parse', t => {
 
       .apply(ParDo.of(new Csv(true)))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         processElement(c) {
 
           /**
@@ -284,11 +244,6 @@ tap.test('parse', t => {
       ])))
       .apply(ParDo.of(new Csv(true)))
       .apply(ParDo.of(new class extends DoFn {
-        constructor() {
-          super()
-          this.objectMode = true
-        }
-
         setup() {
           this.result = {}
         }
