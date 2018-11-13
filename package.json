@@ -12,7 +12,7 @@
     "test": "docker-compose -f test/docker-compose.yml up --exit-code-from unit-test unit-test"
   },
   "dependencies": {
-    "csv-parse": "^2.0.4",
+    "csv-parse": "^3.2.0",
     "debug": "^4.0.1",
     "dockerode": "^2.5.3",
     "elasticsearch": "^15.1.1",
