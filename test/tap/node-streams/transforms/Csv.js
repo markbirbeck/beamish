@@ -287,6 +287,64 @@ tap.test('parse', t => {
       return p.run().waitUntilFinish()
     })
 
+    t.test('error handling', () => {
+      const p = Pipeline.create()
+
+      p
+      .apply(ParDo.of(new CreateReaderFn([
+        'x,y,z',
+        '# This row is correct',
+        '20,30,40',
+        '# This one has too few columns',
+        'hello,world',
+        '# And this one has too many',
+        '1,2,3,4'
+      ])))
+      .apply(ParDo.of(new Csv(true)))
+      .apply(ParDo.of(new class extends DoFn {
+        setup() {
+          this.result = {}
+        }
+
+        processElement(c) {
+          const obj = c.element()
+
+          Object.keys(obj).forEach(key => {
+            if (!this.result[key]) {
+              this.result[key] = 0
+            }
+
+            /**
+             * The parser can be set to return objects of the correct type,
+             * but we haven't done that here, so ensure the string becomes
+             * an integer:
+             */
+
+            this.result[key] += +obj[key]
+          })
+        }
+
+        finishBundle(fbc) {
+          fbc.output(
+            tap.same(
+              this.result,
+              {
+                x: 20,
+                y: 30,
+                z: 40
+              }
+            ).toString()
+          )
+        }
+      }))
+      .apply(
+        ParDo.of(new FileWriterFn(path.resolve(__dirname,
+          '../../../fixtures/output/csv-error-handling')))
+      )
+
+      return p.run().waitUntilFinish()
+    })
+
     t.end()
   })
 
