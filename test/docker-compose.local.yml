@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  mocha-shell:
+    image: markbirbeck/mocha
+    depends_on:
+      - db
+      - node-modules
+    entrypoint: ["/bin/sh"]
+    ports:
+      - "50051:50051"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - node-modules:/usr/src/app/node_modules
+      - ..:/usr/src/app
+  tap-shell:
+    image: markbirbeck/tap
+    depends_on:
+      - db
+      - node-modules
+      - elasticsearch
+      - mockserver
+    entrypoint: ["/bin/sh"]
+    volumes:
+      - node-modules:/usr/src/app/node_modules
+      - ..:/usr/src/app

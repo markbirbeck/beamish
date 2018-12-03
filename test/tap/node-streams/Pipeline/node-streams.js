@@ -104,7 +104,7 @@ const waitOn = require('wait-on')
 waitOn(
   {
     resources: ['tcp:db:3306', 'tcp:elasticsearch:9200'],
-    timeout: 30000
+    timeout: 90000
   },
   err => {
     if (err) { throw new Error(err) }
