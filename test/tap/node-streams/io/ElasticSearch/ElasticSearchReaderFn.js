@@ -1,6 +1,7 @@
 const tap = require('tap')
 tap.comment('ElasticSearchReaderFn')
 
+const fs = require('fs')
 const path = require('path')
 const Count = require('./../../../../../lib/sdk/transforms/node-streams/Count')
 const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
@@ -81,12 +82,12 @@ const main = async () => {
   )
   .apply(ParDo.of(new class extends DoFn {
     processElement(c) {
-      tap.same(c.element(), {words: 26141})
+      c.output(tap.same(c.element(), {words: 26141}).toString())
     }
   }))
   .apply(
     ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../../fixtures/output/temporary-dummy-output')))
+      '../../../../fixtures/output/elasticsearch-readerfn')))
   )
 
   return p
@@ -105,6 +106,16 @@ waitOn(
     tap.comment('ES is now ready')
     tap.test({timeout: 60000}, async t => {
       await main()
+
+      /**
+       * Check the output to the saved file, since if there
+       * are no records returned from the search then the
+       * tap test is not actually run:
+       */
+      const stat = fs.statSync(path.resolve(__dirname,
+        '../../../../fixtures/output/elasticsearch-readerfn'))
+      tap.same(stat.size, 'true'.length)
+
       t.end()
     })
   }
