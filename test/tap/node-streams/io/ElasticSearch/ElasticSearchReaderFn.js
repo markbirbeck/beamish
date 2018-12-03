@@ -100,7 +100,7 @@ const waitOn = require('wait-on')
 waitOn(
   {
     resources: ['http://elasticsearch:9200'],
-    timeout: 60000
+    timeout: 90000
   },
   err => {
     if (err) { throw err }
