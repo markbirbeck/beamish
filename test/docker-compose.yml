@@ -49,6 +49,8 @@ services:
       - node-modules
       - elasticsearch
     command: --no-timeout /usr/src/app/test/tap
+    environment:
+      DEBUG: ${DEBUG}
     volumes:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
