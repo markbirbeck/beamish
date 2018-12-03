@@ -20,13 +20,26 @@ class AddCrFn extends DoFn {
   }
 }
 
+class SpawnFn extends DoFn {
+  constructor(cmd, args, options) {
+    super()
+    this.cmd = cmd
+    this.args = args
+    this.options = options
+  }
+
+  setup() {
+    this.stream = new ChildProcess.spawn(this.cmd, this.args, this.options)
+  }
+}
+
 const main = async () => {
   const p = Pipeline.create()
 
   p
   .apply(ParDo.of(new CreateReaderFn(['hello', 'world!'])))
   .apply(ParDo.of(new AddCrFn()))
-  .apply(new ChildProcess.spawn('tr', ['[a-z]', '[A-Z]']))
+  .apply(ParDo.of(new SpawnFn('tr', ['[a-z]', '[A-Z]'])))
   .apply(
     ParDo.of(new class extends DoFn {
       processElement(c) {
