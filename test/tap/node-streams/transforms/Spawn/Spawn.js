@@ -26,7 +26,6 @@ class SpawnFn extends DoFn {
     this.cmd = cmd
     this.args = args
     this.options = options
-    this.isDuplex = true
   }
 
   setup() {
