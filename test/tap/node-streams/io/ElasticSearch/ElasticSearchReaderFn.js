@@ -52,6 +52,7 @@ const main = async () => {
       connection: {
         host: 'http://elasticsearch:9200'
       },
+      refresh: true,
       idFn: () => '1kinghenryiv',
       type: 'WordCount',
       index: 'shakespeare'
