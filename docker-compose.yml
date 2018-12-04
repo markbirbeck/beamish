@@ -27,9 +27,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-runner
-      args:
-        CI_COMMIT_TAG: ${CI_COMMIT_TAG}
-    image: beamish/runner:${CI_COMMIT_TAG:-latest}
+      target: base
+    image: beamish/runner:${CI_COMMIT_TAG:-dev}
 
   build-beamish-toolbox:
     build:

@@ -1,32 +1,65 @@
-FROM node:10.11.0-alpine
-
-ARG CI_COMMIT_TAG
-
-# Install app dependencies as global node modules:
+# B A S E
+# =======
 #
-ENV NODE_PATH /usr/local/lib/node_modules
+# This is the base image. It should be defined exactly as it will be deployed.
+#
+FROM node:11.2.0-alpine as base
 
 # Create app directory and set as working directory:
 #
 WORKDIR /usr/src/app
 
-# Install Git so that we can install from GitLab:
+# Copy dependency definitions and then install:
 #
-RUN apk add --no-cache \
-  git
+COPY app/package.json .
+ENV NODE_ENV=production
+RUN npm install
 
-# We need '-unsafe-perm' for grpc as described here:
+# Move the installed modules to the global area and make sure
+# that they can be found by Node:
 #
-#  https://github.com/grpc/grpc/issues/6435
+# Note that this is very different to doing 'npm install -g'
+# in the previous step; that would install all dependencies
+# in the project directory, whilst symlinking the current
+# module in as a global dependency.
 #
-RUN npm install -g -unsafe-perm \
-  gitlab:beamish/direct-runner#semver:^${CI_COMMIT_TAG}
+RUN mv node_modules/* node_modules/.bin /usr/local/lib/node_modules
+ENV NODE_PATH /usr/local/lib/node_modules
 
 # Tidy up:
 #
 RUN npm cache clean --force
 
+# Copy in the source files:
+#
+COPY app/ ./
+
 # The Node image should really have set this:
 #
 ENTRYPOINT ["node"]
-CMD ["pipeline.js"]
+
+# Launch the app:
+#
+CMD ["pipeline"]
+
+# Check health every 30s, and allow 30s for a response:
+#
+#HEALTHCHECK CMD wget --tries 1 --quiet --spider http://localhost:$PORT/status || exit 1
+
+# T E S T
+# =======
+#
+# This is a testing layer on top of the deployable image. It should be as
+# minimal as possible.
+#
+FROM base as test
+
+# Install any required test tools:
+#
+# Note that this is not the same as doing 'npm install -g --only=dev' since
+# that won't install devDependencies globally.
+#
+ENV NODE_ENV=testing
+RUN npm i -g tap@^12.1.0
+
+ENTRYPOINT ["tap"]
