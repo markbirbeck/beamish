@@ -1,13 +1,5 @@
 version: "3.2"
 services:
-  # Use the root Dockerfile to install dependencies into a shared volume:
-  #
-  node-modules:
-    build: ..
-    image: beamish-direct-runner-node-modules
-    volumes:
-      - node-modules:/usr/src/app/node_modules
-
   # Data described here:
   #
   #  https://dev.mysql.com/doc/employee/en/sakila-structure.html
@@ -43,18 +35,16 @@ services:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
   tap-test:
-    image: markbirbeck/tap
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: test
+    image: beamish/runner:test
     depends_on:
       - db
-      - node-modules
       - elasticsearch
     command: --no-timeout /usr/src/app/test/tap
     environment:
       DEBUG: ${DEBUG}
     volumes:
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
-
-volumes:
-  node-modules:
-    driver: local

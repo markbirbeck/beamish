@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.4"
 services:
   mocha-shell:
     image: markbirbeck/mocha
@@ -13,13 +13,15 @@ services:
       - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
   tap-shell:
-    image: markbirbeck/tap
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: tap-test
+    image: beamish/runner:tap-test
     depends_on:
       - db
-      - node-modules
       - elasticsearch
       - mockserver
     entrypoint: ["/bin/sh"]
     volumes:
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
