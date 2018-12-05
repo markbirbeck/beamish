@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 
 # Copy dependency definitions and then install:
 #
-COPY app/package.json .
+COPY package.json .
 ENV NODE_ENV=production
 RUN npm install
 
@@ -32,7 +32,7 @@ RUN npm cache clean --force
 
 # Copy in the source files:
 #
-COPY app/ ./
+COPY lib/ /usr/local/lib/node_modules/beamish-direct-runner/lib/
 
 # The Node image should really have set this:
 #
