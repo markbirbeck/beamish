@@ -22,17 +22,19 @@ services:
     environment:
       discovery.type: single-node
   mocha-test:
-    image: markbirbeck/mocha
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: mocha-test
+    image: beamish/runner:mocha-test
     depends_on:
       - db
-      - node-modules
       - mockserver
     command: --exit /usr/src/app/test/mocha
     ports:
       - "50051:50051"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
   tap-test:
     build:
