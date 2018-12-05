@@ -1,16 +1,18 @@
 version: "3.4"
 services:
   mocha-shell:
-    image: markbirbeck/mocha
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: mocha-test
+    image: beamish/runner:mocha-test
     depends_on:
       - db
-      - node-modules
     entrypoint: ["/bin/sh"]
     ports:
       - "50051:50051"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
   tap-shell:
     build:
