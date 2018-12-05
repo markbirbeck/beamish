@@ -38,8 +38,8 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile-runner
-      target: test
-    image: beamish/runner:test
+      target: tap-test
+    image: beamish/runner:tap-test
     depends_on:
       - db
       - elasticsearch
