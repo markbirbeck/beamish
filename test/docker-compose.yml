@@ -1,13 +1,5 @@
-version: "3.2"
+version: "3.4"
 services:
-  # Use the root Dockerfile to install dependencies into a shared volume:
-  #
-  node-modules:
-    build: ..
-    image: beamish-direct-runner-node-modules
-    volumes:
-      - node-modules:/usr/src/app/node_modules
-
   # Data described here:
   #
   #  https://dev.mysql.com/doc/employee/en/sakila-structure.html
@@ -30,31 +22,31 @@ services:
     environment:
       discovery.type: single-node
   mocha-test:
-    image: markbirbeck/mocha
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: mocha-test
+    image: beamish/runner:mocha-test
     depends_on:
       - db
-      - node-modules
       - mockserver
     command: --exit /usr/src/app/test/mocha
     ports:
       - "50051:50051"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
   tap-test:
-    image: markbirbeck/tap
+    build:
+      context: ..
+      dockerfile: Dockerfile-runner
+      target: tap-test
+    image: beamish/runner:tap-test
     depends_on:
       - db
-      - node-modules
       - elasticsearch
     command: --no-timeout /usr/src/app/test/tap
     environment:
       DEBUG: ${DEBUG}
     volumes:
-      - node-modules:/usr/src/app/node_modules
       - ..:/usr/src/app
-
-volumes:
-  node-modules:
-    driver: local

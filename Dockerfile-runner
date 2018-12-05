@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 
 # Copy dependency definitions and then install:
 #
-COPY app/package.json .
+COPY package.json .
 ENV NODE_ENV=production
 RUN npm install
 
@@ -32,7 +32,7 @@ RUN npm cache clean --force
 
 # Copy in the source files:
 #
-COPY app/ ./
+COPY lib/ /usr/local/lib/node_modules/beamish-direct-runner/lib/
 
 # The Node image should really have set this:
 #
@@ -49,17 +49,43 @@ CMD ["pipeline"]
 # T E S T
 # =======
 #
-# This is a testing layer on top of the deployable image. It should be as
-# minimal as possible.
+# The following are testing layers on top of the deployable image. They should
+# be as minimal as possible.
 #
 FROM base as test
 
-# Install any required test tools:
+ENV NODE_ENV=testing
+RUN npm install -g \
+  mockserver-client@^5.5.0
+
+# T A P   T E S T
+# ===============
 #
+# Install any required test tools for TAP.
+#
+FROM test as tap-test
+
 # Note that this is not the same as doing 'npm install -g --only=dev' since
 # that won't install devDependencies globally.
 #
-ENV NODE_ENV=testing
 RUN npm i -g tap@^12.1.0
 
 ENTRYPOINT ["tap"]
+
+# M O C H A   T E S T
+# ===================
+#
+# Install any required test tools for Mocha.
+#
+FROM test as mocha-test
+
+# Note that this is not the same as doing 'npm install -g --only=dev' since
+# that won't install devDependencies globally.
+#
+RUN npm i -g \
+  chai@^4.2.0 \
+  chai-http@^4.2.0 \
+  chai-as-promised@^7.1.1 \
+  mocha@^5.2.0
+
+ENTRYPOINT ["mocha"]
