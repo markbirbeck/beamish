@@ -9,6 +9,8 @@ FROM node:11.2.0-alpine as base
 #
 WORKDIR /usr/src/app
 
+RUN apk add --update python build-base
+
 # Copy dependency definitions and then install:
 #
 COPY package.json .
