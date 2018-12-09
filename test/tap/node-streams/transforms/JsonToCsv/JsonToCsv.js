@@ -13,42 +13,7 @@ const CreateReaderFn = require('./../../../../../lib/sdk/io/node-streams/CreateR
 const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
 
-class JsonToCsv extends DoFn {
-  constructor(headers) {
-    super()
-    this.headers = headers
-  }
-
-  setup() {
-    /**
-     * Create a JSON parser. We want all values from all levels, so
-     * we specify flatten = true. We're also not bothered about the
-     * headers because we're only parsing one line at a time, and if
-     * header=true, we'll get the header values repeated every time:
-     */
-    const JsonToCsvParser = require('json2csv').Parser
-    this.parser = new JsonToCsvParser({
-      flatten: true,
-      header: false
-    })
-    this.headersSent = false
-  }
-
-  processElement(c) {
-    /**
-     * If this is the first time through then we may need to send
-     * the headers (if there are any):
-     */
-    if (!this.headersSent) {
-      if (this.headers) {
-        c.output(this.headers)
-      }
-      this.headersSent = true
-    }
-    const input = c.element()
-    c.output(this.parser.parse(input))
-  }
-}
+const JsonToCsv = require('./../../../../../lib/sdk/transforms/node-streams/JsonToCsv')
 
 tap.test('JSON to CSV', t => {
   t.test('simple objects', t => {
