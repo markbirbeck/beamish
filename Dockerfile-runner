@@ -56,7 +56,7 @@ CMD ["pipeline"]
 #
 FROM base as test
 
-ENV NODE_ENV=testing
+ENV NODE_ENV=test
 RUN npm install -g \
   mockserver-client@^5.5.0
 
