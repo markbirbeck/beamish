@@ -23,7 +23,7 @@ services:
       discovery.type: single-node
   mocha-test:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile-runner
       target: mocha-test
     image: beamish/runner:mocha-test
@@ -35,10 +35,10 @@ services:
       - "50051:50051"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ..:/usr/src/app
+      - .:/usr/src/app
   tap-test:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile-runner
       target: tap-test
     image: beamish/runner:tap-test
@@ -49,4 +49,31 @@ services:
     environment:
       DEBUG: ${DEBUG}
     volumes:
-      - ..:/usr/src/app
+      - .:/usr/src/app
+  mocha-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile-runner
+      target: mocha-test
+    image: beamish/runner:mocha-test
+    depends_on:
+      - db
+    entrypoint: ["/bin/sh"]
+    ports:
+      - "50051:50051"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/usr/src/app
+  tap-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile-runner
+      target: tap-test
+    image: beamish/runner:tap-test
+    depends_on:
+      - db
+      - elasticsearch
+      - mockserver
+    entrypoint: ["/bin/sh"]
+    volumes:
+      - .:/usr/src/app
