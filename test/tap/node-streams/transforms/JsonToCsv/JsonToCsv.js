@@ -1,7 +1,3 @@
-/**
- * The 'raw' version of a test helps us to integrate a module before
- * factoring it into a library.
- */
 const tap = require('tap')
 tap.comment('Transform: JSON to CSV')
 
