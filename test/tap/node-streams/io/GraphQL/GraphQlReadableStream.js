@@ -25,13 +25,15 @@ tap.test('specify query', t => {
   .apply(
     new GraphQlReadableStream({
       url,
-      query: gql`
-        query {
-          continent(code: "AN") {
-            name
+      options: {
+        query: gql`
+          query {
+            continent(code: "AN") {
+              name
+            }
           }
-        }
-      `
+        `
+      }
     })
   )
   .apply(ParDo.of(new class extends DoFn {
