@@ -55,3 +55,53 @@ tap.test('specify query', t => {
 
   p.run().waitUntilFinish()
 })
+
+tap.test('specify query with variable', t => {
+  /**
+   * Publically available GraphQL endpoint with list of countries:
+   */
+  const url = 'https://countries.trevorblades.com/'
+  const outputPath = path.resolve(__dirname,
+    '../../../../fixtures/output/GraphQlReadableStream')
+
+  const p = Pipeline.create()
+
+  p
+  .apply(
+    new GraphQlReadableStream({
+      url,
+      options: {
+        query: gql`
+          query($code: String) {
+            continent(code: $code) {
+              name
+            }
+          }
+        `,
+        variables: {
+          code: 'AF'
+        }
+      }
+    })
+  )
+  .apply(ParDo.of(new class extends DoFn {
+    processElement(c) {
+      const input = c.element()
+      c.output(
+        t.same(
+          input,
+          {
+            continent: {
+              __typename: 'Continent',
+              name: 'Africa'
+            }
+          }
+        )
+      )
+      t.end()
+    }
+  }))
+  .apply(ParDo.of(new FileWriterFn(outputPath)))
+
+  p.run().waitUntilFinish()
+})
