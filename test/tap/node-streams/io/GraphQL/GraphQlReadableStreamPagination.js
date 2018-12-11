@@ -320,7 +320,7 @@ tap.test('GraphQlReadableStream handles pagination', async t => {
       options: {
         query
       },
-      cursorPath: 'search.labels.pageInfo.endCursor',
+      cursorPathFn: data => data.search.labels.pageInfo.endCursor,
       size: 10 / 5
     })
   )
