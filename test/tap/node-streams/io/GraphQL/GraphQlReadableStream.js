@@ -11,46 +11,99 @@ const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
 
 const GraphQlReadableStream = require('./../../../../../lib/sdk/io/node-streams/raw/GraphQlReadableStream')
 
-/**
- * Publically available GraphQL endpoint with list of countries:
- */
-const url = 'https://countries.trevorblades.com/'
-const outputPath = path.resolve(__dirname,
-  '../../../../fixtures/output/GraphQlReadableStream')
+tap.test('specify query', t => {
+  /**
+   * Publically available GraphQL endpoint with list of countries:
+   */
+  const url = 'https://countries.trevorblades.com/'
+  const outputPath = path.resolve(__dirname,
+    '../../../../fixtures/output/GraphQlReadableStream')
 
+  const p = Pipeline.create()
 
-const p = Pipeline.create()
+  p
+  .apply(
+    new GraphQlReadableStream({
+      url,
+      options: {
+        query: gql`
+          query {
+            continent(code: "AN") {
+              name
+            }
+          }
+        `
+      }
+    })
+  )
+  .apply(ParDo.of(new class extends DoFn {
+    processElement(c) {
+      const input = c.element()
+      c.output(
+        t.same(
+          input,
+          {
+            continent: {
+              __typename: 'Continent',
+              name: 'Antarctica'
+            }
+          }
+        )
+      )
+      t.end()
+    }
+  }))
+  .apply(ParDo.of(new FileWriterFn(outputPath)))
 
-p
-.apply(
-  new GraphQlReadableStream({
-    url,
-    query: gql`
-      query {
-        continent(code: "AN") {
-          name
+  p.run().waitUntilFinish()
+})
+
+tap.test('specify query with variable', t => {
+  /**
+   * Publically available GraphQL endpoint with list of countries:
+   */
+  const url = 'https://countries.trevorblades.com/'
+  const outputPath = path.resolve(__dirname,
+    '../../../../fixtures/output/GraphQlReadableStream')
+
+  const p = Pipeline.create()
+
+  p
+  .apply(
+    new GraphQlReadableStream({
+      url,
+      options: {
+        query: gql`
+          query($code: String) {
+            continent(code: $code) {
+              name
+            }
+          }
+        `,
+        variables: {
+          code: 'AF'
         }
       }
-    `
-  })
-)
-.apply(ParDo.of(new class extends DoFn {
-  processElement(c) {
-    const input = c.element()
-    c.output(
-      tap.same(
-        input,
-        {
-          continent: {
-            __typename: 'Continent',
-            name: 'Antarctica'
+    })
+  )
+  .apply(ParDo.of(new class extends DoFn {
+    processElement(c) {
+      const input = c.element()
+      c.output(
+        t.same(
+          input,
+          {
+            continent: {
+              __typename: 'Continent',
+              name: 'Africa'
+            }
           }
-        }
+        )
       )
-    )
-    tap.end()
-  }
-}))
-.apply(ParDo.of(new FileWriterFn(outputPath)))
+      t.end()
+    }
+  }))
+  .apply(ParDo.of(new FileWriterFn(outputPath)))
 
-p.run().waitUntilFinish()
+  p.run().waitUntilFinish()
+})
