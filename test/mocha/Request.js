@@ -26,7 +26,7 @@ describe('Request', () => {
       processElement(c) {
         c.element()
         .should.have.property('result')
-        .with.property('longitude', -0.113948);
+        .with.property('longitude', -0.114056);
       }
     }))
     ;

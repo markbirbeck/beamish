@@ -73,7 +73,7 @@ const main = async () => {
    */
 
   const stat = fs.statSync(outputPath)
-  tap.same(stat.size, 1483)
+  tap.same(stat.size, 1541)
 }
 
 tap.resolves(main())
