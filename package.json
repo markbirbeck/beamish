@@ -31,6 +31,9 @@
     "request-promise-native": "^1.0.5",
     "serialize-javascript": "^1.4.0",
     "@slack/client": "^4.8.0",
+    "@tensorflow/tfjs": "^0.14.1",
+    "@tensorflow/tfjs-node": "^0.2.1",
+    "@tensorflow/tfjs-node-gpu": "^0.2.1",
     "wait-on": "^3.2.0",
     "yargs": "^10.0.3",
     "yauzl": "^2.10.0"
