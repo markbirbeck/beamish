@@ -26,6 +26,7 @@
     "mysql": "^2.15.0",
     "node-fetch": "^2.3.0",
     "n3": "^1.0.1",
+    "numeral": "^2.0.6",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "serialize-javascript": "^1.4.0",
