@@ -4,11 +4,7 @@ tap.comment('CreateReaderFn')
 const path = require('path')
 const stream = require('stream')
 
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
+const { DoFn, FileWriterFn, CreateReaderFn, ParDo, Pipeline } = require('../../../../')
 
 /**
  * Define a DoFn for ParDo:
