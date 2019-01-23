@@ -1,10 +1,10 @@
 const tap = require('tap')
-tap.comment('CreateReaderFn')
+tap.comment('Create#of')
 
 const path = require('path')
 const stream = require('stream')
 
-const { DoFn, FileWriterFn, CreateReaderFn, ParDo, Pipeline } = require('../../../../')
+const { DoFn, FileWriterFn, Create, ParDo, Pipeline } = require('../../../../')
 
 /**
  * Define a DoFn for ParDo:
@@ -42,14 +42,12 @@ const main = async () => {
 
   p
   .apply(
-    ParDo.of(
-      new CreateReaderFn([
-        'To be, or not to be: that is the question: ',
-        'Whether \'tis nobler in the mind to suffer ',
-        'The slings and arrows of outrageous fortune, ',
-        'Or to take arms against a sea of troubles, '
-      ])
-    )
+    Create.of([
+      'To be, or not to be: that is the question: ',
+      'Whether \'tis nobler in the mind to suffer ',
+      'The slings and arrows of outrageous fortune, ',
+      'Or to take arms against a sea of troubles, '
+    ])
   )
   .apply(ParDo.of(new SplitLineFn()))
   .apply(ParDo.of(new ComputeWordLengthFn()))
