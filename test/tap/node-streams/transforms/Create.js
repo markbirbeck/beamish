@@ -4,7 +4,12 @@ tap.comment('Create#of')
 const path = require('path')
 const stream = require('stream')
 
-const { DoFn, Create, ParDo, Pipeline } = require('../../../../')
+const {
+  DoFn,
+  Create,
+  ParDo,
+  Pipeline
+} = require('../../../../')
 
 /**
  * A writable stream that performs a TAP test:
