@@ -48,7 +48,7 @@ tap.test('specify query', t => {
               name: 'Antarctica'
             }
           }
-        )
+        ).toString()
       )
       t.end()
     }
@@ -98,7 +98,7 @@ tap.test('specify query with variable', t => {
               name: 'Africa'
             }
           }
-        )
+        ).toString()
       )
       t.end()
     }
