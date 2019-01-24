@@ -7,7 +7,7 @@ const stream = require('stream')
 const {
   DoFn,
   Create,
-  NoopWritableStream,
+  NoopWriterFn,
   ParDo,
   Pipeline
 } = require('../../../../')
@@ -67,7 +67,7 @@ const main = async () => {
       }
     })
   )
-  .apply(new NoopWritableStream())
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()
