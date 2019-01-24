@@ -4,12 +4,13 @@ tap.comment('GraphQlReadableStream')
 const path = require('path')
 const gql = require('graphql-tag')
 
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
-
-const GraphQlReadableStream = require('./../../../../../lib/sdk/io/node-streams/raw/GraphQlReadableStream')
+const {
+  DoFn,
+  FileWriterFn,
+  GraphQlReadableStream,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 tap.test('specify query', t => {
   /**

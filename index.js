@@ -5,6 +5,7 @@ const ElasticSearchReaderFn = require('./lib/sdk/io/node-streams/ElasticSearchRe
 const ElasticSearchWriterFn = require('./lib/sdk/io/node-streams/ElasticSearchWriterFn')
 const FileReaderFn = require('./lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./lib/sdk/io/node-streams/FileWriterFn')
+const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlReadableStream')
 const NoopWriterFn = require('./lib/sdk/io/node-streams/NoopWriterFn')
 const ParDo = require('./lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
@@ -17,6 +18,7 @@ module.exports = {
   ElasticSearchWriterFn,
   FileReaderFn,
   FileWriterFn,
+  GraphQlReadableStream,
   NoopWriterFn,
   ParDo,
   Pipeline
