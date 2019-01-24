@@ -3,14 +3,16 @@ tap.comment('ElasticSearchReaderFn')
 
 const fs = require('fs')
 const path = require('path')
-const Count = require('./../../../../../lib/sdk/transforms/node-streams/Count')
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const ElasticSearchReaderFn = require('./../../../../../lib/sdk/io/node-streams/ElasticSearchReaderFn')
-const ElasticSearchWriterFn = require('./../../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
-const FileReaderFn = require('./../../../../../lib/sdk/io/node-streams/FileReaderFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
+const {
+  Count,
+  DoFn,
+  ElasticSearchReaderFn,
+  ElasticSearchWriterFn,
+  FileReaderFn,
+  FileWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 const main = async () => {
   /**
