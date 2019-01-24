@@ -1,14 +1,16 @@
 const tap = require('tap')
-tap.comment('CreateReaderFn')
+tap.comment('Create#of')
 
 const path = require('path')
 const stream = require('stream')
 
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
+const {
+  DoFn,
+  Create,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../')
 
 /**
  * Define a DoFn for ParDo:
@@ -21,8 +23,8 @@ class SplitLineFn extends DoFn {
 }
 
 class ComputeWordLengthFn extends DoFn {
-  processElement(c) {
-    c.output(c.element().length)
+  apply(element) {
+    return element.length
   }
 }
 
@@ -46,14 +48,12 @@ const main = async () => {
 
   p
   .apply(
-    ParDo.of(
-      new CreateReaderFn([
-        'To be, or not to be: that is the question: ',
-        'Whether \'tis nobler in the mind to suffer ',
-        'The slings and arrows of outrageous fortune, ',
-        'Or to take arms against a sea of troubles, '
-      ])
-    )
+    Create.of([
+      'To be, or not to be: that is the question: ',
+      'Whether \'tis nobler in the mind to suffer ',
+      'The slings and arrows of outrageous fortune, ',
+      'Or to take arms against a sea of troubles, '
+    ])
   )
   .apply(ParDo.of(new SplitLineFn()))
   .apply(ParDo.of(new ComputeWordLengthFn()))
@@ -67,10 +67,7 @@ const main = async () => {
       }
     })
   )
-  .apply(
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../fixtures/output/create')))
-  )
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()
