@@ -7,18 +7,10 @@ const stream = require('stream')
 const {
   DoFn,
   Create,
+  NoopWritableStream,
   ParDo,
   Pipeline
 } = require('../../../../')
-
-/**
- * A writable stream that performs a TAP test:
- */
-class NoopWritableStream extends stream.Writable{
-  _write(body, enc, next) {
-    next()
-  }
-}
 
 /**
  * Define a DoFn for ParDo:
