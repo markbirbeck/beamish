@@ -4,7 +4,16 @@ tap.comment('Create#of')
 const path = require('path')
 const stream = require('stream')
 
-const { DoFn, FileWriterFn, Create, ParDo, Pipeline } = require('../../../../')
+const { DoFn, Create, ParDo, Pipeline } = require('../../../../')
+
+/**
+ * A writable stream that performs a TAP test:
+ */
+class NoopWritableStream extends stream.Writable{
+  _write(body, enc, next) {
+    next()
+  }
+}
 
 /**
  * Define a DoFn for ParDo:
@@ -61,10 +70,7 @@ const main = async () => {
       }
     })
   )
-  .apply(
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../fixtures/output/create')))
-  )
+  .apply(new NoopWritableStream())
 
   return p
   .run()
