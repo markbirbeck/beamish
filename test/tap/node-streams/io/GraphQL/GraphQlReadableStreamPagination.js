@@ -4,21 +4,20 @@ tap.comment('GraphQlReadableStreamPagination')
 const path = require('path')
 const gql = require('graphql-tag')
 
-const Count = require('./../../../../../lib/sdk/transforms/node-streams/Count')
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
-
-const GraphQlReadableStream = require('./../../../../../lib/sdk/io/node-streams/raw/GraphQlReadableStream')
+const {
+  Count,
+  DoFn,
+  GraphQlReadableStream,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 tap.test('two stages, different queries', async t => {
   /**
    * Publically available GraphQL endpoint for MusicBrainz:
    */
   const url = 'https://graphbrainz.herokuapp.com/'
-  const outputPath = path.resolve(__dirname,
-    '../../../../fixtures/output/GraphQlReadableStream')
 
   /**
    * The first step runs a query to get a list, and also gets a
@@ -83,7 +82,7 @@ tap.test('two stages, different queries', async t => {
       )
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
   await p.run().waitUntilFinish()
 
   /**
@@ -145,7 +144,7 @@ tap.test('two stages, different queries', async t => {
       )
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
   await p.run().waitUntilFinish()
 
   /**
@@ -160,8 +159,6 @@ tap.test('two stages, one query', async t => {
    * Publically available GraphQL endpoint for MusicBrainz:
    */
   const url = 'https://graphbrainz.herokuapp.com/'
-  const outputPath = path.resolve(__dirname,
-    '../../../../fixtures/output/GraphQlReadableStream')
 
   const query = gql`
     query GoldenLabels($cursor: String) {
@@ -228,7 +225,7 @@ tap.test('two stages, one query', async t => {
       )
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
   await p.run().waitUntilFinish()
 
   /**
@@ -272,7 +269,7 @@ tap.test('two stages, one query', async t => {
       )
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
   await p.run().waitUntilFinish()
 
   /**
@@ -287,8 +284,6 @@ tap.test('GraphQlReadableStream handles pagination', async t => {
    * Publically available GraphQL endpoint for MusicBrainz:
    */
   const url = 'https://graphbrainz.herokuapp.com/'
-  const outputPath = path.resolve(__dirname,
-    '../../../../fixtures/output/GraphQlReadableStream')
 
   const query = gql`
     query HarpLabels($cursor: String) {
@@ -349,7 +344,7 @@ tap.test('GraphQlReadableStream handles pagination', async t => {
       )
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
   await p.run().waitUntilFinish()
 
   t.end()
