@@ -1,13 +1,12 @@
 const tap = require('tap')
 tap.comment('GraphQlReadableStream')
 
-const path = require('path')
 const gql = require('graphql-tag')
 
 const {
   DoFn,
-  FileWriterFn,
   GraphQlReadableStream,
+  NoopWriterFn,
   ParDo,
   Pipeline
 } = require('../../../../../')
@@ -17,8 +16,6 @@ tap.test('specify query', t => {
    * Publically available GraphQL endpoint with list of countries:
    */
   const url = 'https://countries.trevorblades.com/'
-  const outputPath = path.resolve(__dirname,
-    '../../../../fixtures/output/GraphQlReadableStream')
 
   const p = Pipeline.create()
 
@@ -54,7 +51,7 @@ tap.test('specify query', t => {
       t.end()
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
 
   p.run().waitUntilFinish()
 })
@@ -64,8 +61,6 @@ tap.test('specify query with variable', t => {
    * Publically available GraphQL endpoint with list of countries:
    */
   const url = 'https://countries.trevorblades.com/'
-  const outputPath = path.resolve(__dirname,
-    '../../../../fixtures/output/GraphQlReadableStream')
 
   const p = Pipeline.create()
 
@@ -104,7 +99,7 @@ tap.test('specify query with variable', t => {
       t.end()
     }
   }))
-  .apply(ParDo.of(new FileWriterFn(outputPath)))
+  .apply(ParDo.of(new NoopWriterFn()))
 
   p.run().waitUntilFinish()
 })
