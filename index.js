@@ -1,12 +1,17 @@
 const Count = require('./lib/sdk/transforms/node-streams/Count')
 const Create = require('./lib/sdk/transforms/node-streams/Create')
 const DoFn = require('./lib/sdk/harnesses/node-streams/DoFn')
+const DoFnAsReadable = require('./lib/sdk/harnesses/node-streams/DoFnAsReadable')
+const DoFnAsTransform = require('./lib/sdk/harnesses/node-streams/DoFnAsTransform')
+const DoFnAsWritable = require('./lib/sdk/harnesses/node-streams/DoFnAsWritable')
 const ElasticSearchReaderFn = require('./lib/sdk/io/node-streams/ElasticSearchReaderFn')
 const ElasticSearchWriterFn = require('./lib/sdk/io/node-streams/ElasticSearchWriterFn')
 const FileReaderFn = require('./lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./lib/sdk/io/node-streams/FileWriterFn')
 const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlReadableStream')
+const MySqlReaderFn = require('./lib/sdk/io/node-streams/MySqlReaderFn')
 const NodeStreamsHarness = require('./lib/sdk/harnesses/node-streams/NodeStreamsHarness')
+const NodeStreamsRunner = require('./lib/runners/node-streams/NodeStreamsRunner')
 const NoopWriterFn = require('./lib/sdk/io/node-streams/NoopWriterFn')
 const ParDo = require('./lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
@@ -19,12 +24,17 @@ module.exports = {
   Count,
   Create,
   DoFn,
+  DoFnAsReadable,
+  DoFnAsTransform,
+  DoFnAsWritable,
   ElasticSearchReaderFn,
   ElasticSearchWriterFn,
   FileReaderFn,
   FileWriterFn,
   GraphQlReadableStream,
+  MySqlReaderFn,
   NodeStreamsHarness,
+  NodeStreamsRunner,
   NoopWriterFn,
   ParDo,
   Pipeline,
