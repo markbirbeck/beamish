@@ -1,5 +1,6 @@
 const Count = require('./lib/sdk/transforms/node-streams/Count')
 const Create = require('./lib/sdk/transforms/node-streams/Create')
+const Csv = require('./lib/sdk/transforms/node-streams/Csv')
 const DoFn = require('./lib/sdk/harnesses/node-streams/DoFn')
 const DoFnAsReadable = require('./lib/sdk/harnesses/node-streams/DoFnAsReadable')
 const DoFnAsTransform = require('./lib/sdk/harnesses/node-streams/DoFnAsTransform')
@@ -24,6 +25,7 @@ const UnzipReaderFn = require('./lib/sdk/io/node-streams/UnzipReaderFn')
 module.exports = {
   Count,
   Create,
+  Csv,
   DoFn,
   DoFnAsReadable,
   DoFnAsTransform,

@@ -1,22 +1,21 @@
 const tap = require('tap')
 tap.comment('Csv')
 
-const path = require('path')
-const stream = require('stream')
-
-const Csv = require('./../../../../lib/sdk/transforms/node-streams/Csv')
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
+const {
+  Create,
+  Csv,
+  DoFn,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../')
 
 tap.test('parse', t => {
   t.test('simple row', () => {
     const p = Pipeline.create()
 
     p
-    .apply(ParDo.of(new CreateReaderFn([ 'a,b,c' ])))
+    .apply(Create.of([ 'a,b,c' ]))
 
     /**
      * When no parameter is passed to the parse function then it
@@ -34,10 +33,7 @@ tap.test('parse', t => {
         }
       })
     )
-    .apply(
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/csv-simple-row')))
-    )
+    .apply(ParDo.of(new NoopWriterFn()))
 
     return p.run().waitUntilFinish()
   })
@@ -47,7 +43,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([ '  d,  e ,    f     ' ])))
+      .apply(Create.of([ '  d,  e ,    f     ' ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -56,10 +52,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/csv-whitespace-trimmed')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -68,7 +61,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([ '  hello,  world ,    is    it   me     ' ])))
+      .apply(Create.of([ '  hello,  world ,    is    it   me     ' ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -77,10 +70,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/csv-whitespace-not-trimmed')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -93,7 +83,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([ '"g","h","i"' ])))
+      .apply(Create.of([ '"g","h","i"' ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -102,10 +92,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/quotes-around-fields')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -114,7 +101,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([ '"j ","  k ","   l"' ])))
+      .apply(Create.of([ '"j ","  k ","   l"' ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -123,10 +110,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/quotes-containing-whitespace')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -139,7 +123,7 @@ tap.test('parse', t => {
        */
 
       p
-      .apply(ParDo.of(new CreateReaderFn([ '"""m"" "," "" n"" ","   o"' ])))
+      .apply(Create.of([ '"""m"" "," "" n"" ","   o"' ]))
       .apply(ParDo.of(new Csv()))
       .apply(ParDo.of(new class extends DoFn {
         processElement(c) {
@@ -148,10 +132,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/quotes-containing-quotes')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -163,11 +144,11 @@ tap.test('parse', t => {
     const p = Pipeline.create()
 
     p
-    .apply(ParDo.of(new CreateReaderFn([
+    .apply(Create.of([
       '# A comment that should be skipped',
       'p,  q,r',
       '# And another comment that should be skipped'
-    ])))
+    ]))
     .apply(ParDo.of(new Csv()))
     .apply(ParDo.of(new class extends DoFn {
       processElement(c) {
@@ -176,10 +157,7 @@ tap.test('parse', t => {
         )
       }
     }))
-    .apply(
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../fixtures/output/comments')))
-    )
+    .apply(ParDo.of(new NoopWriterFn()))
 
     return p.run().waitUntilFinish()
   })
@@ -189,10 +167,10 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([
+      .apply(Create.of([
         'height,width,length',
         '100,200,300'
-      ])))
+      ]))
 
       /**
        * Setting the parameter to true means that first row is used
@@ -221,10 +199,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/json-single-object')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -233,7 +208,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([
+      .apply(Create.of([
         'friends,romans,countrymen',
         '# Test some leading whitespace',
         '1,  2,3',
@@ -241,7 +216,7 @@ tap.test('parse', t => {
         '4,"5",6  ',
         '# Test having leading and trailing whitespace',
         '7, 8  ,"9"'
-      ])))
+      ]))
       .apply(ParDo.of(new Csv(true)))
       .apply(ParDo.of(new class extends DoFn {
         setup() {
@@ -279,10 +254,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/json-multiple-objects')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
@@ -291,7 +263,7 @@ tap.test('parse', t => {
       const p = Pipeline.create()
 
       p
-      .apply(ParDo.of(new CreateReaderFn([
+      .apply(Create.of([
         'x,y,z',
         '# This row is correct',
         '20,30,40',
@@ -299,7 +271,7 @@ tap.test('parse', t => {
         'hello,world',
         '# And this one has too many',
         '1,2,3,4'
-      ])))
+      ]))
       .apply(ParDo.of(new Csv(true)))
       .apply(ParDo.of(new class extends DoFn {
         setup() {
@@ -326,6 +298,10 @@ tap.test('parse', t => {
 
         finishBundle(fbc) {
           fbc.output(
+            /**
+             * Note that the output will not contain anything from the 2nd or
+             * 3rd rows:
+             */
             tap.same(
               this.result,
               {
@@ -337,10 +313,7 @@ tap.test('parse', t => {
           )
         }
       }))
-      .apply(
-        ParDo.of(new FileWriterFn(path.resolve(__dirname,
-          '../../../fixtures/output/csv-error-handling')))
-      )
+      .apply(ParDo.of(new NoopWriterFn()))
 
       return p.run().waitUntilFinish()
     })
