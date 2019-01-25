@@ -1,14 +1,15 @@
 const tap = require('tap')
 tap.comment('SpawnFn')
 
-const path = require('path')
 const ChildProcess = require('duplex-child-process')
 
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
+const {
+  Create,
+  DoFn,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 /**
  * Define a DoFn for ParDo:
@@ -37,7 +38,7 @@ const main = async () => {
   const p = Pipeline.create()
 
   p
-  .apply(ParDo.of(new CreateReaderFn(['hello', 'world!'])))
+  .apply(Create.of(['hello', 'world!']))
   .apply(ParDo.of(new AddCrFn()))
   .apply(ParDo.of(new SpawnFn('tr', ['[a-z]', '[A-Z]'])))
   .apply(
@@ -49,10 +50,7 @@ const main = async () => {
       }
     })
   )
-  .apply(
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../../fixtures/output/spawn-tr')))
-  )
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()

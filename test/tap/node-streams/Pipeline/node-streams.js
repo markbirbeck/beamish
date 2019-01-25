@@ -8,16 +8,18 @@ const util = require('util')
 
 const pipeline = util.promisify(stream.pipeline)
 
-const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const DoFnAsReadable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsReadable')
-const DoFnAsTransform = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsTransform')
-const DoFnAsWritable = require('./../../../../lib/sdk/harnesses/node-streams/DoFnAsWritable')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
-const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
+const {
+  Count,
+  DoFn,
+  DoFnAsReadable,
+  DoFnAsTransform,
+  DoFnAsWritable,
+  ElasticSearchWriterFn,
+  FileReaderFn,
+  FileWriterFn,
+  MySqlReaderFn,
+  ParDo
+} = require('../../../../')
 
 function main() {
   tap.test(async t => {

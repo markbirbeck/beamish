@@ -1,19 +1,19 @@
 const tap = require('tap')
 tap.comment('GraphQL Source')
 
-const path = require('path')
-
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
+const {
+  DoFn,
+  Create,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 tap.test('GraphQL Source', t => {
   const p = Pipeline.create()
 
   p
-  .apply(ParDo.of(new CreateReaderFn([ 'hello, world!' ])))
+  .apply(Create.of([ 'hello, world!' ]))
   .apply(
     ParDo.of(new class extends DoFn {
       processElement(c) {
@@ -24,10 +24,7 @@ tap.test('GraphQL Source', t => {
       }
     })
   )
-  .apply(
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../../fixtures/output/graphql-source')))
-  )
+  .apply(ParDo.of(new NoopWriterFn()))
 
   p.run().waitUntilFinish()
 })

@@ -5,8 +5,8 @@ const path = require('path')
 const stream = require('stream')
 
 const {
-  DoFn,
   Create,
+  DoFn,
   NoopWriterFn,
   ParDo,
   Pipeline

@@ -4,14 +4,16 @@ tap.comment('node-streams harness')
 const fs = require('fs')
 const path = require('path')
 
-const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
-const NodeStreamsHarness = require('./../../../../lib/sdk/harnesses/node-streams/NodeStreamsHarness')
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const FileReaderFn = require('./../../../../lib/sdk/io/node-streams/FileReaderFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const MySqlReaderFn = require('./../../../../lib/sdk/io/node-streams/MySqlReaderFn')
-const ElasticSearchWriterFn = require('./../../../../lib/sdk/io/node-streams/ElasticSearchWriterFn')
+const {
+  Count,
+  DoFn,
+  ElasticSearchWriterFn,
+  FileReaderFn,
+  FileWriterFn,
+  MySqlReaderFn,
+  NodeStreamsHarness,
+  ParDo
+} = require('../../../../')
 
 function main() {
   tap.test(async t => {

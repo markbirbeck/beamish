@@ -1,26 +1,25 @@
 const tap = require('tap')
 tap.comment('Transform: JSON to CSV')
 
-const path = require('path')
-
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
-const CreateReaderFn = require('./../../../../../lib/sdk/io/node-streams/CreateReaderFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../../lib/sdk/NodeStreamsPipeline')
-
-const JsonToCsv = require('./../../../../../lib/sdk/transforms/node-streams/JsonToCsv')
+const {
+  Create,
+  DoFn,
+  JsonToCsv,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 tap.test('JSON to CSV', t => {
   t.test('simple objects', t => {
     const p = Pipeline.create()
 
     p
-    .apply(ParDo.of(new CreateReaderFn([
+    .apply(Create.of([
       { a: 1, b: 'two', c: { x: 3, y: 4 }},
       { a: 11, b: 'twelve', c: { x: 13, y: 14 }},
       { a: 21, b: 'twenty-two', c: { x: 23, y: 24 }}
-    ])))
+    ]))
     .apply(ParDo.of(new JsonToCsv()))
     .apply(ParDo.of(new class extends DoFn {
       setup() {
@@ -47,15 +46,12 @@ tap.test('JSON to CSV', t => {
               '11,"twelve",13,14',
               '21,"twenty-two",23,24'
             ]
-          )
+          ).toString()
         )
         t.end()
       }
     }))
-    .apply(
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../../fixtures/output/transforms-json-to-csv')))
-    )
+    .apply(ParDo.of(new NoopWriterFn()))
 
     p.run().waitUntilFinish()
   })
@@ -64,11 +60,11 @@ tap.test('JSON to CSV', t => {
     const p = Pipeline.create()
 
     p
-    .apply(ParDo.of(new CreateReaderFn([
+    .apply(Create.of([
       { d: 5, e: 'six', f: { x: 7, y: 8 }},
       { d: 15, e: 'sixteen', f: { x: 17, y: 18 }},
       { d: 25, e: 'twenty-six', f: { x: 27, y: 28 }}
-    ])))
+    ]))
     .apply(ParDo.of(new JsonToCsv('age,name,x,y')))
     .apply(ParDo.of(new class extends DoFn {
       setup() {
@@ -96,15 +92,12 @@ tap.test('JSON to CSV', t => {
               '15,"sixteen",17,18',
               '25,"twenty-six",27,28'
             ]
-          )
+          ).toString()
         )
         t.end()
       }
     }))
-    .apply(
-      ParDo.of(new FileWriterFn(path.resolve(__dirname,
-        '../../../../fixtures/output/transforms-json-to-csv-with-header')))
-    )
+    .apply(ParDo.of(new NoopWriterFn()))
 
     p.run().waitUntilFinish()
   })

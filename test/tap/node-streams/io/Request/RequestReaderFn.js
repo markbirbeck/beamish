@@ -1,13 +1,12 @@
 const tap = require('tap')
 
-const fs = require('fs')
-const path = require('path')
-
-const NodeStreamsHarness = require('./../../../../lib/sdk/harnesses/node-streams/NodeStreamsHarness')
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const RequestReaderFn = require('./../../../../lib/sdk/io/node-streams/RequestReaderFn')
+const {
+  DoFn,
+  NodeStreamsHarness,
+  NoopWriterFn,
+  ParDo,
+  RequestReaderFn
+} = require('../../../../../')
 
 const main = async () => {
   const graph = [
@@ -37,18 +36,13 @@ const main = async () => {
         c.output(JSON.stringify(c.element()))
       }
     }),
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../fixtures/output/request')))
+    ParDo.of(new NoopWriterFn())
   ]
 
   const harness = new NodeStreamsHarness()
   harness.register(graph)
 
   await harness.processBundle()
-
-  const stat = fs.statSync(path.resolve(__dirname,
-    '../../../fixtures/output/request'))
-  tap.same(stat.size, 'true'.length)
 }
 
 const waitOn = require('wait-on')
