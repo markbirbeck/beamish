@@ -6,9 +6,11 @@ const ElasticSearchWriterFn = require('./lib/sdk/io/node-streams/ElasticSearchWr
 const FileReaderFn = require('./lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./lib/sdk/io/node-streams/FileWriterFn')
 const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlReadableStream')
+const NodeStreamsHarness = require('./lib/sdk/harnesses/node-streams/NodeStreamsHarness')
 const NoopWriterFn = require('./lib/sdk/io/node-streams/NoopWriterFn')
 const ParDo = require('./lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
+const RequestReaderFn = require('./lib/sdk/io/node-streams/RequestReaderFn')
 const RequestTransformFn = require('./lib/sdk/io/node-streams/RequestTransformFn')
 
 module.exports = {
@@ -20,8 +22,10 @@ module.exports = {
   FileReaderFn,
   FileWriterFn,
   GraphQlReadableStream,
+  NodeStreamsHarness,
   NoopWriterFn,
   ParDo,
   Pipeline,
+  RequestReaderFn,
   RequestTransformFn
 }
