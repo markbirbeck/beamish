@@ -1,15 +1,12 @@
 const tap = require('tap')
 
-const fs = require('fs')
-const path = require('path')
-
 const {
   DoFn,
   NodeStreamsHarness,
   NoopWriterFn,
   ParDo,
   RequestReaderFn
-} = require('../../../../')
+} = require('../../../../../')
 
 const main = async () => {
   const graph = [
