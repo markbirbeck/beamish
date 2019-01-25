@@ -12,6 +12,8 @@ const ParDo = require('./lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
 const RequestReaderFn = require('./lib/sdk/io/node-streams/RequestReaderFn')
 const RequestTransformFn = require('./lib/sdk/io/node-streams/RequestTransformFn')
+const Split = require('./lib/sdk/transforms/node-streams/Split')
+const UnzipReaderFn = require('./lib/sdk/io/node-streams/UnzipReaderFn')
 
 module.exports = {
   Count,
@@ -27,5 +29,7 @@ module.exports = {
   ParDo,
   Pipeline,
   RequestReaderFn,
-  RequestTransformFn
+  RequestTransformFn,
+  Split,
+  UnzipReaderFn
 }

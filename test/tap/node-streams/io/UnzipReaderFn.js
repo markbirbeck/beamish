@@ -2,15 +2,16 @@ const tap = require('tap')
 tap.comment('UnzipReaderFn')
 
 const path = require('path')
-const stream = require('stream')
 
-const Count = require('./../../../../lib/sdk/transforms/node-streams/Count')
-const DoFn = require('./../../../../lib/sdk/harnesses/node-streams/DoFn')
-const FileWriterFn = require('./../../../../lib/sdk/io/node-streams/FileWriterFn')
-const ParDo = require('./../../../../lib/sdk/harnesses/node-streams/ParDo')
-const Pipeline = require('./../../../../lib/sdk/NodeStreamsPipeline')
-const Split = require('./../../../../lib/sdk/transforms/node-streams/Split')
-const UnzipReaderFn = require('./../../../../lib/sdk/io/node-streams/UnzipReaderFn')
+const {
+  Count,
+  DoFn,
+  NoopWriterFn,
+  ParDo,
+  Pipeline,
+  Split,
+  UnzipReaderFn
+} = require('../../../../')
 
 const main = async () => {
   const p = Pipeline.create()
@@ -32,10 +33,7 @@ const main = async () => {
       }
     })
   )
-  .apply(
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../fixtures/output/create')))
-  )
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()
