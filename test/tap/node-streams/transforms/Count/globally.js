@@ -13,12 +13,14 @@ const fs = require('fs')
  *  - checks the count.
  */
 
-const Count = require('./../../../../../lib/sdk/transforms/node-streams/Count')
-const NodeStreamsHarness = require('./../../../../../lib/sdk/harnesses/node-streams/NodeStreamsHarness')
-const DoFn = require('./../../../../../lib/sdk/harnesses/node-streams/DoFn')
-const ParDo = require('./../../../../../lib/sdk/harnesses/node-streams/ParDo')
-const FileReaderFn = require('./../../../../../lib/sdk/io/node-streams/FileReaderFn')
-const FileWriterFn = require('./../../../../../lib/sdk/io/node-streams/FileWriterFn')
+const {
+  Count,
+  DoFn,
+  FileReaderFn,
+  FileWriterFn,
+  NodeStreamsHarness,
+  ParDo
+} = require('../../../../../')
 
 const main = async () => {
   const graph = [
