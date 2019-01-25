@@ -9,6 +9,7 @@ const ElasticSearchWriterFn = require('./lib/sdk/io/node-streams/ElasticSearchWr
 const FileReaderFn = require('./lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./lib/sdk/io/node-streams/FileWriterFn')
 const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlReadableStream')
+const JsonToCsv = require('./lib/sdk/transforms/node-streams/JsonToCsv')
 const MySqlReaderFn = require('./lib/sdk/io/node-streams/MySqlReaderFn')
 const NodeStreamsHarness = require('./lib/sdk/harnesses/node-streams/NodeStreamsHarness')
 const NodeStreamsRunner = require('./lib/runners/node-streams/NodeStreamsRunner')
@@ -32,6 +33,7 @@ module.exports = {
   FileReaderFn,
   FileWriterFn,
   GraphQlReadableStream,
+  JsonToCsv,
   MySqlReaderFn,
   NodeStreamsHarness,
   NodeStreamsRunner,
