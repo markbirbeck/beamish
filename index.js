@@ -9,6 +9,7 @@ const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlRead
 const NoopWriterFn = require('./lib/sdk/io/node-streams/NoopWriterFn')
 const ParDo = require('./lib/sdk/harnesses/node-streams/ParDo')
 const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
+const RequestTransformFn = require('./lib/sdk/io/node-streams/RequestTransformFn')
 
 module.exports = {
   Count,
@@ -21,5 +22,6 @@ module.exports = {
   GraphQlReadableStream,
   NoopWriterFn,
   ParDo,
-  Pipeline
+  Pipeline,
+  RequestTransformFn
 }
