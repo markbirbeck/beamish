@@ -16,9 +16,13 @@ tap.comment('Pipeline flow')
  *    timestamp 1 in the second record.
  */
 
-const DoFn = require('../../../lib/sdk/transforms/DoFn')
-const ParDo = require('../../../lib/sdk/transforms/ParDo')
-const Pipeline = require('../../../lib/sdk/Pipeline')
+const {
+  Create,
+  DoFn,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../')
 
 const main = async () => {
   const p = Pipeline.create()
@@ -28,6 +32,7 @@ const main = async () => {
    */
 
   p
+  .apply(Create.of(['']))
   .apply(ParDo.of(
     new class extends DoFn {
       async processElement(c) {
@@ -62,7 +67,7 @@ const main = async () => {
 
   .apply(ParDo.of(
     new class extends DoFn {
-      processStart() {
+      setup() {
         this.results = []
       }
 
@@ -99,10 +104,11 @@ const main = async () => {
          *  ))
          */
 
-        return require('tap').ok(input[0].ts2 < input[1].ts1)
+        return tap.ok(input[0].ts2 < input[1].ts1).toString()
       }
     }
   ))
+  .apply('Noop', ParDo.of(new NoopWriterFn()))
 
   return p
   .run()
