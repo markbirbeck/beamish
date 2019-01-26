@@ -20,6 +20,7 @@ const Pipeline = require('./lib/sdk/NodeStreamsPipeline')
 const RequestReaderFn = require('./lib/sdk/io/node-streams/RequestReaderFn')
 const RequestTransformFn = require('./lib/sdk/io/node-streams/RequestTransformFn')
 const Split = require('./lib/sdk/transforms/node-streams/Split')
+const TextIO = require('./lib/sdk/io/node-streams/TextIO')
 const UnzipReaderFn = require('./lib/sdk/io/node-streams/UnzipReaderFn')
 
 module.exports = {
@@ -45,5 +46,6 @@ module.exports = {
   RequestReaderFn,
   RequestTransformFn,
   Split,
+  TextIO,
   UnzipReaderFn
 }
