@@ -10,19 +10,26 @@ tap.comment('GenerateSequence#from')
  *  - checks that the sum received is the sum expected.
  */
 
-const DoFn = require('../../../../lib/sdk/transforms/DoFn');
-const GenerateSequence = require('../../../../lib/sdk/io/GenerateSequence');
-const ParDo = require('../../../../lib/sdk/transforms/ParDo');
-const Pipeline = require('../../../../lib/sdk/Pipeline');
+const {
+  Create,
+  DoFn,
+  GenerateSequence,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../../')
 
 const main = async () => {
   const p = Pipeline.create()
 
   /**
-   * Simulate p.apply(GenerateSequence.from(9).to(2001)):
+   * TODO(MRB): The initial Create.of() does nothing other than pass the test imposed
+   * by the pipeline that the first step must be a readable stream. There is probably
+   * a better way around this.
    */
 
   p
+  .apply(Create.of(['']))
   .apply(GenerateSequence.from(17).to(720))
 
   /**
@@ -31,7 +38,7 @@ const main = async () => {
 
   .apply(ParDo.of(
     new class extends DoFn {
-      processStart() {
+      setup() {
         this.sum = 0
       }
 
@@ -52,13 +59,14 @@ const main = async () => {
   .apply(ParDo.of(
     new class extends DoFn {
       apply(input) {
-        return require('tap').same(
+        return tap.same(
           input,
           ((from, to) => (from + to) * (to - from + 1) / 2)(17, 720)
         )
       }
     }
   ))
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()
