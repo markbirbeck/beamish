@@ -2,7 +2,6 @@ const tap = require('tap')
 tap.comment('Count#globally')
 
 const path = require('path')
-const fs = require('fs')
 
 /**
  * Set up a pipeline that:
@@ -17,15 +16,21 @@ const {
   Count,
   DoFn,
   FileReaderFn,
-  FileWriterFn,
-  NodeStreamsHarness,
-  ParDo
+  NoopWriterFn,
+  ParDo,
+  Pipeline
 } = require('../../../../../')
 
 const main = async () => {
-  const graph = [
+  const p = Pipeline.create()
+
+  p
+  .apply(
     ParDo.of(new FileReaderFn(path.resolve(__dirname,
-      '../../../../fixtures/shakespeare/1kinghenryiv'))),
+      '../../../../fixtures/shakespeare/1kinghenryiv')))
+  )
+  .apply(
+    'ExtractWords',
     ParDo.of(
       new class ExtractWordsFn extends DoFn {
         processElement(c) {
@@ -34,24 +39,27 @@ const main = async () => {
           .forEach(word => word.length && c.output(word))
         }
       }(false)
-    ),
-    Count.globally(),
-    ParDo.of(new FileWriterFn(path.resolve(__dirname,
-      '../../../../fixtures/output/1kinghenryiv')))
-  ]
+    )
+  )
+  /**
+   * Accumulate count for all elements:
+   */
+  .apply(Count.globally())
+  /**
+   * Now we can check the values:
+   */
+  .apply(ParDo.of(
+    new class extends DoFn {
+      apply(input) {
+        return require('tap').equal(input, 26141).toString()
+      }
+    }
+  ))
+  .apply(ParDo.of(new NoopWriterFn()))
 
-  try {
-    const harness = new NodeStreamsHarness()
-    harness.register(graph)
-
-    await harness.processBundle()
-
-    const stat = fs.statSync(path.resolve(__dirname,
-      '../../../../fixtures/output/1kinghenryiv'))
-    tap.same(stat.size, 5)
-  } catch (err) {
-    console.error('Pipeline failed', err)
-  }
+  return p
+  .run()
+  .waitUntilFinish()
 }
 
-main()
+tap.resolves(main())
