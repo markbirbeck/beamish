@@ -33,6 +33,13 @@ function main() {
     )
     .apply(Count.globally())
     .apply(
+      ParDo.of(new class extends DoFn {
+        apply(input) {
+          return String(input)
+        }
+      })
+    )
+    .apply(
       ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/departments')))
     )

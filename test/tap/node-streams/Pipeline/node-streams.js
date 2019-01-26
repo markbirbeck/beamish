@@ -34,6 +34,11 @@ function main() {
         query: 'SELECT dept_name FROM departments;'
       }))),
       new DoFnAsTransform(Count.globally()),
+      new DoFnAsTransform(ParDo.of(new class extends DoFn {
+        apply(input) {
+          return String(input)
+        }
+      })),
       new DoFnAsWritable(ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/departments'))))
     ]
