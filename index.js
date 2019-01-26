@@ -9,6 +9,7 @@ const ElasticSearchReaderFn = require('./lib/sdk/io/node-streams/ElasticSearchRe
 const ElasticSearchWriterFn = require('./lib/sdk/io/node-streams/ElasticSearchWriterFn')
 const FileReaderFn = require('./lib/sdk/io/node-streams/FileReaderFn')
 const FileWriterFn = require('./lib/sdk/io/node-streams/FileWriterFn')
+const GenerateSequence = require('./lib/sdk/io/node-streams/GenerateSequence')
 const GraphQlReadableStream = require('./lib/sdk/io/node-streams/raw/GraphQlReadableStream')
 const JsonToCsv = require('./lib/sdk/transforms/node-streams/JsonToCsv')
 const MapElements = require('./lib/sdk/transforms/node-streams/MapElements');
@@ -36,6 +37,7 @@ module.exports = {
   ElasticSearchWriterFn,
   FileReaderFn,
   FileWriterFn,
+  GenerateSequence,
   GraphQlReadableStream,
   JsonToCsv,
   MapElements,
