@@ -4,11 +4,14 @@
 
 const tap = require('tap')
 
-const Count = require('../../../lib/sdk/transforms/Count')
-const DoFn = require('../../../lib/sdk/transforms/DoFn')
-const ParDo = require('../../../lib/sdk/transforms/ParDo')
-const Pipeline = require('../../../lib/sdk/Pipeline')
-const Create = require('../../../lib/sdk/transforms/Create')
+const {
+  Count,
+  Create,
+  DoFn,
+  NoopWriterFn,
+  ParDo,
+  Pipeline
+} = require('../../../../')
 
 class SplitLineFn extends DoFn {
   processElement(c) {
@@ -47,10 +50,11 @@ p
        *  ))
        */
 
-      return require('tap').equal(input, 34)
+      return require('tap').equal(input, 34).toString()
     }
-  }()
+  }
 ))
+.apply('Noop', ParDo.of(new NoopWriterFn()))
 
 /**
  * Run the pipeline:

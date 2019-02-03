@@ -8,10 +8,10 @@ const {
   DoFn,
   ElasticSearchReaderFn,
   ElasticSearchWriterFn,
-  FileReaderFn,
   FileWriterFn,
   ParDo,
-  Pipeline
+  Pipeline,
+  TextIO
 } = require('../../../../../')
 
 const main = async () => {
@@ -23,8 +23,8 @@ const main = async () => {
 
   p
   .apply(
-    ParDo.of(new FileReaderFn(path.resolve(__dirname,
-      '../../../../fixtures/shakespeare/1kinghenryiv')))
+    TextIO.read().from(path.resolve(__dirname,
+      '../../../../fixtures/shakespeare/1kinghenryiv'))
   )
   .apply(
     ParDo.of(

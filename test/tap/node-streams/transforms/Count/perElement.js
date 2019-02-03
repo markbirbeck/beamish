@@ -11,18 +11,21 @@ tap.comment('Count#perElement')
  *  - checks the count.
  */
 
-const Count = require('../../../../lib/sdk/transforms/Count');
-const DoFn = require('../../../../lib/sdk/transforms/DoFn');
-const MapElements = require('../../../../lib/sdk/transforms/MapElements');
-const ParDo = require('../../../../lib/sdk/transforms/ParDo');
-const Pipeline = require('../../../../lib/sdk/Pipeline');
-const TextIO = require('../../../../lib/sdk/io/TextIO');
+const {
+  Count,
+  DoFn,
+  MapElements,
+  NoopWriterFn,
+  ParDo,
+  Pipeline,
+  TextIO
+} = require('../../../../../')
 
 const main = async () => {
   const p = Pipeline.create()
 
   p
-  .apply(TextIO.read().from(path.resolve(__dirname, '../../../fixtures/file2.txt')))
+  .apply(TextIO.read().from(path.resolve(__dirname, '../../../../fixtures/file2.txt')))
   .apply('ExtractWords', ParDo.of(
     new class ExtractWordsFn extends DoFn {
       processElement(c) {
@@ -30,7 +33,7 @@ const main = async () => {
         .split(/[^\S]+/)
         .forEach(word => word.length && c.output(word))
       }
-    }()
+    }(false)
   ))
 
   /**
@@ -46,19 +49,19 @@ const main = async () => {
 
   .apply(MapElements.via(
     new class extends DoFn {
-      processStart() {
-        this.results = {};
+      setup() {
+        this.results = {}
       }
 
       processElement(c) {
-        const element = c.element()
-        this.results[element.getKey()] = element.getValue()
+        const input = c.element()
+        this.results[input.getKey()] = input.getValue()
       }
 
       processFinish(pe) {
-        pe.output(this.results);
+        pe.output(this.results)
       }
-    }()
+    }
   ))
 
   /**
@@ -83,7 +86,7 @@ const main = async () => {
          *  ))
          */
 
-        return require('tap').same(
+        return tap.same(
           input,
           {
             au: 1,
@@ -91,10 +94,11 @@ const main = async () => {
             hello: 3,
             revoir: 2
           }
-        )
+        ).toString()
       }
     }
   ))
+  .apply(ParDo.of(new NoopWriterFn()))
 
   return p
   .run()

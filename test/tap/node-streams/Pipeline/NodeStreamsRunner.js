@@ -28,6 +28,11 @@ function main() {
         query: 'SELECT dept_name FROM departments;'
       })),
       Count.globally(),
+      ParDo.of(new class extends DoFn {
+        apply(input) {
+          return String(input)
+        }
+      }),
       ParDo.of(new FileWriterFn(path.resolve(__dirname,
         '../../../fixtures/output/departments')))
     ]
