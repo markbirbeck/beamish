@@ -4,7 +4,8 @@
   "description": "A Direct Runner for Beamish.",
   "scripts": {
     "deployOpenFaas": "docker stack deploy func -c openfaas/docker-compose.yml",
-    "rmOpenFaas": "docker stack rm func"
+    "rmOpenFaas": "docker stack rm func",
+    "lint": "standard"
   },
   "dependencies": {
     "@slack/client": "^4.8.0",
@@ -37,5 +38,10 @@
     "wait-on": "^3.2.0",
     "yargs": "^10.0.3",
     "yauzl": "^2.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-plugin-jsdoc": "^17.1.1",
+    "standard": "^14.3.1"
   }
 }
