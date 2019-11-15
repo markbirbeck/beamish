@@ -19,7 +19,7 @@ tap.comment('Pipeline flow')
 const Create = require('../../../../lib/sdk/transforms/Create');
 const DoFn = require('../../../../lib/sdk/transforms/DoFn');
 const ParDo = require('../../../../lib/sdk/transforms/ParDo');
-const Pipeline = require('../../../../lib/sdk/DirectRunnerPipeline');
+const Pipeline = require('../../../../lib/sdk/Pipeline');
 const TextIO = require('../../../../lib/sdk/io/TextIO');
 
 const main = async () => {
