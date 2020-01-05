@@ -46,13 +46,13 @@ function main() {
     try {
       let transform
       for (transform of graph) {
-        await transform.fn.setup()
+        await transform.doFn.setup()
       }
 
       await pipeline(...graph)
 
       for (transform of graph) {
-        await transform.fn.teardown()
+        await transform.doFn.teardown()
       }
 
       console.log('Pipeline succeeded')
@@ -90,13 +90,13 @@ function main() {
     try {
       let transform
       for (transform of graph) {
-        await transform.fn.setup()
+        await transform.doFn.setup()
       }
 
       await pipeline(...graph)
 
       for (transform of graph) {
-        await transform.fn.teardown()
+        await transform.doFn.teardown()
       }
 
       console.log('Pipeline succeeded')
